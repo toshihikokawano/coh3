@@ -1,0 +1,24 @@
+#
+#  CoH3 Sample Data No.19
+#
+#  Coupled-Channels Vibrational Model
+#
+
+BEGIN    :  Fe 56 one and two-phonon states
+DATA     :
+target   : Fe 56
+incident :         n
+energy   :   10.0
+omp_n    : Koning
+level    :  0.0        0.0  gs
+
+# one-phonon state
+level    :  0.8468     2.0  1ph
+
+# two-phonon states
+level    :  2.0851     4.0  2ph
+level    :  2.6576     2.0  2ph
+level    :  2.9415     0.0  2ph
+beta_vib : 0.17
+ENDDATA  :
+END      :

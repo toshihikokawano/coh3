@@ -1,0 +1,43 @@
+#
+#  CoH3 Sample Data No.18
+#
+#  Hartree-Fock BCS and direct/semidirect calculation
+#
+
+BEGIN    :  U 238 DSD calculation with Hartree-Fock BCS
+DATA     :
+target   : U 238
+incident :         n
+energy   :   14.0
+omp_n    : Soukhovitskii
+level    : 0.0           0.0
+level    : 0.044916      2.0
+level    : 0.148380      4.0
+level    : 0.307180      6.0
+#deform   :    0.210
+ENDDATA  :
+
+#  deformation parameter taken from FRDM
+
+MFT      :
+epsilon  : -1
+force    :   SIII
+pairing  :   seniority
+strength :  -14.3     -15.5
+basis    :  14  0.48  1.15
+converge : 50 0.001
+print    : energy
+print    : bcs
+print    : HFmonitor
+ENDMFT   :
+
+#  perform DSD calculation using the spherical expanded
+#  Hartree-Fock wave functions
+
+DSD      :
+ENDDSD   :
+
+
+END      :
+
+

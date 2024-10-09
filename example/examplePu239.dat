@@ -1,0 +1,115 @@
+#
+#  CoH3 Sample Data Pu-239
+#
+#  Fission Cross Section Calculation
+#
+
+BEGIN    :  Pu-239 fission calculation
+DATA     :
+target   :        94       239
+incident :         n
+energy   :      14.0
+
+omp_n    : Soukhovitskii
+level    :   0.000000   0.5
+level    :   0.007861   1.5
+level    :   0.057275   2.5
+level    :   0.075705   3.5
+level    :   0.163760   4.5
+level    :   0.192800   5.5
+level    :   0.318500   6.5
+deform   :   2.2232e-01 9.4921e-02 -1.7988e-02
+partmax  : 3
+ENDDATA  :
+
+DWBA     :
+level    :   0.391584   -3.5  0.1
+level    :   0.434000   -4.5  0.1
+level    :   0.487000   -5.5  0.1
+nonloc   : 0.85
+ENDDWBA  :
+
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+
+gdr      :         E1    11.4726     2.5956 321.774072
+gdr      :         E1    14.0204     4.4910 441.414136
+gdr      :         M1     6.5975     4.0000   1.541427
+gdr      :         E2    10.1376     3.2300   6.786007
+gdr      :         M2     6.5975     4.0000   0.001233
+gdr      :         E3    10.1376     3.2300   0.005429
+gdr      :         M1     2.6        0.5      4.33
+
+tweakLD  : Pu 238 0.95
+tweakLD  : Pu 237 0.90
+
+# Fission Barriers
+barrier  :   Pu 240 0  5.76    0.64 
+barrier  :   Pu 240 1  5.03    0.77
+barrier  :   Pu 239 0  5.83    0.52
+barrier  :   Pu 239 1  5.55    0.68
+barrier  :   Pu 238 0  5.550   0.600
+barrier  :   Pu 238 1  5.200   0.800
+barrier  :   Pu 237 0  5.800   0.800
+barrier  :   Pu 237 1  5.800   0.520
+barrier  :   Pu 236 0  6.000   1.040
+barrier  :   Pu 236 1  5.000   0.600
+
+
+# Other published fission barriers
+# T. Ohsawa, JNST 21, 887 (1984)
+#barrier  :  Pu 240    0  5.99   1.0
+#barrier  :  Pu 240    1  5.22   0.7
+#barrier  :  Pu 239    0  5.86   0.80
+#barrier  :  Pu 239    1  5.68   0.55
+#barrier  :  Pu 238    0  6.25   0.65
+#barrier  :  Pu 238    1  5.65   0.5
+
+# P.G. Young (maybe taken from H.C. Britt)
+#barrier  :  Pu 240    0  5.81   0.8
+#barrier  :  Pu 240    1  5.49   0.6
+#barrier  :  Pu 239    0  5.70   0.6
+#barrier  :  Pu 239    1  5.05   0.5
+#barrier  :  Pu 238    0  5.50   0.9
+#barrier  :  Pu 238    1  5.00   0.6
+
+# O. Iwamoto (in JENDL-4)
+#barrier  :  Pu 240    0  6.25   1.04
+#barrier  :  Pu 240    1  5.00   0.6
+#barrier  :  Pu 239    0  5.75   0.7
+#barrier  :  Pu 239    1  5.50   0.6
+#barrier  :  Pu 238    0  5.40   0.7
+#barrier  :  Pu 238    1  5.10   0.6
+
+
+# K-band parameters
+# P.G. Young (probably by H.C. Britt, private communication)
+kband    :   Pu 240    0  0.000  0.0    1
+kband    :   Pu 240    0  0.400  2.0    1
+kband    :   Pu 240    0  0.600  0.0   -1
+kband    :   Pu 240    0  0.700  1.0   -1
+
+kband    :   Pu 240    1  0.000  0.0    1
+kband    :   Pu 240    1  0.400  2.0    1
+kband    :   Pu 240    1  0.600  0.0   -1
+kband    :   Pu 240    1  0.700  1.0   -1
+
+kband    :   Pu 239    0  0.000  0.5    1
+kband    :   Pu 239    0  0.000  1.5    1
+kband    :   Pu 239    0  0.046  3.5   -1
+
+kband    :   Pu 239    1  0.000  0.5    1
+kband    :   Pu 239    1  0.001  1.5    1
+kband    :   Pu 239    1  0.013  1.5    1
+
+kband    :   Pu 238    0  0.000  0.5    1
+kband    :   Pu 238    0  0.300  0.0   -1
+
+kband    :   Pu 238    1  0.000  0.5    1
+kband    :   Pu 238    1  0.300  0.0   -1
+
+ENDHFS   :
+END      :

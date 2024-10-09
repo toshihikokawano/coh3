@@ -1,0 +1,152 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: usage </title>
+<!-- Generated 1997/ 8/27, Last modified 2016/ 9/ 1 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="install.html"> [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="input.html">   [NEXT] </a>
+<hr>
+
+<h1> How to Run the Code </h1>
+<h2><a name="#commandline"> Command-Line Options </a></h2>
+
+<p>CoH reads data from a standard input.</p>
+
+<pre>   % coh < <i> file_name </i> </pre>
+<pre>   % cat <i> file_name </i> | coh </pre>
+
+<p>The code has several command-line options which control the output
+and calculation sequence. The available  options are,</p>
+
+<dl>
+<dt> <b>-p</b> <i>print_out_option</i>
+<dd>  Control output data. The number <i> print_out_option </i> is sum of
+      the following numbers:
+     <ul>
+      <li>    1 : system parameters </li>
+      <li>    2 : cross sections </li>
+      <li>    4 : particle emission energy spectra </li>
+      <li>    8 : level excitation cross sections (inelastic scattering) </li>
+      <li>   16 : gamma-ray cascading in the Hauser-Feshbach calculation </li>
+      <li>   32 : continuum bin populations </li>
+      <li>   64 : transmission coefficients for the entrance channel </li>
+      <li>  128 : scattering angular distributions </li>
+      <li>  256 : parameters in preequilibrium model </li>
+      <li>  512 : S-matrix elements for the entrance channel</li>
+    </ul>
+         For example, "-p 66" tells CoH to print cross sections and 
+         transmission coefficients.
+
+<dt> <b>-q</b> <i>extra_print_out_option</i>
+<dd>  Similar to <i> print_out_option </i>, some non-standard outputs are given,
+      depending on the following numbers:
+     <ul>
+      <li>    1 : gamma-ray branching ratios </li>
+      <li>    2 : cumulative discrete levels </li>
+      <li>    4 : level densities </li>
+      <li>    8 : fission level densities </li>
+      <li>   16 : double differential cross sections for ENDF formatting </li>
+      <li>   32 : compound nucleus decay probabilities </li>
+      <li>   64 : discrete gamma-ray lines </li>
+    </ul>
+         "-p" and "-q" options are exclusive. When the "-q" option is given,
+         all the standard outputs will be turned off.
+
+<dt> <b>-e</b>  <i>incident energy</i>
+<dd>  This option overrides the incident particle energy.
+
+<dt> <b>-h</b>
+<dd>  Print help.
+
+<dt> <b>-f</b>
+<dd> Write calculated results on files in a table format.  CoH
+      generates several files in the current directory. If these files
+      already exist, the results are appended. These file names are fixed,
+      and defined in <code> fileout.h</code>
+   <ul>
+     <li> CoHCrossSection.dat <br/>
+          optical model cross sections and total elastic, inelastic, capture, and total fission </li>
+
+     <li> CoHParticleProduction.dat <br/>
+          ground state production cross sections for particle emission channels </li>
+     <li> CoHFission.dat<br/>
+          multi-chance fission cross sections </li>
+     <li> CoHLevelExciteN.dat <br/>
+          discrete level production cross sections by particle emissions only,
+          where N=1 is for neutron, 2 for proton, 3 for alpha-particle ,etc </li>
+     <li> CoHAngularDistribution.dat <br/>
+          direct elastic and inelastic scattering angular distributions </li>
+     <li> CoHLegendreCoefficient.dat <br/>
+          angular distributions of compound reactions represented 
+          by Legendre Coefficients</li>
+     <li> CoHRadioactiveProduction.dat <br/>
+          production cross sections of radioactive nuclides and meta-stable states</li>
+   </ul>
+
+<dt> <b>-x</b>
+<dd> Calculate exclusive particle energy spectra for each residual nucleus.
+     If -q16 option is provided, CoH produces DDX data, which can be
+     used for ENDF-6 formatting.
+
+<dt> <b>-m</b> <i> Nsimulaiton </i>
+<dd> Perform Monte Carlo simulation for <i>Nsimulation</i> times. CoH prints out
+     particle and gamma-ray emissions with their energies.
+</dl>
+
+
+<h2><a name="datafile" >Data File Location</a></h2>
+
+<p>CoH requires several data files, kcksyst.dat (level density
+parameters) and discrete level data files taken from RIPL-3 (under
+levels directory).  The code first looks at a current directory if a
+file exist, then try the system directory, /usr/local/share/coh, for
+example. </p>
+
+<p>If you need to modify some data in these data files, for example,
+to correct a spin/parity in an RIPL data file, copy the file from
+the system directory into the current directory and edit them.</p>
+
+
+<h2><a name="superlazy"> Superlazy Mode </a></h2>
+
+<p>Instead of preparing an input file, CoH provides a qucik and easy
+way to calculate cross sections, which is called a Superlazy mode.
+This is only for neutron incident calculations. In this mode, the
+target Z number, A number, and incident energy are needed.</p>
+
+<pre>   % coh -z 26 -a 56 -e 10.0</pre>
+
+<p>This calculates 10-MeV neutron induced reactions on Fe56. Many model
+parameters are automatically set to default built-in values.</p>
+
+<p>Instead of the Z-number, you can give an element name, like </p>
+
+<pre>   % coh -z Fe -a 56 -e 10.0</pre>
+
+<p>When the atomic number is larger than 50, charged particle emission
+channels are suppressed. If the atomic number is more than 89, a
+fission channel is included. However, the fission calculation might be
+very crude.</p>
+
+
+<h2><a name="postprocess"> Post-Processing </a></h2>
+
+<p>CoH generates exclusive particle emission energy spectra, gamma-ray
+discrete spectra, and double-differential cross sections by Kalbach's
+systematics when the <b>-x</b> option is provided. However, the output
+format is not suitable for reading. There is a post-processing code,
+DeCE, which reads the CoH output, and generate ENDF-6 formatted
+file.</p>
+
+<hr>
+<a href="install.html"> [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="input.html">   [NEXT] </a>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: input (optical model)</title>
+<!-- Generated 2009/ 9/24, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="input.html">   [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="direct.html">  [NEXT] </a>
+<hr>
+
+<h1><a name="omcalc">Optical Model Calculation</a></h1>
+
+<h2><a name="som">Spherical Optical Model</a></h2>
+
+<p>If only <code>DATA</code> section is provided, CoH performs optical
+model calculations, but no statistical models. In this section,
+available data-definition keywords are (underscores should be
+interpreted as "space"):</p>
+
+<dl>
+   <dt> target___: <dd> target nucleus </dd>
+   <dt> incident_: <dd> incident particle </dd>
+   <dt> energy___: <dd> incident particle energy </dd>
+   <dt> egrid____: <dd> default incident energy grid </dd>
+   <dt> excite___: <dd> initial target excitation energy </dd>
+   <dt> omp_n____: <dd> optical potential name for neutron </dd>
+   <dt> omp_p____: <dd> for proton </dd>
+   <dt> omp_d____: <dd> for deuteron </dd>
+   <dt> omp_t____: <dd> for triton </dd>
+   <dt> omp_h____: <dd> for helium-3 </dd>
+   <dt> omp_a____: <dd> for alpha </dd>
+   <dt> level____: <dd> target state </dd>
+   <dt> beta_rot_: <dd> static deformation parameter, beta2, beta4, beta6, etc.
+                        "deform" can be used instead for compatibility </dd>
+   <dt> beta_vib_: <dd> dynamic deformation parameter, beta2, beta3 </dd>
+   <dt> partmax__: <dd> maximum number of particles to be emitted </dd>
+   <dt> bin______: <dd> continuum energy bin width for the statistical model </dd>
+   <dt> macs_____: <dd> Maxwellian average cross section at this temperature </dd>
+   <dt> t9_______: <dd> same as <code>macs</code> but the temperature is given by T9 </dd>
+</dl>
+
+<p>Some keywords defined here (<code>partmax</code> and <code>bin</code>) are
+not used in the optical model, but in the other models. </p>
+
+<p>All of them require at least one parameter after the keyword.
+Many of them require only one parameter. Exception is for <code>target</code>
+which requires two values. For example, this minimal input </p>
+<pre>
+BEGIN    : Proton induced reaction on Fe56
+DATA     :
+target   : Fe 56
+incident : p
+energy   : 10.0
+omp_p    : Koning
+ENDDATA  :
+END      :
+</pre>
+<p>is for a calculation of the 10-MeV proton induced reaction cross
+section on Fe56, using the Koning-Delaroche optical potential.</p>
+
+<p>Two parameters follow the <code>target</code> keyword, <code> Z number </code> and 
+<code> A number </code> of the target nucleus. The Z-number can be an element
+name, like Fe, Co. This is case-insensitive. </p>
+
+<p>The <code>incident</code> keyword defines a projectile of the
+reaction, given by an alphabetical letter, n, p, d, t, h, a, and g, which
+stand for neutron, proton, deuteron, triton, helium-3, alpha-particle,
+and photon.</p>
+
+<p>The optical potential parameter set is needed, which corresponds
+to the incident particle. In the case of neutron induced reaction,
+the potential set is given in the <code> omp_n </code> line. Similarly
+<code> omp_p </code> for proton incident, <code> omp_a </code> for
+alpha-particle incident, etc. </p>
+
+<p>The optical potentials are given by potential names, which are one of
+the built-in optical potential parameter set defined in the code as
+following:</p>
+
+<p>
+<table>
+<tr><th> Potential Name </th><th> Projectile </th><th> Reference </th></tr>
+<tr><td> Wilmore        </td><td> n          </td><td> NP 55, 673 (1964)   </td></tr>
+<tr><td> Becchetti      </td><td> n,p,t,h    </td><td> PR 182, 1190 (1969) </td></tr>
+<tr><td> Rapaport       </td><td> n          </td><td> NP A330, 15 (1979)   </td></tr>
+<tr><td> Walter         </td><td> n,p        </td><td> Rad Eff 95, 73 (1986) </td></tr>
+<tr><td> CH89           </td><td> n,p        </td><td> PR 201, 57 (1991) </td></tr>
+<tr><td> Koning         </td><td> n,p        </td><td> NP A713, 231 (2003) </td></tr>
+<tr><td> Soukhovitskii  </td><td> n          </td><td> JNP G30, 905 (2004) </td></tr>
+<tr><td> Soukhovitskii2005 </td><td> n       </td><td> Phys. Rev. C 72, 024604 (2005) </td></tr>
+<tr><td> Kunieda        </td><td> n,p        </td><td> NP A713, 231 (2003) </td></tr>
+<tr><td> Perey          </td><td> p          </td><td> PR 131, 745 (1963) </td></tr>
+<tr><td> Schwandt       </td><td> p          </td><td>  </td></tr>
+<tr><td> Madland        </td><td> n          </td><td>  </td></tr>
+<tr><td> Lemos          </td><td> a          </td><td> Orsay Rep A136 (1972) </td></tr>
+<tr><td> Nolte          </td><td> a          </td><td> PR C36, 1312 (1987)  </td></tr>
+<tr><td> Avrigeanu      </td><td> a          </td><td> PR C49, 2136 (1994)  </td></tr>
+<tr><td> Avrigeanu2009  </td><td> a          </td><td> At. Data Nucl. Data Tables 95, 501 (2009) </td></tr>
+<tr><td> Avrigeanu2014  </td><td> a          </td><td> Phys. Rev. C 90, 044612 (2014) </td></tr>
+<tr><td> TALYS-A        </td><td> a          </td><td> in TALYS </td></tr>
+<tr><td> Bojowald       </td><td> d          </td><td> PR C38, 1153 (1988) </td></tr>
+<tr><td> An             </td><td> d          </td><td> PR C73 054605 (2006) </td></tr>
+<tr><td> Han            </td><td> d          </td><td> PR C74 044615 (2006) </td></tr>
+</table>
+</p>
+
+<p><code>energy</code> is for the incident particle energy in MeV. A
+positive value means that the input value is in the LAB-system, while
+a negative value is translated as the CMS energy. When the target is
+in its excited state, the excitation energy can be fed by
+the <code>excite</code> keyword to CoH.</p>
+
+
+<h2><a name="dom">Coupled-Channels Method</a></h2>
+
+<p>CoH solves the coupled-channels equations for the rotational and
+vibrational models. Weak coupling problems can be considered by the
+DWBA method too. To calculate the direct inelastic scattering to the
+rotational band members, the input data look like </p>
+<pre>
+BEGIN    :  Pu239 CC Rotational
+DATA     :
+target   :        94       239
+incident :         n
+energy   :       2.0
+omp_n    : Soukhovitskii
+level    : 0.000e+00       0.5
+level    : 7.861e-03       1.5
+level    : 5.728e-02       2.5
+beta_rot :    0.2120    0.0660   -0.0084
+ENDDATA  :
+END      :
+</pre>
+<p>where <code>level</code> define the coupled levels (excitation energy
+in MeV, and spin). In the CC calculation case, the ground state
+of zero should be included. </p>
+
+<p><code>beta_rot</code> (or <code>deform</code>) line is for the nuclear
+deformation parameters.  The first value is the &beta;<sub>2</sub>,
+the second &beta;<sub>4</sub>, and the third &beta;<sub>6</sub>. The
+&beta;<sub>4</sub> and &beta;<sub>6</sub> deformations can be
+omitted. </p>
+
+<p>For the vibrational model, one has to specify the number of phonons.
+When one-quadrupole-phonon of 2+ state is excited,</p>
+
+<pre>
+level    :  0.000    0.0  gs
+level    :  0.8468   2.0  1ph
+beta_vib :  0.100
+</pre>
+
+<p>and for the two-phonon excitation case:</p>
+
+<pre>
+level    :  0.000    0.0  gs
+level    :  0.8468   2.0  1ph
+level    :  2.0851   4.0  2ph
+level    :  2.6576   2.0  2ph
+level    :  2.9415   0.0  2ph
+beta_vib : 0.100
+</pre>
+
+<p>We implicitly assume that the two-phonon states are always constructed
+by the one-phonon 2+ state.</p>
+
+
+<hr>
+<a href="input.html">   [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="direct.html">  [NEXT] </a>
+</body>
+</html>

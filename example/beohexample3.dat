@@ -1,0 +1,18 @@
+#
+#  BeoH Sample Data No.3
+#
+#  BeoH CGM compatible mode test input file
+#  Statistical decay of excited 134Xe at 15 MeV with J-Pi
+#  from level density distributions
+
+BEGIN    :  BeoH test input file 3
+DATA     :
+compound :     Xe 134
+omp_n    :  Koning
+exenergy :  15
+#initspin :  4.0 +
+spinfact :  1.0
+bin      :  0.1
+option   : internalconversion
+ENDDATA  :
+END      :

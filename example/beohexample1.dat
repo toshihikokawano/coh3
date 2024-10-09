@@ -1,0 +1,21 @@
+#
+#  BeoH Sample Data No.1
+#
+#  Delayed neutron emission from beta-decay of 88Br
+#  Dummy GT strenth data are given
+#
+
+BEGIN    :  BeoH test input file 1
+DATA     :
+precursor:     Br 88
+omp_n    :  Koning
+bin      :  0.1
+ENDDATA  :
+BETA     :  dummy G-T strength data
+gtstate  :      7.00   30.0
+gtstate  :      8.00   50.0
+gtstate  :      9.00    5.0
+gtstate  :     10.00   10.0
+gtstate  :     1.00    5.0
+ENDBETA  :
+END      :

@@ -1,0 +1,135 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: option </title>
+<!-- Generated 2016/ 7/28, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="tweak.html">     [BACK] </a>
+<a href="index.html">      [UP]  </a>
+<a href="structure.html"> [NEXT] </a>
+<hr>
+
+<h1>Options</h1>
+
+<h2><a name="option">Activate Optional Features</a></h2>
+
+<p> Some optional features in CoH can be activated by
+the <code>option</code> lines in the <code>DATA</code> section,
+followed by an option keyword. There is no parameters.  The option
+keyword just turns on the special functionality that is not so common
+in a standard calculations. </p>
+
+<p>This option capability could be used for an ad-hoc change to the
+code. It does not guarantee the provided options work in a same way
+for a newer versions of CoH.</p>
+
+
+<h2><a name="internalconversion">Internal Conversion</a></h2>
+
+<pre>
+DATA     :
+option   : internalconversion
+ENDDATA  :
+</pre>
+
+<p>This option applies the internal conversion (IC) coefficients to
+the produced gamma-rays when printing. The IC coefficients are taken
+from RIPL. This option is used to compare experimental data of photon
+production, if they are not corrected by IC. </p>
+
+
+<h2><a name="ewtransformation">Engelbrecht-Weidenmueller transformation</a></h2>
+
+<pre>
+option   : ewtransformation
+</pre>
+
+<p>Perform Engelbrecht-Weidenmueller transformation for the coupled-channels
+S-matrix to calculate compound inelastic scattering cross section. This option
+is important when the target deformation is large and the incident energy is low.
+The effect of this option will be very small above 1 MeV or so.</p>
+
+
+<h2><a name="readphotoabsorption">Photon strength function from external file</a></h2>
+
+<pre>
+option   : readphotoabsorption
+</pre>
+
+<p>Replace gamma-ray strength functions that are calculated internally by 
+data given by an external file. This replacement is performed only for the first
+compound nucleus, while all the other nuclei emerging in the decay chain use
+the internal GDR parameters. The external data are given as the photo-absorption
+cross sections for different gamma-ray multipolarites in the table format like</p>
+
+<pre>
+#   Eg[MeV]       E1[mb]       M1[mb]       E2[mb]       M2[mb]       E3[mb]
+     0.0200  2.23005e-03  1.84388e-06  1.79236e-06  1.47510e-09  1.43389e-09
+     0.0400  4.45469e-03  7.37580e-06  7.16958e-06  5.90064e-09  5.73567e-09
+...(snip)...
+    19.9000  9.58305e+01  4.01890e-02  3.37430e-01  3.21512e-05  2.69944e-04
+    20.0000  9.43296e+01  3.96937e-02  3.31537e-01  3.17550e-05  2.65230e-04
+</pre>
+<p>where the multipolarities are given in the order of E1, M1, E2, M2, ...
+The highest multipolarity is arbitrary. If only E1 is given, CoH applies 
+the internal GDRs for the higher multipolarities. </p>
+
+<p>Currently the data file name is
+fixed, <code>CoHPhotoabsorption.dat</code>, and it must be in the
+current directory.</p>
+
+
+<h2><a name="readdensity">Level density from external file</a></h2>
+
+<pre>
+option   : readdensity
+</pre>
+
+<p>Read tabulated pre-calculated level densities from an external
+file. The data file should be in the current working directory with
+the name of zNNN.tab, where NNN is the z-number such as 092 for
+uranium. When the fission channel is open, the fission level densities
+for the first and second barriers will be red too.  These files are
+zNNNmax1.tab and zNNNmax2.tab. For the data format, see RIPL technical
+report.</p>
+
+
+<h2><a name="groundstateomp">Use ground state OMP for excited states</a></h2>
+
+<pre>
+option   : groundstateomp
+</pre>
+
+<p>In a coupled-channels calculation, the optical potentials for the excited
+states are often different from the one for the ground state when the potential
+parameters are energy-dependent. This option forces to use the same optical
+potential given for the ground state.
+
+
+<h2><a name="continuumangdist">Calculate compound angular distribution for continuum</a></h2>
+
+<pre>
+option   : continuumangdist
+</pre>
+
+
+<p>Usually angular distributions of emitted particle from a compound
+nucleus is isotropic when the final state is in the
+continuum. However, there might be small anisotropy seen when the spin
+distribution in the continuum is not so wide.  This option calculates
+the angular distributions for such cases, although the output will be
+much longer.</p>
+
+
+
+<hr>
+<a href="tweak.html">     [BACK] </a>
+<a href="index.html">      [UP]  </a>
+<a href="structure.html"> [NEXT] </a>
+</body>
+</html>
+

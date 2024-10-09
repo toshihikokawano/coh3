@@ -1,0 +1,128 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: Introduction </title>
+<!-- Generated 1997/ 8/27, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="index.html">    [UP]  </a>
+<a href="install.html"> [NEXT] </a>
+<hr>
+
+<h1> Introduction </h1>
+<h2><a name="general"> General Information </a></h2>
+
+<p>CoH is an optical model, exciton preequilibrium, and
+Hauser-Feshbach statistical model code, which calculates nuclear
+reaction cross sections for medium to heavy targets in the keV to
+MeV energy region. This program is written in standard C++, divided
+into approximately 200 source and header files.</p>
+
+<p>CoH solves the Schroedinger equation for optical potentials defined
+in the code, and calculates differential elastic scattering, reaction,
+and total cross sections, for neutron, proton, deuteron, triton, He3,
+and alpha-particle. Deformed optical potentials are solved with the
+coupled-channels method, in which the ground state rotational band
+members, or vibrational phonon states are coupled.</p>
+
+<p>The optical model gives particle transmission coefficients that are
+fed into the statistical model calculations. CoH includes the
+pre-equilibrium model (exciton model), the direct/semidirect capture
+model, and the multi-stage Hauser-Feshbach statistical decay with
+width fluctuation correction by Moldauer. For weakly coupled levels,
+the DWBA method is used to calculate the direct inelastic scattering
+process to the excited states.</p>
+
+<p>CoH originally stood for a <span style="color:red;"> Compact
+optical and Hauser-Feshbach models</span> as the code was relatively
+compact and small memory usage.  As one can imagine, a compact code is
+no longer compact after several years. Nowadays CoH stands for
+nothing. It is just a name, like Coo.</p>
+
+
+<h2><a name="history"> History </a></h2>
+
+<p>The original code, written in C, first appeared in August 1992,
+which was an optical and Hauser-Feshbach code for binary reactions,
+run on an 16-bit MS-DOS PC. In June 1995 the code was totally
+rewritten, including an optical potential parameter search option
+using a generalized least-squares method (ver.2.0).</p>
+
+<p> Ver.2 series had been slowly developed until ver.2.3, which
+includes the neutron capture calculations and the coupled-channels
+method for the deformed optical potential.</p>
+
+<p>In 2008 holiday season, I decided to write a new Hauser-Feshbach
+code, just like GNASH, based on CoH 2.3. Though about 50% of the
+source program came from CoH 2.3, quite a few number of program
+sources had been incorporated - those were the Direct/Semidirect model
+code DSD, the Feshbach-Kerman-Koonin model code CmC, and the gamma-ray
+cascading simulation code CGM. All these modules but for CGM were
+originally in C, and they were converted into C++.</p>
+
+<p>CoH ver.3 (CoH<sub>3</sub>) has a project name, taken from moons in
+the solar system. This developing version - project
+name <b>Ganymede</b> - was first finished in March 2009, and a test
+distribution version <b>Callisto</b> was made in May 2009. Note that
+there exist other two different versions, <b>Io</b> and <b>Europa</b>
+that were named for the CGM code. This is because CoH ver.3.0 adopted
+the same coding style as CGM though CoH<sub>3</sub> is an extended
+version of v.2.3. </p>
+
+<p>Starting in 2010, CGM and CoH<sub>3</sub> got a different
+versioning method. Now CoH<sub>3</sub> has the names
+after the moons of Uranus. Ver.3.1 was <b>Ariel</b>.</p>
+
+<p>In 2012, an optional code, ECLIPSE, was merged into the main source.
+This facilitates making ENDF-6 formatted files, including the exclusive
+particle emission spectra, and double differential cross sections.
+Outputs by CoH can be processed with the DeCE code to generate the
+ENDF nuclear data files.</p>
+
+<p>Ver.3.4 <b>Oberon</b>, released in 2015, got a significant upgrade
+by including nuclear structure model calculations, namely Finite Range
+Droplet Model (FRDM) and Hartree-Fock BCS (HF-BCS) Model. These
+mean-field model calculations are performed prior to cross section
+calculations. This release also provides a beta-delayed neutron and
+gamma-ray emission calculation code BeoH. Ver. 3.5 <b>Miranda</b>
+was released in 2015 too, in which the coupled-channels model part
+was largely modified. This was done for both the phonon excitation,
+and the rigorous treatment of the direct channel in the Hauser-Feshbach
+formalism, so-called the Engelbrecht-Weidenmueller transformation.
+</p>
+
+
+<p>Although there was no significant changes but many small upgrades
+at various places since <b>Miranda</b>, a new Ver.3.6 <b>Cordelia</b>
+series started in 2024. The primal goal of this version is to release
+CoH as open-source.</p>
+
+
+<dl>
+   <dt>IO       <dd> CGM, the Hauser-Feshbach model for gamma-ray emission
+   <dt>EUROPA   <dd> Monte Carlo version of CGM
+   <dt>GANYMEDE <dd> developing version for the full Hauser-Feshbach,
+                     including particle emissions
+   <dt>CALLISTO <dd> stable version of the full Hauser-Feshbach
+   <dt>AMALTHEA <dd> back-port version of CGM from CoH3
+   <dt>HIMALIA  <dd> beta-decay enhanced version of CGM
+   <dt>ARIEL    <dd> fission calculation included, CoH3.1
+   <dt>UMBRIEL  <dd> better nuclear data file production version, CoH3.2
+   <dt>TITANIA  <dd> advanced memory control version, CoH3.3
+   <dt>OBERON   <dd> nuclear structure model included version, CoH3.4
+   <dt>MIRANDA  <dd> coupled-channels model enhanced version, CoH3.5
+   <dt>CORDELIA <dd> open-source version, CoH3.6
+   <dt>OPHELIA  <dd> plan for CoH3.7
+   <dt>BIANCA   <dd> plan for CoH3.8
+</dl>
+
+
+<hr>
+<a href="index.html">    [UP]  </a>
+<a href="install.html"> [NEXT] </a>
+</body>
+</html>
+

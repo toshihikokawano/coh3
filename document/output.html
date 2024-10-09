@@ -1,0 +1,293 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: output </title>
+<!-- Generated 1997/ 9/17, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="tweak.html">   [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="example.html"> [NEXT] </a>
+<hr>
+
+<h1><a name="output">Output Description</a></h1>
+
+<h2><a name="stdout">Standard Output</a></h2>
+
+<p>The optical model calculation gives the simplest output. The output data
+would be self-explanatory. Here is an example of the neutron induced reaction
+on vanadium.</p>
+
+<pre>
+########################################################################################
+#                                                                                  TITLE
+#            vanadium data
+#............................................................./  023-051V   // 20.000000
+#                                                                      SYSTEM PARAMETERS
+#            AtomicNum    MassNum
+#    Target         23         51
+#  Incident          0          1
+#           Ecms [MeV] Elab [MeV] Red. Mass  WaveNumber
+     Energy 1.9612e+01 2.0000e+01 9.8908e-01 9.6337e-01
+#............................................................./  023-051V   // 20.000000
+#                                                                OPTICAL MODEL POTENTIAL
+#             V         Vs        Wv        Ws        Vso       Wso
+     r [fm]   1.18557   0.00000   0.00000   1.67967   1.18557   0.00000
+     a [fm]   0.94239   0.00000   0.00000   0.17700   0.94239   0.00000
+ Depth[MeV]  43.75531   0.00000   0.00000  10.25915   6.00000   0.00000
+#............................................................./  023-051V   // 20.000000
+#                                                           TOTAL REACTION CROSS SECTION
+#                Total    Elastic   Reaction
+  Sigma[mb] 2.8124e+03 1.7305e+03 1.0819e+03
+</pre>
+
+<p>In this case, system data (Z, A, energy), optical potential
+parameters, and calculated cross sections are printed out. The cross sections
+are in milli-barns. Each data section is separated by a line, with the section
+title on the right hand side.</p>
+
+<p>The statistical model calculation includes more output lines, but the 
+top part is the same as the optical model calculations. Below the data 
+are for the compound reaction calculation.</p>
+
+<pre>
+########################################################################################
+#                                                                                  TITLE
+#            As reaction calculation
+#............................................................./  033-075As  //  7.000000
+#                                                                      SYSTEM PARAMETERS
+#            AtomicNum    MassNum
+#    Target         33         75
+#  Incident          0          1
+#            Ecms[MeV]  Elab[MeV] ReduceMass WaveNumber
+     Energy 6.9070e+00 7.0000e+00 9.9527e-01 5.7350e-01
+#............................................................./  033-075As  //  7.000000
+#                                                                OPTICAL MODEL POTENTIAL
+#             V         Vs        Wv        Ws        Vso       Wso
+      r[fm]   1.20777   0.00000   1.20777   1.27556   1.03198   1.03198
+      a[fm]   0.66665   0.00000   0.66665   0.53218   0.59000   0.59000
+ Depth[MeV]  48.90409   0.00000   0.53621   6.57690   5.76122  -0.03147
+#............................................................./  033-075As  //  7.000000
+#                                                           TOTAL REACTION CROSS SECTION
+#                Total    Elastic   Reaction
+  Sigma[mb] 3.9615e+03 2.2537e+03 1.7078e+03
+#............................................................./  033-075As  //  7.000000
+#                                                                           TARGET STATE
+#           Excitation  Spin
+  033-075As 0.0000e+00  1.5-
+#............................................................./  033-075As  //  7.000000
+#                                                                  COMPOUND NUCLEUS DATA
+#              Z     A  MassExess    Ex(max) Separation     N-cont    N-level
+  033-076As              -72.2902    14.2366                   131         82
+      gamma  033-076As     0.0000                0.0000
+    neutron  033-075As     8.0714                7.3296
+     proton  032-075Ge     7.2890                7.7227
+      alpha  031-072Ga     2.4249                6.1280
+  033-075As              -73.0320     6.9070                    55         31
+      gamma  033-075As     0.0000                0.0000
+     proton  032-074Ge     7.2890                6.8984
+      alpha  031-071Ga     2.4249                5.3195
+  032-075Ge              -71.8565     6.5139                    53         25
+      gamma  032-075Ge     0.0000                0.0000
+    neutron  032-074Ge     8.0714                6.5053
+  031-072Ga              -68.5871     8.1086                    69         63
+      gamma  031-072Ga     0.0000                0.0000
+    neutron  031-071Ga     8.0714                6.5211
+      alpha  029-068Cu     2.4249                5.4696
+  032-074Ge              -73.4226     0.0086                     0         67
+      gamma  032-074Ge     0.0000                0.0000
+  031-071Ga              -70.1374     1.5875                     0         46
+      gamma  031-071Ga     0.0000                0.0000
+  029-068Cu              -65.5424     2.6390                    26          1
+      gamma  029-068Cu     0.0000                0.0000
+#............................................................./  033-075As  //  7.000000
+#                                                               LEVEL DENSITY PARAMETERS
+#                 a       Pairing     T          E0         Em         Sigma2     Eshell
+  033-076As    10.0242     0.0000     1.1119    -4.1166     8.6619     3.6463    -0.1112
+  033-075As     9.8867     1.3092     1.0958    -2.6789     9.7355     3.6815     0.2497
+  032-075Ge     9.8867     1.4703     1.1536    -2.9293    10.6264     4.6950    -0.3028
+  031-072Ga     9.4750     0.0000     1.1077    -3.7036     8.0682     5.5238     0.1647
+  029-068Cu     8.5277     0.0000     1.1331    -2.4765     6.4921     2.7309    -0.9337
+#............................................................./  033-075As  //  7.000000
+#                                                            GIANT DIPOLE RESONANCE DATA
+#          Energy[MeV] Width[MeV] Sigma0[mb]
+         E1    17.3810     5.2143   154.4978
+         M1     9.6793     4.0000     0.7014
+         E2    14.8731     5.1980     1.6412
+#............................................................./  033-075As  //  7.000000
+#                                                                      DSD CROSS SECTION
+#                 Real       Imag   NonLocal
+    V1[MeV]    227.273      0.000    0.85000
+#          
+#                Total     Direct Semidirect
+  Sigma[mb] 6.2670e-02 6.1792e-02 1.2287e-02
+#............................................................./  033-075As  //  7.000000
+#                                                            SUM OF PRECOMPOUND EMISSION
+#            033-076As      gamma    neutron     proton      alpha
+ SpcSum[mb]            0.0000e+00 1.1852e+02 7.0575e-01 5.9156e-03
+ Emean[MeV]            0.0000e+00 2.7835e+00 3.9374e+00 6.4570e+00
+#          
+#           TotalPreEq   Compound   Fraction
+  Sigma[mb] 1.1923e+02 1.7078e+03 6.9815e-02
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            033-076As      gamma    neutron     proton      alpha
+ SpcSum[mb]            2.2689e+00 1.5707e+03 1.6520e+01 8.6644e-01
+ Emean[MeV]            3.0968e+00 1.9840e+00 4.8502e+00 7.5286e+00
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            033-075As      gamma     proton      alpha
+ SpcSum[mb]            5.6015e+03 0.0000e+00 0.0000e+00
+ Emean[MeV]            1.4653e+00 0.0000e+00 0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                              ISOMERIC STATE PRODUCTION
+#            033-075As
+#   Ex[MeV]     Jpi     T(1/2)[s]  Prod.[mb]
+  4  0.3039    4.5+    1.7600e-02 2.1564e+02
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            032-075Ge      gamma    neutron
+ SpcSum[mb]            4.1973e+01 0.0000e+00
+ Emean[MeV]            7.0491e-01 0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                              ISOMERIC STATE PRODUCTION
+#            032-075Ge
+#   Ex[MeV]     Jpi     T(1/2)[s]  Prod.[mb]
+  2  0.1397    3.5+    4.7700e+01 7.8954e+00
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            031-072Ga      gamma    neutron      alpha
+ SpcSum[mb]            1.4888e+00 0.0000e+00 0.0000e+00
+ Emean[MeV]            3.3857e-01 0.0000e+00 0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                              ISOMERIC STATE PRODUCTION
+#            031-072Ga
+#   Ex[MeV]     Jpi     T(1/2)[s]  Prod.[mb]
+  2  0.1197    0.0+    3.9700e-02 6.6737e-02
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            032-074Ge      gamma
+ SpcSum[mb]            0.0000e+00
+ Emean[MeV]            0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            031-071Ga      gamma
+ SpcSum[mb]            0.0000e+00
+ Emean[MeV]            0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                               SUM SPECTRA FOR COMPOUND
+#            029-068Cu      gamma
+ SpcSum[mb]            0.0000e+00
+ Emean[MeV]            0.0000e+00
+#............................................................./  033-075As  //  7.000000
+#                                                                GROUND STATE PRODUCTION
+#             Residual  Prod.[mb]  Qval[MeV]   Particles
+#                                              n p a d t h
+ Production  033-076As 4.2595e-01    7.32960   0 0 0 0 0 0
+ Production  033-075As 1.6893e+03    0.00000   1 0 0 0 0 0
+ Production  032-075Ge 1.7225e+01   -0.39312   0 1 0 0 0 0
+ Production  031-072Ga 8.7236e-01    1.20157   0 0 1 0 0 0
+                   sum 1.7078e+03
+#............................................................./  033-075As  //  7.000000
+#                                                                    PARTICLE PRODUCTION
+#             Particle  Prod.[mb] Multiplic.
+ ParticlPrd    neutron 1.6893e+03 9.8915e-01
+ ParticlPrd     proton 1.7225e+01 1.0086e-02
+ ParticlPrd      alpha 8.7236e-01 5.1081e-04
+</pre>
+
+<p>The calculated reaction cross sections can be found in <code>GROUND STATE
+PRODUCTION</code>. On the right column of this section, one can see the number
+of particles emitted to produce the ground state. When the particle count is 
+zero, this means the capture reaction. </p>
+
+<p>The particle production cross sections are in the <code> PARTICLE
+PRODUCTION</code> section, together with the multiplicities for all particles.</p>
+
+<p>When a reaction produces isomers, the production cross sections of
+there states is found in the <code>ISOMERIC STATE PRODUCTION</code> section.
+
+
+
+<h2><a name="spectra">Particle Emission Spectra</a></h2>
+
+<p>When a command line option of <code> -p4 </code> is provided, CoH prints out
+the particle emission energy spectra for preequilibrium and compound processes.
+The first section is the preequilibrium spectrum, then compound particle
+emission spectra from all the compound are written. At the bottom, the
+composite particle spectra are printed out.</p>
+
+<pre>
+#............................................................./  033-075As  //  7.000000
+#                                                            PECOMPOUND PARTICLE SPECTRA
+#            033-076As
+# Emin[MeV]  Emax[MeV]      gamma    neutron     proton      alpha
+     0.0000     0.0500 0.0000e+00 0.0000e+00 0.0000e+00 0.0000e+00
+     0.0500     0.1500 0.0000e+00 3.0359e+00 0.0000e+00 0.0000e+00
+     0.1500     0.2500 0.0000e+00 5.4367e+00 0.0000e+00 0.0000e+00
+     0.2500     0.3500 0.0000e+00 7.8257e+00 0.0000e+00 0.0000e+00
+     0.3500     0.4500 0.0000e+00 1.0106e+01 1.2390e-14 0.0000e+00
+     0.4500     0.5500 0.0000e+00 1.2216e+01 1.9347e-12 0.0000e+00
+...(snip)...
+
+
+
+#............................................................./  033-075As  //  7.000000
+#                                                          SPECTRA FROM COMPOUND NUCLEUS
+#            033-076As
+# Emin[MeV]  Emax[MeV]      gamma    neutron     proton      alpha
+     0.0000     0.0500 1.1587e+01 1.6848e+01 0.0000e+00 0.0000e+00
+     0.0500     0.1500 1.7048e+01 1.5637e+02 0.0000e+00 0.0000e+00
+     0.1500     0.2500 2.0380e+01 2.6138e+02 0.0000e+00 0.0000e+00
+     0.2500     0.3500 5.4411e+00 3.5220e+02 0.0000e+00 0.0000e+00
+     0.3500     0.4500 4.0600e+00 4.2639e+02 6.1137e-13 0.0000e+00
+     0.4500     0.5500 4.1905e+00 4.8349e+02 9.0814e-11 0.0000e+00
+...(snip)...
+
+
+#............................................................./  033-075As  //  7.000000
+#                                                        TOTAL PARTICLE EMISSION SPECTRA
+#            033-076As
+# Emin[MeV]  Emax[MeV]      gamma    neutron     proton      alpha
+     0.0000     0.0500 1.7565e+03 1.6848e+01 0.0000e+00 0.0000e+00
+     0.0500     0.1500 1.9464e+03 1.5940e+02 0.0000e+00 0.0000e+00
+     0.1500     0.2500 1.6195e+03 2.6681e+02 0.0000e+00 0.0000e+00
+     0.2500     0.3500 8.8991e+03 3.6002e+02 0.0000e+00 0.0000e+00
+     0.3500     0.4500 9.2065e+02 4.3649e+02 6.2376e-13 0.0000e+00
+     0.4500     0.5500 1.5797e+03 4.9571e+02 9.2749e-11 0.0000e+00
+</pre>
+
+
+<h2><a name="level">Level Excitation Cross Section</a></h2>
+
+<p>With the <code>-p8</code> command line option, CoH generates discrete level
+population cross sections. The excited discrete states are produced by two
+different mechanisms. A compound nucleus decays by emitting a particle,
+leaving the residual nucleus at a discrete level. This level is also populated
+by a gamma-ray cascading from the higher excited state. The level excitation
+cross section does not include the gamma-ray cascading.</p>
+
+<pre>
+#............................................................./  033-075As  //  7.000000
+#                                                              DISCRETE LEVEL POPULATION
+#            033-075As
+#   Ex[MeV]     JP      Ecms[MeV]  Prod.[mb]
+     0.0000    1.5-    6.9070e+00 1.6407e+00
+     0.1986    0.5-    6.7084e+00 5.8297e-01
+     0.2647    1.5-    6.6424e+00 1.1312e+00
+     0.2795    2.5-    6.6275e+00 1.5511e+00
+     0.3039    4.5+    6.6031e+00 1.6839e+00
+...(snip)...
+</pre>
+
+
+<hr>
+<a href="tweak.html">    [BACK] </a>
+<a href="index.html">     [UP]  </a>
+<a href="example.html">  [NEXT] </a>
+</body>
+</html>
+

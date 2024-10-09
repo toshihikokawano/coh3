@@ -1,0 +1,51 @@
+Optical and Statistical Hauser-Feshbach Model Code: CoH ver.3
+                                                    T. Kawano
+
+           .oooooo.             ooooo   ooooo
+          d8P    Y8b             888     888
+         888           .ooooo.   888     888
+         888          d88   88b  888ooooo888
+         888          888   888  888     888  dP^Y8b
+          88b    ooo  888   888  888     888      8P
+           Y8bood8P    Y8bod8P' o888o   o888o   <8B
+                                            8b    8b
+                                             Y8oo8P
+
+CoH is a nuclear reaction calculation code, which includes the optical
+model, the exciton preequilibrium model, the direct-semidirect model,
+and the Hauser-Feshbach statistical model. It calculates nuclear
+reaction cross sections for medium to heavy targets in the keV to MeV
+energy region. The nuclear reaction cross sections include nucleon
+elastic/inelastic scattering, capture, multi-nucleon evaporation, and
+nuclear fission. Two mean-field models are also included: the Finite
+Range Droplet Model (FRDM 1995) and the Hartree-Fock BCS model with
+some Skyrme interactions.
+
+
+This package includes:
+
+   + document
+       - the code manual in HTML
+   + example
+       - some examples of CoH input data files
+   + levels
+       - RIPL-3 discrete level files to be copied into a system directory
+   + source
+       - main source files
+   + beoh
+       - derivative program: BeoH, source files for CN-decay calculations
+   + omplib
+       - various optical potential
+
+   kcksyst.dat
+       - level density parameters to be copied in to a system directory
+   fisbar.dat
+       - fission barrier parameters for limited nuclei
+   nucshape.dat
+       - nuclear shape (deformation) parameters
+   decaybranchENDF.dat
+   decaybranchJENDL.dat
+       - radioactive decay branching ratio data from ENDF and JENDL
+
+For installation, compile, running the code, please see document/index.html
+

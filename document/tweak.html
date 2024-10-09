@@ -1,0 +1,197 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: tweak </title>
+<!-- Generated 2009/10/23, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="compound.html">  [BACK] </a>
+<a href="index.html">      [UP]  </a>
+<a href="option.html">    [NEXT] </a>
+<hr>
+
+<h1><a name="tweak">Adjust Parameters</a></h1>
+
+<p> In each section, there are several parameters that can be modified
+by <code>tweak</code> lines, followed by a specific parameter
+name. Basically there are four formats depending on how these
+parameters are identified.</p>
+
+<dl>
+   <dt>tweak..  : (x) <dd> unique parameter case</dd>
+   <dt>tweak..  : (particle) (x) <dd> modify emitted particle related parameters</dd>
+   <dt>tweak..  : (Z) (A) (x) <dd> modify residual nucleus related parameters</dd>
+   <dt>tweak..  : (Z) (A) (particle) (x) <dd> modify parameters for a given decay channel of residual nucleus</dd>
+</dl>
+
+<p>In the first case, an adjustable parameter that has a unique value
+throughout the calculation will be multiplied by the factor
+provided. For example, when the coupling strength of Direct/Semidirect
+capture is 100 MeV and <b>tweakDSDV: 1.10</b>, the calculation is done
+with the strength of 110 MeV.</p>
+
+<p>The second case requires a particle type, n, p, a, d, t, or h, as
+the second argument (particle), and the scaling factor (x) as the
+third parameter.</p>
+
+<p>In the last format, Z and A numbers are provided before the factor
+(x).  The Z number can be an element name.</p>
+
+<p>In all the format shown above, the factor (x) can be followed by
+one more parameter (z), for example </p>
+
+<dl>
+   <dt>tweak..  : (particle) (x) (z) <dd> </dd>
+</dl>
+
+<p>If the second parameter (z) is given, CoH draws the parameter (x)
+from Gaussian with the mean of x and width of z. At each run, CoH
+gives different answers. This requires to modify a random number seed
+at each run, by activating one of, or both, two lines in
+setup.cpp. </p>
+
+<pre>
+//#define RANDOM_SEED_BY_TIME
+//#define RANDOM_SEED_BY_PID
+</pre>
+
+
+
+<h2><a name="omp">Adjustment of Optical Potential Parameters</a></h2>
+
+<p>The optical potential parameters can be adjusted by the following
+lines for each particle. The adjustment is done for the real and
+imaginary depths and the radii of them. For the imaginary part, only
+the surface term is scaled by the factor (x).</p>
+
+<dl>
+   <dt> tweakOV  : (particle) (x) <dd> adjustment of the real potential depth </dd>
+   <dt> tweakOW  : (particle) (x) <dd> adjustment of the imaginary surface potential depth </dd>
+   <dt> tweakORV : (particle) (x) <dd> adjustment of the real potential radius </dd>
+   <dt> tweakORW : (particle) (x) <dd> adjustment of the imaginary surface potential radius </dd>
+   <dt> tweakOAV : (particle) (x) <dd> adjustment of the real potential diffuseness </dd>
+   <dt> tweakOAW : (particle) (x) <dd> adjustment of the imaginary surface potential diffuseness </dd>
+   <dt> tweakOC  : (particle) (x) <dd> adjustment of the Coulomb radius </dd>
+</dl>
+
+<h2><a name="ldp">Adjustment of Level Density Parameters</a></h2>
+
+<p>The level density of the compound nucleus can be modified by
+adjusting the asymptotic level density parameter, a<sup>*</sup>, and
+the pairing energy.  These factors are applied to the "a" parameter
+and the pairing energy of nucleus, Z-A. The level density at low
+excitation energies are automatically recalculated.</p>
+
+<dl>
+   <dt> tweakLD  : (Z) (A) (x) <dd> adjustment of the "a" parameter of Z-A</dd>
+   <dt> tweakPAIR: (Z) (A) (x) <dd> adjustment of the pairing energy of Z-A </dd>
+   <dt> tweakSPIN: (Z) (A) (x) <dd> adjustment of the spin cut-off parameter of Z-A </dd>
+   <dt> tweakPDST: (Z) (A) (x) <dd> adjustment of the parity distribution </dd>
+</dl>
+
+<p>As a default, the parity distribution in the continuum is always
+the same for the even/odd parity states. <b>tweakPDST</b> modifies the
+fraction of even and odd densities. If the given factor is 1.5, the
+even parity density is 50% larger than the odd parrity density. If the
+factor is larger than 2, this parameter is ignored.</p>
+
+
+<p>There is another way to adjust the level density parameters for the
+initial compound nucleus, by providing an experimental D0 value
+(average s-wave level spacing).</p>
+
+<dl>
+   <dt> d0search : (x) <dd> adjust "a" for the given D0</dd>
+</dl>
+
+<p>The level density parameter for the compound nucleus is
+automatically adjusted to the given D0 value, and set the factor to
+the <b>tweakLD</b> parameter.</p>
+
+
+<h2><a name="tj">Adjustment of Decay Branching Ratios</a></h2>
+
+<p> <b>tweakTJ :</b> rescales the total emission probability of this
+particle in the statistical model, by applying a scaling factor to the
+transmission coefficients of all J and L.  This scaling factor is
+applied to a given parent compound nucleus, which results in changing
+the decay branching ratios. This adjustment works for the particle
+emission channles only, hence the entrance channel transmission
+coefficients are not affected. </p>
+
+<dl>
+   <dt> tweakTJ  : (Z) (A) (particle) (x) <dd> scale whole transmission coefficients </dd>
+</dl>
+
+<p>As a special case for fission, the particle can be "f." The fission
+transmission coefficient for the i-th chance fission will be modified
+by the given factor.</p>
+
+
+<h2><a name="dsd">Adjustment of DSD Parameter</a></h2>
+
+<p>The coupling strength in the semidirect process can be modified, when
+internal built-in parameters are used.</p>
+
+<dl>
+   <dt> tweakDSDV: (x) <dd> adjustment of the "V1" parameter in semidirect</dd>
+</dl>
+
+
+<h2><a name="pre">Adjustment of Exciton Model Parameters</a></h2>
+
+<p>Parameters in the exciton model are the averaged two-body matrix
+element |M|<sup>2</sup> for n-n and p-p, and that for n-p scattering.
+These parameters define the magnitude of total pre-equilibrium
+emission.  The single particle state densities for the residual nuclei
+change relative strength of each particle emissions.</p>
+
+<p>A simple phenomenological model of the alpha-particle knock-out
+mechanism is implemented in CoH. The entire alpha knock-out spectrum 
+is rescaled by the factor.</p>
+
+<dl>
+   <dt> tweakM2  : (x) <dd> adjustment of the M2 parameter for nn and pp collisions</dd>
+   <dt> tweakM2R : (x) <dd> adjustment of the M2 parameter for np collision</dd>
+   <dt> tweakSD  : (particle) (x) <dd> adjustment of the single particle state density for that particle emission channel</dd>
+   <dt> tweakKO  : (x) <dd> re-normalize the alpha-particle knock-out</dd>
+</dl>
+
+
+<h2><a name="fis">Adjustment of Fission Parameters</a></h2>
+
+<p>You can tweak three fission parameters for each fission barrier,
+the fission height, the curvature, and the fission level density.
+Since there can be three barriers (first, second, and third barrier)
+for each fissioning compound nucleus, one nucleus has can have nine
+tuning parameters.</p>
+
+<dl>
+   <dt> tweakFH1 : (Z) (A) (x) <dd> adjustment of the fission barrier height of Z-A</dd>
+   <dt> tweakFC1 : (Z) (A) (x) <dd> its curvature</dd>
+   <dt> tweakFL1 : (Z) (A) (x) <dd> its level density</dd>
+</dl>
+
+<p>The numeric after the parameter names is for each fission barrier,
+e.g., FH1 for the first barrier, FH2 for the second barrier, etc.</p>
+
+<p>Basically the fission barriers and the curvature parameters are
+given as the inputs, you can adjust them by changing these numbers
+directly.  The factors of <code>tweakFH</code>
+and <code>tweakFC</code> are applied to these values given in the
+input file.</p>
+
+<p>The fission level densities are calculated
+internally. <code>tweakFL</code> provides a way to re-scale the
+calculated level densities.</p>
+
+<hr>
+<a href="compound.html"> [BACK] </a>
+<a href="index.html">     [UP]  </a>
+<a href="option.html">   [NEXT] </a>
+</body>
+</html>
+

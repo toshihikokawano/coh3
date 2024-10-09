@@ -1,0 +1,55 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: install </title>
+<!-- Generated 1997/ 8/27, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="introduction.html">  [BACK] </a>
+<a href="index.html">   [UP]  </a>
+<a href="usage.html">  [NEXT] </a>
+<hr>
+
+<h1> Install </h1>
+
+<p>Distribution of CoH is managed by a standard GNU Autoconf package.
+To compile all the sources you need a standard C++ compiler. GCC (GNU
+C++, g++ is recommended). The distribution package has been tested
+only on Linux and Mac OSX, but this should work on the other 
+platforms.</p>
+
+<p>To install the package, extract all the source files in an archive by </p>
+
+<pre> % tar zxvf coh-3.X.Y-Z.tar.gz</pre>
+
+<p>where <code>X,Y</code> is the version number, and <code>Z</code> is the
+project name, which is <b>Cordelia</b> now. </p>
+
+<p>Enter the directory <code>coh-3.X.Y-Z</code>, and type </p>
+
+<pre> % ./configure</pre>
+
+<p>and</p>
+
+<pre> % make ; make install</pre>
+
+<p>As a default, data files needed will be installed
+under <code>/usr/local/share/coh</code> (or something similar), and two
+executables (coh and eclipse) go to <code>/usr/local/bin</code>, so that
+the last step requires administrative privilege.  If you want to
+change the installation location, use <code>--prefix </code> option,
+like</p>
+
+<pre> % ./configure --prefix=/home/hoge/coh </pre>
+
+<p>where <code>/home/home/coh</code> is the top directory for installation. </p>
+
+<hr>
+<a href="introduction.html">  [BACK] </a>
+<a href="index.html">   [UP]  </a>
+<a href="usage.html">  [NEXT] </a>
+</body>
+</html>

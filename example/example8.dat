@@ -1,0 +1,46 @@
+#
+#  CoH3 Sample Data No.8
+#
+#  Fission Neutron Spectrum Calculation
+#
+
+BEGIN    :  U-235 fission calculation
+DATA     :
+target   :        92       235
+incident :         n
+energy   :    7
+omp_n    : Soukhovitskii
+level    : 0.000000   -3.5
+level    : 0.046207   -4.5
+level    : 0.103035   -5.5
+deform   :    0.210
+partmax  : 3
+ENDDATA  :
+
+DSD      :
+ENDDSD   :
+
+PREEQ    :
+ENDPREEQ :
+
+FNS      :
+
+# first chance fission
+fragment :  Sr   96     Xe  140
+energies :  186.98  171.8 -0.2  6.71  4.998
+density  :  8.7273      12.7273    21.4545
+nuratio  : 1
+
+# second chance fission
+fragment :  Sr   95     Xe  140
+density  :  8.7273      12.5       21.2
+
+ENDFNS   :
+
+HFS      :
+barrier  :  U 236    0  6.38   1.04
+barrier  :  U 236    1  5.05   0.55
+barrier  :  U 235    0  5.79   0.4
+barrier  :  U 235    1  5.47   0.3
+ENDHFS   :
+END      :

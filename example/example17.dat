@@ -1,0 +1,41 @@
+#
+#  CoH3 Sample Data No.17
+#
+#  Hartree-Fock BCS calculation
+#
+
+#  initial potential to be spherical Woods-Saxon
+
+BEGIN    :  Yb 176 Hartree-Fock calculation
+DATA     :
+target   : Yb 176
+ENDDATA  :
+MFT      :
+force    :   SLy4
+pairing  : delta
+strength : -1250.0  -1250.0
+converge : 100 0.0001
+print    : energy
+print    : bcs
+print    : HFmonitor
+ENDMFT   :
+END      :
+
+
+#  this time, initial potential taken from FRDM
+
+BEGIN    :  Yb 176 Hartree-Fock calculation with FRDM initial potential
+DATA     :
+target   : Yb 176
+ENDDATA  :
+MFT      :
+epsilon  : -1
+force    :   SLy4
+pairing  : delta
+strength : -1250.0  -1250.0
+converge : 100 0.0001
+print    : energy
+print    : bcs
+print    : HFmonitor
+ENDMFT   :
+END      :

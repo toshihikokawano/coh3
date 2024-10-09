@@ -1,0 +1,34 @@
+#
+#  CoH3 Sample Data No.15
+#
+#  Coupled-Channels with FRDM deformation parameter calculation
+#
+
+BEGIN    :  Au197 + n reaction
+DATA     :
+target   : Au 197
+incident :    n
+energy   :   0.4
+omp_n    : Kunieda
+level    : 0.00000     1.5
+level    : 0.27899     2.5
+ENDDATA  :
+
+#  mean-field Theory calculation
+#  when eps(1) = -1.0, all epsilons are red from data file
+
+MFT      :
+epsilon  : -1
+print    : spstate
+ENDMFT   :
+
+DSD      :
+ENDDSD   :
+
+PREEQ    :
+ENDPREEQ :
+
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :

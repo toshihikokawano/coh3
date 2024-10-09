@@ -1,0 +1,143 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: input (direct)</title>
+<!-- Generated 2009/ 9/24, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="optical.html">   [BACK] </a>
+<a href="index.html">      [UP]  </a>
+<a href="compound.html">  [NEXT] </a>
+<hr>
+
+<h1><a name="direct">Direct Reactions</a></h1>
+
+<h2><a name="dwba">DWBA Calculation</a></h2>
+
+<p>In addition to the <code>DATA</code> section, DWBA calculations for 
+inelastic scattering to a vibrational state requires another top
+level keyword <code>DWBA</code>. The next example calculates
+the neutron inelastic scattering on Fe56 to excite the first level
+2+ state.</p>
+
+<pre>
+BEGIN    :  DWBA to the first excited state
+DATA     :
+target   :        Fe        56
+incident :         n
+energy   :      10.0
+omp_n    : Koning
+level    : 0.000e+00       0.0
+ENDDATA  :
+DWBA     :
+level    :  0.8468+00      2.0      0.120
+nonloc   :  0.85
+ENDDWBA  :
+END      :
+</pre>
+
+<p> The <code>DATA</code> section is the same as the optical model
+calculation, so that with this input CoH first performs a normal
+spherical optical model calculation, then the DWBA direct cross
+section to the 846.8keV level is calculated. The <code>level</code> line,
+which defines the ground state spin, should be given in the <code>DATA</code>
+section.</p>
+
+<p>In the <code>DWBA</code>, there are two valid data-definition keywords.</p>
+
+<ul>
+<li> level    :</li>
+<li> nonloc   :</li>
+</ul>
+
+<p>The <code>level</code> is for the excited state information (excitation
+energy, spin, and &beta;<sub>L</sub> value, and the <code>nonloc</code> line
+is for the non-locality correction, which is empirically known to be
+0.85. </p>
+
+
+<h2><a name="dsd">Direct/Semidirect Capture Calculation</a></h2>
+
+<p>The direct/semidirect capture cross section is calculated when
+the top level keyword of <code>DSD</code> exists. Four data-definition
+keywords will be in this section.</p>
+
+<ul>
+<li> interact :</li>
+<li> nonloc   :</li>
+<li> boundmax :</li>
+<li> efshift  :</li>
+</ul>
+
+<p>and the input data file looks like</p>
+
+<pre>
+BEGIN    :  DSD calculation
+DATA     :
+incident :         n
+target   :        33        75
+energy   :      14.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+interact :      90.0      70.0
+nonloc   :      0.85
+ENDDSD   :
+END      :
+</pre>
+
+<p>The <code>nonloc</code> keyword is the non-locality correction for the
+distorted wave. This is the same as that in the <code>DWBA</code> section,
+but treated independently.</p>
+
+<p>The <code>interact</code> line defines the coupling strength of the 
+semi-direct process. The first value is the real part, and the 
+second value is the imaginary part, both in MeV. If this keyword
+is omitted, CoH calculate the DSD cross sections with the internal
+values. Since the DSD cross sections are small,</p>
+
+<pre>
+BEGIN    :
+DATA     :
+incident :         n
+target   :        33        75
+energy   :      14.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+END      :
+</pre>
+
+<p>the input like above should work for many cases. However, for 
+near the double-magic nuclei like <sup>208</sup>Pb, relative
+magnitude of DSD is comparable or larger than the compound reaction,
+and it is difficult to change the shape of cross section by
+<code>interact</code> only. To perform fine tuning,
+
+<pre>
+DSD      :
+boundmax : 1.0
+efshift  : -1.5
+ENDDSD   :
+</pre>
+
+<code>boundmax</code> changes the highest single particle orbit. This
+case includes the levels up to the binding energy of 1 MeV. When set
+to zero, only the bound levels below the Fermi energy will be
+included. <code>efshift</code> shifts the Fermi energy, which also
+modifies the DSD cross section.</p>
+
+
+</p>
+
+
+<hr>
+<a href="optical.html">   [BACK] </a>
+<a href="index.html">      [UP]  </a>
+<a href="compound.html">  [NEXT] </a>
+</body>
+</html>

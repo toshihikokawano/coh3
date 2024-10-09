@@ -1,0 +1,205 @@
+#
+#  CoH3 Sample Data No.14
+#
+#  Maxwellian Average Cross Section
+#
+
+BEGIN    : KADoNiS 1049 +/- 17 mb
+DATA     :
+incident :        n
+target   :       Gd  152
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 4550 +/- 700 mb
+DATA     :
+incident :        n
+target   :       Gd  153
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 1028 +/- 12 mb
+DATA     :
+incident :        n
+target   :       Gd  154
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 2648 +/- 30 mb
+DATA     :
+incident :        n
+target   :       Gd  155
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 615 +/- 5 mb
+DATA     :
+incident :        n
+target   :       Gd  156
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 1369 +/- 15 mb
+DATA     :
+incident :        n
+target   :       Gd  157
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 324 +/- 3 mb
+DATA     :
+incident :        n
+target   :       Gd  158
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :
+
+BEGIN    : KADoNiS 154 +/- 20 mb
+DATA     :
+incident :        n
+target   :       Gd  160
+macs     : 0.001
+macs     : 0.005
+macs     : 0.01
+macs     : 0.02
+macs     : 0.03
+macs     : 0.05
+macs     : 0.1
+macs     : 0.2
+macs     : 0.5
+macs     : 1.0
+omp_n    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+photo    : -1
+ENDHFS   :
+END      :

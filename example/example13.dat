@@ -1,0 +1,58 @@
+#
+#  CoH3 Sample Data No.13
+#
+#  Multiple incident energy calculation
+#
+
+BEGIN    :  Mo-95 reaction calculation from 1keV to 3MeV
+DATA     :
+incident :   n
+target   :   Mo 95
+energy   : 0.001
+energy   : 0.002
+energy   : 0.005
+energy   : 0.01
+energy   : 0.02
+energy   : 0.05
+energy   : 0.1
+energy   : 0.2
+energy   : 0.3
+energy   : 0.4
+energy   : 0.5
+energy   : 0.6
+energy   : 0.7
+energy   : 0.8
+energy   : 0.9
+energy   : 1.0
+energy   : 1.1
+energy   : 1.2
+energy   : 1.3
+energy   : 1.4
+energy   : 1.5
+energy   : 1.6
+energy   : 1.7
+energy   : 1.8
+energy   : 1.9
+energy   : 2.0
+energy   : 2.2
+energy   : 2.4
+energy   : 2.6
+energy   : 2.8
+energy   : 3.0
+
+omp_n    : Koning
+omp_p    : Koning
+omp_a    : Avrigeanu2009
+ENDDATA  :
+
+DSD      :
+interact : 140
+ENDDSD   :
+
+PREEQ    :
+ENDPREEQ :
+
+HFS      :
+photo    : -1.0
+ENDHFS   :
+END      :

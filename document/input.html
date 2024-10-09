@@ -1,0 +1,186 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: input (general) </title>
+<!-- Generated 1997/ 8/28, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="usage.html">   [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="optical.html">  [NEXT] </a>
+<hr>
+
+<h1>Input Data Format Description</h1>
+
+<h2><a name="general">General Description</a></h2>
+
+<p>Each line in the control data file begins with a 10-character
+keyword terminated by a colon <code>:</code>, and some numbers or letters follow,
+depending on the keyword.  The keywords are classified into two
+categories, the top level keywords and the data-definition keywords. The
+top level keywords define a calculation flow, and the data-definition
+keywords provide numerical data for each specific entry.</p>
+
+
+<p>There are seven top level keywords as following;
+(underscores are inserted instead of a blank to make each of the 
+keywords to be 10-characters)</p>
+
+<dl>
+   <dt>BEGIN____: <dd> input data start here </dd>
+   <dt>DATA_____: <dd> system common parameters in this section </dd>
+   <dt>DWBA_____: <dd> start DWBA calculation </dd>
+   <dt>DSD______: <dd> start Direct/Semidirect calculation </dd>
+   <dt>PREEQ____: <dd> start preequilibrium calculation, </dd>
+   <dt>FNS______: <dd> start prompt fission neutron spectrum calculation, </dd>
+   <dt>HFS______: <dd> start statistical Hauser-Feshbach calculation, </dd>
+   <dt>MFT______: <dd> include mean-field theory calculation, and
+   <dt>END______: <dd> close the top-level sections. </dd>
+</dl>
+
+<p>The input data files must start with the <code>BEGIN</code>
+keyword (colon requited at 10th column), and must be closed by
+the <code>END</code> keyword. For the other top level keywords,
+they also have a corresponding keyword to close each section,
+like <code> ENDDATA </code> for the <code>DATA</code> section,
+<code>ENDDWBA</code> for the <code>DWBA</code> section, etc.
+
+<p>These keywords control the flow of CoH calculations. For example,
+if <code>PREEQ</code> section is omitted, CoH does not calculate the
+preequilibrium process. These keywords do not take any optional
+parameters after ":", except for the keyword <code>BEGIN</code>.  An
+arbitrary text after the <code>BEGIN</code> keyword is printed as a title
+of calculation.</p>
+
+<p>The simplest case is to provide <code>BEGIN</code> and <code>END</code> only,
+where</p>
+<pre>
+# this is a comment line
+BEGIN    : Do nothing
+
+END      :
+</pre>
+<p>prints the comment line "Do nothing" and in fact CoH does nothing.</p>
+
+<p>CoH ignores lines if they are blank or if the first character is #,
+as above.</p>
+
+<p>When system parameters are only provided in the <code>DATA</code> section,
+CoH calculates an entrance channel optical model.</p>
+<pre>
+BEGIN    :  Optical Model Calculation
+DATA     :
+target   :        23        51
+incident :         n
+energy   : 1.0
+omp_n    : Wilmore
+ENDDATA  :
+END      :
+</pre>
+<p>This is a minimum case that includes required data-definition keywords
+to run the code. On the right side of the data-definition keywords, the values
+are in a free format. If more than two values are defined, they are separated
+by spaces.</p>
+
+
+<h2><a name="structure">Data Structure</a></h2>
+
+<p>Basically CoH performs different model calculations according to
+the order of top level keywords.  One exception is for
+the <code>DATA</code> section, in which global parameters such as Z and A
+numbers are defined. For example, the input data below are for the
+DWBA calculation,</p>
+<pre>
+BEGIN    :  DWBA to the first excited state
+DATA     :
+target   :        Fe        56
+incident :         n
+energy   :      10.0
+omp_n    : Koning
+level    : 0.000e+00       0.0
+ENDDATA  :
+DWBA     :
+level    :  0.8468+00      2.0      0.120
+nonloc   :  0.85
+ENDDWBA  :
+END      :
+</pre>
+
+<p>and the next one is for the statistical model calculation, with
+preequilibrium emission.</p>
+<pre>
+BEGIN    :  Tc reaction calculation
+DATA     :
+incident : n
+target   : Tc   99
+energy   : 5.0
+omp_n    : Koning
+omp_p    : Koning
+omp_a    : Avrigeanu
+ENDDATA  :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+ENDHFS   :
+END      :
+</pre>
+
+<p>When any of the top level keywords <code>PREEQ</code>, <code>DWBA</code>, <code>DSD</code>,
+or <code>HFS</code> exists in the input file, CoH performs these model calculations,
+if not, CoH skips that model.</p>
+
+<p>If multiple line of <code> energy </code> are given, CoH repeats the calculation
+to these incident energies, for example:</p>
+<pre>
+BEGIN    :  Gd
+DATA     :
+incident : n
+target   : Gd  164
+energy   : 1.0
+energy   : 2.0
+energy   : 3.0
+energy   : 4.0
+omp_n    : Becchetti
+ENDDATA  :
+END      :
+</pre>
+
+
+<p>Instead of providing many incident energies, 
+CoH has four types of default energy grid,</p>
+<pre>
+egrid    : 1
+</pre>
+<p>where the number can be 1, 2, 3, or 4. 1 is the most general energy
+grid, 2 might be good for a neutron capture calculation as it has more
+data points at low energies, and the maximum is 5 MeV, 3 and 4 are the
+coarse grids designed for a testing purpose. See
+<source/cohegrid.h</source> for the actual incident energy grids.</p>
+
+
+<p>Similar to the multiple <code> energy </code> case, CoH calculates
+the Maxwellian average cross section at given temperatures in MeV.
+The actual calculation energies are hardwired in the code.</p>
+<pre>
+BEGIN    :  Gd
+DATA     :
+incident : n
+target   : Gd  164
+macs     : 0.01
+macs     : 0.03
+macs     : 0.1
+omp_n    : Becchetti
+ENDDATA  :
+END      :
+</pre>
+
+
+<hr>
+<a href="usage.html">   [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<a href="optical.html">  [NEXT] </a>
+</body>
+</html>

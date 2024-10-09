@@ -1,0 +1,25 @@
+#
+#  CoH3 Sample Data No.11
+#
+#  Charged Particle-induced Reaction Calculation
+#
+
+BEGIN    :  He3 + C12 Reaction
+DATA     :
+target   :    C    12
+incident :    h
+energy   :   16
+omp_n    :  Koning
+omp_p    :  Koning
+omp_a    :  Lemos
+omp_d    :  Bojowald
+omp_t    :  Becchetti
+omp_h    :  Becchetti
+ENDDATA  :
+
+PREEQ    :
+ENDPREEQ :
+
+HFS      :
+ENDHFS   :
+END      :

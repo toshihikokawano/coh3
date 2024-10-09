@@ -1,0 +1,25 @@
+#
+#  CoH3 Sample Data No.10
+#
+#  Photo-induced Reaction Calculation
+#
+
+BEGIN    : K-39 + gamma-ray calculation
+DATA     :
+target   :    K    39
+incident :    g
+energy   :   20
+omp_n    :  Koning
+omp_p    :  Koning
+omp_a    :  Avrigeanu2009
+omp_d    :  Bojowald
+omp_h    :  Becchetti
+omp_t    :  Becchetti
+ENDDATA  :
+HFS      :
+
+# GDR parameter
+gdr      : E1  20.83   7.74 60.0
+
+ENDHFS   :
+END      :

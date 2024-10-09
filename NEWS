@@ -1,0 +1,36 @@
+coh version 3.0 : Callisto
+--------------------
+* first version of cross section calculations
+* angular distribution of scattering cross sections
+* new output file AngularDistribution.dat
+
+
+coh version 3.1 : Ariel
+--------------------
+* fission improved version
+
+
+coh version 3.2 : Umbriel
+--------------------
+* eclipse merged version
+
+
+coh version 3.3 : Titania
+--------------------
+* new memory allocation scheme version
+
+
+coh version 3.4 : Oberon
+--------------------
+* mean-field theories included
+
+
+coh version 3.5 : Milanda
+--------------------
+* coupled-channels enhanced version
+
+
+coh version 3.6 : Cordelia
+--------------------
+* open-source version
+

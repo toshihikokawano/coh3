@@ -1,0 +1,27 @@
+#
+#  CoH3 Sample Data No.5
+#
+#  Neutron-Induced Particle Emission Reaction on Ni58
+#
+
+BEGIN    :  Hauser-Feshbach calculation for Ni58
+DATA     :
+target   :        28 58
+incident :        n
+energy   :        20.0
+omp_n    : Koning
+omp_p    : Koning
+omp_a    : Lemos
+omp_d    : Bojowald
+omp_t    : Becchetti
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+#           pre-eq matrix elements Mnn and Mnp scaled by 10%
+tweakM2  :   1.1
+tweakM2R :   1.1
+ENDPREEQ :
+HFS      :
+ENDHFS   :
+END      :

@@ -1,0 +1,34 @@
+#
+#  CoH3 Sample Data No.9
+#
+#  Coupled-Channels Optical Model Calculation
+#  Monte Carlo search for S0 and S1
+#  Each run gives different strength functions
+#
+
+BEGIN    :  Soukhovitskii CC potential
+DATA     :
+target   :         U       238
+incident :         n
+energy   :    0.001
+omp_n    : Soukhovitskii
+level    : 0.0           0.0
+level    : 0.044916      2.0
+level    : 0.148380      4.0
+level    : 0.307180      6.0
+level    : 0.518100      8.0
+level    : 0.775900     10.0
+deform   :    0.210
+
+# randomize optical potential parameters
+# 3% for V, 20% for W, 1% for radii, 20% for difuseness
+
+tweakOV  : n  1.0   0.03
+tweakOW  : n  1.0   0.2
+tweakORV : n  1.0   0.01
+tweakORW : n  1.0   0.01
+tweakOAV : n  1.0   0.2
+tweakOAW : n  1.0   0.2
+
+ENDDATA  :
+END      :

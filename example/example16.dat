@@ -1,0 +1,20 @@
+#
+#  CoH3 Sample Data No.16
+#
+#  FRDM calculation
+#
+
+BEGIN    :  Pb 208 shape calculation
+DATA     :
+target   : Pb 208
+ENDDATA  :
+
+#  generate almost spherical nucleus,
+#  and print the mesh data on CoHFRDMShape.dat and CoHFRDMBeta.dat
+
+MFT      :
+epsilon  : 0.0   0.0   0.01   0.0   0.0   0.0
+print    : FRDMshape
+ENDMFT   :
+
+END      :

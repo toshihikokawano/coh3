@@ -1,0 +1,24 @@
+#
+#  CoH3 Sample Data No.3
+#
+#  DWBA Calculation for the First Excited State of Fe56
+#
+
+BEGIN    :  DWBA to the first excited state
+DATA     :
+target   :        Fe        56
+incident :         n
+energy   :   10.0
+omp_n    : Koning
+level    : 0.000e+00       0.0
+ENDDATA  :
+
+#  DWBA section describes the collective state
+
+DWBA     :
+#          excitation  spin-transfer  beta2
+level    :  0.8468+00            2.0  0.120
+#          non-locality correction
+nonloc   : 0.85
+ENDDWBA  :
+END      :

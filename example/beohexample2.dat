@@ -1,0 +1,24 @@
+#
+#  BeoH Sample Data No.2
+#
+#  Delayed fission calculation of 232Ac
+#
+#
+
+BEGIN    :  BeoH test input file 2
+DATA     :
+precursor:     Ac 232
+omp_n    :  Koning
+bin      :  0.1
+ENDDATA  :
+
+BETA     :
+gtstate  :
+gtstate  :      2.5    80.0
+gtstate  :      3.0    20.0
+ENDBETA  :
+
+HFS      :
+barrier  :   Th 232  0  5.0  0.6
+ENDHFS   :
+END      :

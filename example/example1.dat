@@ -1,0 +1,53 @@
+#
+#  CoH3 Sample Data No.1
+#
+#  Spherical Optical Model Calculation for Vanadium with 
+#  different optical potentials
+#
+
+#  This is minimum required data
+
+BEGIN    :  Wilmore-Hodgson
+DATA     :
+target   :        23        51
+incident :         n
+energy   : 1.0
+omp_n    : Wilmore
+ENDDATA  :
+END      :
+
+#  change the neutron optical potential
+#  atomic number can be an element name
+
+BEGIN    :  Walter-Guss
+DATA     :
+target   :         V        51
+incident :         n
+energy   : 1.0
+omp_n    : Walter
+ENDDATA  :
+END      :
+
+#  calculation repeats until CoH reads EOF
+#  BEGIN line enforces parameter reset
+
+BEGIN    :  Koning-Delaroche
+DATA     :
+target   :         V        51
+incident :         n
+energy   : 1.0
+omp_n    : Koning
+ENDDATA  :
+END      :
+
+
+#  for a proton case
+
+BEGIN    :  Koning-Delaroche
+DATA     :
+target   :         V        51
+incident :         p
+energy   : 5.0
+omp_p    : Koning
+ENDDATA  :
+END      :

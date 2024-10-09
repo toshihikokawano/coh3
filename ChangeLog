@@ -1,0 +1,2483 @@
+2024-10-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohoutput.cpp (outIsomericRatio): updated
+	* beoh/beohffragbeta.cpp (cfyReadDecayData): updated
+	print J-Pi of isomeric state
+
+2024-05-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* document/index.html: update
+	manual updated
+
+2024-05-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outbanner.h: updated
+	Nakahara's poetry added
+
+	* source/masstable.cpp: older mass tables removed
+
+	* omplib/omplib.h: files moved
+	omplib under source directoy moved to the top directory
+
+	* source/coh.cpp: updated
+	the entire source files were updated, including a lot of modifications
+	namespace std removed from all the files
+	NULL changed into nullptr
+	function arguments defined by the const-type
+	removed unnecessary headers
+	new version, 3.6 Cordelia
+
+2024-04-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/mt19937.cpp: new file
+	replacement of mt19937.c
+	random number now taken from C++ library
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): updated
+	for <Gamma> for non-zero target, the average weight was changed
+	into level densit
+
+2024-04-16  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/fileout.h (class Radioactive): new class
+	production cross section of radiactive nuclide
+
+	* source/fileout.cpp (fioWriteCrossSectionRadioactive): new function
+	print radioactive nuclides and isomers (fioWriteCrossSectionIsomer obsoleted)
+
+	* source/ripl2levels.cpp (riplReadDiscreteLevels): updated
+	sometimes -1 given to halflife, include the negative sign
+
+2023-10-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupGeneralParameter): updated
+	change the excited level selection criteria from 1 keV to 0.1 keV
+	to avoid misidentification of the excited target
+
+2023-05-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statdecay.cpp (specCompoundElastic): updated
+	jmax fixed before loop to skip too high J
+
+	* source/output.cpp (outFissionBarrier): updated
+	* source/dataread.cpp (readStatModel): updated
+	* source/fispop.cpp (specTransitionFission): updated
+	* source/structur.h (class FisEnhance): updated
+	* source/fpotential.cpp (specFissionPotentialModel): new functions
+	one-dimensional penetration calculation for fission channel
+	level compress parameters added
+	
+
+2023-04-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/macs.cpp (macsStoreCrossSection): updated
+	* source/fileout.cpp (fioWriteCrossSectionParticle): updated
+	sprintf() replaced by ostringstream
+
+2023-04-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohsetup.cpp (setupEnergy): updated
+	check if precursor decays by beta+
+
+2023-02-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaBranch): updated
+	print internal conversion too, when gammaray_compabible_mode is false
+	
+	* source/ripl2levels.cpp (riplReadDiscreteLevels): updated
+	eliminate the ground state case, since no gamma transition
+
+2023-02-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (main): bug fixed
+	print option ignored even if mchistory is set in the Monte Carlo mode
+
+2022-12-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/global.h (PRN_FISENERGY): updated
+	new print option to make a fission energy tabele
+	before it was activated by a def-line in fns.cpp
+
+2022-12-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dir.h: updated
+	* source/omplib/wlh.cpp: new file
+	* beoh/ffpparameter.cpp: updated
+	* beoh/ffpyield.cpp (FFPGeneratePairs): new function
+	* beoh/beohffrag.cpp (beohEnergyDependentParameters): updated
+	(beohReadInputFiles): new function
+	* beoh/beohdataread.cpp (readFissionFragment): updated
+	Lovell's updates merged 
+
+	* beoh/beohffrag.cpp (beohFissionFragmentInit): updated
+	avoid 5th chance fission
+
+2022-12-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): modified
+	average gamma width for different spin states averaged with spin-weight
+
+2022-11-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cohegrid.h (coh_egrid4): updated
+	new energy grid added
+
+2022-11-13  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/global.h (GlobalOption): updated
+	continuumangdist in global option added
+	(class GlobalPrint): updated
+	mchistory in global print added 
+
+	* source/statdecay.cpp (specContinuumAngularDistribution): new function
+	* source/output.cpp (outLegendreCoefficient): modified
+	* source/parleg.cpp (specBiedenharnContinuum): new function
+	new option continuumangdist calculate compound angular distributions to the continuum in the residual nuclei
+	this option may not be used since these angular distributions are close to isotropic
+
+2022-11-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/mchf.h: new file
+	* beoh/beohspecmc.cpp: new file
+	Monte Carlo compound decay imported from cgm
+	
+2022-11-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/constant.h: updated
+	default energy bin number increased to 3000
+
+2022-09-27  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statmaniplevel.cpp (statForceIncludeMeta): bug fixed
+	when internnalconversion is on and meta-stable enforcement happens, gamma-ratio was not defined
+
+2022-09-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/spectra.cpp (spectraExclusive): modified
+	avoid zero-div for non-neutron reaction cases
+
+2022-09-15  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statcompounddecay.cpp (specCompoundDecay): bug fixed
+	FNS calculation for photo-induced case, add PE to sigma_reac for fission probability calculation
+
+2022-09-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodeltools.cpp (specSortDiscreteGamma): new function
+	sort discrete gamma-rays, for printing only
+
+	* beoh/beohffragcalc.cpp (FFPCombinedSpectra): updated
+	(FFPSplitCalc1): updated
+	* beoh/beohoutput.cpp (outDiscreteGamma): new function
+	(outSpectrumFineGamma): new function
+	* beoh/beohspectra.cpp (beohspectra): modified
+	* beoh/beohffrag.cpp (beohFissionFragmentMain): modified
+
+	print all discrete fission gamma-rays
+
+2022-09-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodeltools.cpp (specPrimaryGamma): modified
+	(specDiscreteGamma): modified
+	moved two functions from spectra to statmodeltools
+
+	* source/coh.cpp (cohAllocateMemory): modified
+	* source/constant.h: updated
+	* source/output.cpp (outSpectrumFineGamma): new function
+	spectrum by discrete gamma-lines printed separately
+
+	* source/spectra.cpp (specDiscreteGamma): updated
+	name changed, from CascadeGamma to DiscreteGamma, and push method used
+
+	* source/structur.h (class GammaLine): updated
+	new method push added, and cut-off population defined inside the class
+
+2022-08-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (CrossSection): modified
+	* source/global.h (class GlobalOption): modified
+	* source/statmodeltools.cpp (specCumulativeSpectraFineGamma): new function
+	* source/spectra.cpp (spectra): modified
+	* source/output.cpp (outSpectrumFineGamma): new function
+	(outParticleProduction): modified
+	new option finegammaspectrum added
+	discrete transition gamma stored in a finer energy grid array
+
+2022-08-25  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* beoh/beohffragcalc.cpp (FFPSetExcitationEnergy): modified
+	avoid zero division when excitation energies are both zero
+
+2022-08-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohdataread.cpp (readMultiChanceFission): updated
+	* beoh/ffpyield.cpp (FFPMassYieldTune): new function
+	new parameter, fine tune, added to modify the FF yield
+
+	* beoh/beohffragcalc.cpp (FFPSelectZA): new function
+	* beoh/beohdataread.cpp (readSystem): updated
+	new parameters, select_z and select_A, added to restrict calculations for given Z and A
+	* beoh/ffpyield.cpp (FFPMassYieldParameters): modified
+	names ChainYield and chain_yield changed into MassYield and mass_yield
+
+2022-08-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fileout.h: 
+	* source/fileout.cpp (fioWriteCrossSectionIsomer): new function
+	print isomeric state production
+
+2022-06-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohsetup.cpp (setupParticle): new function
+	* beoh/beohffrag.cpp (beohFissionFragmentInit): updated
+	* beoh/beohdataread.cpp (readSystem): updated
+	beohffrag input requires incident particle, otherwise spontaneous fission assumed
+	
+
+2022-06-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciparm.cpp (NO_PAIRING_SHIFT): defined
+	this keyword is defined in the recent code,
+	which makes some changes in proton and alpha emission from PE
+
+	* source/coulomb.cpp: new file
+	* source/extwave.cpp (omExternalFunction): updated
+	* source/asympt.cpp: this file is no longer used, but we keep it for a while
+	new Coulomb function code merged, called by extwave.cpp
+	for neutrons, keep the original method
+
+	* source/output.cpp (outGDR): updated
+	print GDRs for all nuclei (printall option, not activated)
+	skip parameter printing when external data are given
+
+2022-06-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* configure.ac:  new version number 3.5.5
+	calculation of gamma-ray transmission coefficients more flexible
+
+	* source/gampop.cpp (specTransitionGamma): updated
+	* source/stattrans.cpp (statStoreDiscreteGammaTransmission): new function
+	* source/gtrans.cpp (gdrGammaTransmission): updated
+	when readphotoabsorption option is activated, gamma-ray transmision
+	is calculated from the data given by external file, and interpolated
+
+	* source/gtransread.cpp: new file
+	read photo-absorption cross section table and
+	convert it into strength function
+
+	* source/datatable.h: new file
+	* source/datatable.cpp: new file
+	general class to store tabulated data
+	
+
+2022-06-02  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaStrengthFunction): new function
+	print gamma-ray strength functino (photo-absorption as an inverse channel)
+
+	* source/gtrans.cpp: modified
+	object gdr changed into pointer to an object
+
+	* source/statparm.cpp (statSetupGdrSystematics): new function
+	(statSetupGdrParameter): updated
+	use statSetupGdrParameter() for the first CN, then use Systematics() for the rest
+
+	* source/statmodel.cpp (statParameterSetting): updated
+	* source/structur.h (class Nucleus): updated
+	* source/spectra.cpp (spectra): modified
+	* source/spectra.cpp (spectraExclusive): modified
+ 	Class Nucleus includes GDR parameters, allows to change GDR for each CN
+	spectra calls gdrParameterSave() to point proper GDR parameters
+
+	* source/gtrans.cpp (gdrParameterSave): modified
+	calculate droplet width here for each CN
+	(gdrParameterReset): modified
+	this function is no longer used
+
+2022-05-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/gdr.h (class GDR): updated
+	* source/output.cpp (outGDR): updated
+	* source/dataread.cpp (readStatModel): updated
+	GDR class includes the shape of Lorentzian (SL, GL, and ML),
+	which can be specified in input
+	Calling gdrGammaTransmission() also updated accordingly
+
+	* source/photoabs.cpp (photoAbsorption): updated
+	* source/popinit.cpp (statStoreInitPopulationPhoton): new function
+	calculate initial population for photo-induced reaction more precisely,
+	while older version had simplification for M1 and E2
+
+	* source/statparm.cpp (statSetupGdrParameter): modified
+	GDR parameters given in input will be always used, even if E1 is missing
+
+2022-05-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/omoutput.cpp (outOMPtable): new function
+	tabulate optical potential parameters (not used)
+
+2022-05-04  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/eclddx.cpp (ddxEnergyArray): bug fixed
+	when the highest inelastic level is very close to the incident energy,
+	the DDX continuum spectrum should be omitted
+	(ddxEnergyArray): 
+
+2022-04-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupClearCrxArray): bug fixed
+	* source/spectra.cpp (specCascadeGamma): updated
+	* source/structur.h (init): updated
+	-q64 option did not work when multiple incident energies are given
+	gml array cleared when move to the next energy point
+
+	* source/fileout.cpp (rname1): updated
+	reaction name "non-elasitc" changed into "CNFormation"
+
+2022-03-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (class FisEnhance): updated
+	* source/fispop.cpp (specTransitionFission): updated
+	empirical fission enhance near the threshold, still experimental
+
+2022-02-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/spectra.cpp (spectraExclusive): bug fixed
+	but that clean up dp array removed, since it contains pre-equilibrium spectrum
+
+	* source/statdirect.cpp (statDirectSpectra): modified
+	shape elastic removed from the total spectrum,
+	due to a problem in calculating the exclusive soectrum
+
+2021-10-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	miminum input check added
+
+2021-06-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciton.cpp (preqEmissionRate): updated
+	* source/exciparm.cpp (preqCollectiveEnhancement): new function
+	phoenomenological collective enhancement in pre-equilibrium added
+	no_pairing_shift default
+
+2021-04-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/omplib/avrigeanu.cpp (OMPAvrigeanu2014): new function
+	* source/omplib/omplib.h: updated
+	* source/builtin.cpp (omp_library): updated
+
+	alpha potential Avrigeanu 2014 added
+
+2021-03-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohmain.cpp (beohReadInputFile): updated
+	* beoh/beohffragdecay.cpp (beohFFDecaySpec): updated
+	* beoh/beohffragcalc.cpp (FFPSplitCalc2): updated
+	chi-calc mode restored
+
+	* source/stataveragespace.cpp (statCalculateD0): bug fixed
+	extra factor of 0.5 in density calc for non-zero spin case removed
+
+2021-01-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohffrag.h (class MultiChanceFissionData): modified
+	* beoh/beohffrag.cpp (beohEnergyDependentParameters): modified
+	* beoh/beohdataread.cpp (readMultiChanceFission): modifed
+	add spinfactor1 for energy-dependent part
+
+2020-10-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cccalc.cpp (ccPreset): updated
+	Jmax increased slightly for approximated S-matrix printing
+
+2020-08-27  KAWANO Toshihiko  <kawano@lanl.gov> 
+
+	* beoh/beohffrag.cpp (beohEnergyDependentParameters): updated
+	* beoh/beohdataread.cpp (readMultiChanceFission): updated
+	energy-dependence term in Zp factor added (this happend before 8/22)
+	
+	* source/exciton.cpp (preqLevelPopulation): modified
+	discrete level excitation by pre-equilibrium temporally diabled
+
+2020-08-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohdataread.cpp (readMultiChanceFission): modified
+	* beoh/beohffrag.cpp (beohFissionFragmentInit): modified
+	new input eprefiss added
+	when multi-chance data file is used, and the same input exists in the input file,
+	input file data will be used
+
+2020-05-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/wahl.cpp (WahlZpModel): modified
+	Zp model even-odd term tuning factor added
+
+	* beoh/beohffrag.cpp (beohEnergyDependentParameters): new function
+	* beoh/beohffrag.h (class MultiChanceFissionData): modified
+	* beoh/beohdataread.cpp (readMultiChanceFission): modified
+	energy dependent terms in Gaussians, TKE, and RT added
+
+2020-05-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/ccsetform.cpp (ccPotentialFormRot): bug fix
+	energy dependent omp for groundstateomp option case fixed
+
+2020-04-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* configure.ac: new version number 3.5.4
+	fission fragment decay mode in BeoH upgrade
+	multi-chance fission included
+	beta-delayed product calculation added
+
+2020-02-26  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/coh.cpp (cohTerminateCode): updated
+	code termination process changed, message now global
+	all the files that contain cohTerminateCode were modified
+
+	* source/coupling.cpp: modified
+	file cleaned up, method to allocate *fact modified
+
+2020-02-05  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/fns.cpp (fnsExfissCheck): new function
+	print average excitation for fission and its ditribution
+	this is for debugging
+
+2020-02-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fns.cpp (fnsFissionNeutronModel): updated
+	calculate average exciation energy causing fission
+
+	* source/fnssystematics.h: new file
+	* source/fnssystematics.cpp: new file
+	some functions in fns.cpp moved to this new file
+
+2020-02-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statcompounddecay.cpp (specLostPopFraction): updated
+	save two variables; fission probability at each bin,
+	and lost population due to fission
+
+	* source/structur.h (class FChance): modified
+	member exfiss for average excitation energy for fission added
+
+2019-11-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaLine): updated
+	* source/statmodeltools.cpp (specGaussianBroadening): new function
+	boaden discrete gamma-lines by Gaussian when Gaussian width is given
+
+2019-08-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/polysq.cpp (LSQLegendre): modified
+	chi-sq calculation changed to a normalized value to increase L-max
+
+2019-07-16  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cohmain.cpp (cohMainLoop): bug fixed
+	clear angdist array for multiple incident energy case
+
+2019-04-03  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/output.cpp (outFissionNeutronEnergy): modified
+	print out average fission energies for multi-chance fission
+
+2019-04-02  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statdirect.cpp (statDirectSpectra): modified
+	add shape elastic to the total spectrum, per HI.K's request
+
+2019-03-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	* source/global.h (class GlobalOption): modified
+	chargediscrete option added
+
+	* source/eclipse.h (class EXSpectra): modified
+	gbin member removed
+
+	* source/eclspectra.cpp (eclSpectra): modified
+	* source/eclddx.cpp: byg fixed
+	* source/eclipse.cpp: bug fixed
+	exclusive spectra for charged particles when DDX calc. invoked
+	discrete transisions to the levels were not included
+
+2019-01-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (class Dcapt): modified
+	* source/dataread.cpp (readDsd): modified
+	* source/nilsson.cpp (nilssonLevel): modified
+	some DSD parameters red from inputs
+
+2018-11-15  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/output.cpp (outFission): modified
+	in case charged particles are emitted prior to fission,
+	we define the number of chance is just the number of neutrons emitted
+
+2018-09-17  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciparm.cpp (preqStateDensity): modified
+	avoid round-off error
+
+2018-08-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coupling.cpp (min3): modified
+	gcc7 hack, to clear misleading-identation warning
+
+	* source/etc.cpp (gam): modified
+	gcc7 hack, to clear misleading-identation warning
+
+	* source/omcalc.cpp (omCalc): modified
+	gcc7 hack, to clear implicit-fallthrough warning
+
+2018-08-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDMsolvebcs.cpp (LNSolveBCS): updated
+	Lipkin-Nogami convergence improved
+
+2018-07-31  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/betaexpansion.cpp (BetaExpansion): bug fix
+	* source/FRDMmain.cpp (FRDMmain): bug fix
+	3D mesh print option, inconsistent instance and class definition of PolarCoordinate
+
+2018-07-09  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statreaddensity.cpp (statReadDensityFile): modified
+	avoid reading error when the data format is different
+
+	* source/exciton.cpp (preqSpinDistribution): modified
+	U238 spin distribution added
+
+2018-05-24  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/beta2.cpp (beta2Read): modified
+	uninitialized warning made quiet
+
+	* source/ecloutput.cpp: modified
+	eclHead commented out (not used)
+
+	* source/omsetform.cpp: modified
+	omSecondDerivGaussian commented out (not used)
+
+	* source/HObasis.h (OneBodyPotential): modified
+	Potantial class renamed into OneBodyPotential
+	gcc4 hack, since its name collides with the Potential class in optical.h
+
+2018-04-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beoh.h (BData): modified
+	* beoh/beohdataread.cpp (readSystem): modified
+	* beoh/beohpopinit.cpp (beohInitialPopulationStat): modified
+	read external spin/parity distribution data file
+
+	* source/statmaniplevel.cpp (statForceIncludeMeta): bug fixed
+	number of fictitious levels for isomer calculation may exceed
+	the max number of discrete level data size
+
+2018-02-09  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/outprep.h (CumulativeResidualProduct): bug fixed
+	output shifted in the multiple incident energy case
+
+2018-01-09  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* beoh/ripl2levels.cpp (riplSetNmax): modified
+	found RIPL has a strange case, Nmax < Nc
+
+2018-01-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmaniplevel.cpp (statAdjustDensityByExtraLevels): bug fixed
+	discrete level manipulation still buggy for some cases
+	tag removed
+
+2018-01-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* configure.ac: modified
+	version 3.5.3 prepared
+
+2018-01-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmaniplevel.cpp: new file
+	manipulate discrete level data, especially for the meta-state production
+	* source/statparm.cpp: modified
+	discrete level related methods moved to statmaniplevel.cpp
+	* beoh/beohmain.cpp (beohParameterSetting): modified
+	new flag for inclusion of meta-stable state
+
+2017-12-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statFixDiscreteLevels): modified
+	reset random number so that created discrete levels will be the same all the time
+
+2017-12-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohmain.cpp (beohParameterSetting): modified
+	* beoh/statparm.cpp (statPopTrapMeta): new function
+	meta states do not decay, population will be trapped
+
+	* source/output.cpp (outIsomericRatio): modified
+	meta contributions to g.s. production already subtracted
+
+2017-12-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outSpectrum): modified
+	* source/dataread.cpp (readStatModel): modified
+	* source/statmodeltools.cpp (specGaussianBroadening): new function
+	* source/statmodel.cpp (statHauserFeshbach): modified
+	* source/parameter.h (p): modified
+	new parameter parmBROD controls energy-broadening of total photon spectrum
+	
+
+2017-11-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/photoabs.cpp: modified
+	* source/exciton.cpp (preqExcitonModel): updated
+	preequilibrium for photo reaction improved
+	
+
+2017-10-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/ffpoutput.cpp (FFPOutputIndividualSpectrum): new function
+	* beoh/beohffrag.cpp: updated
+	individual CMS/LAB spectrum print option added
+
+2017-10-06  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* beoh/beohoutput.cpp (outFissionFragment): new function
+	print calculation input and some internal values
+
+	* beoh/ffpyield.cpp (FFPMassChainYieldParameters): updated
+	(FFPGeneratePairs): update
+	these functions moved to ffpyield.cpp
+
+2017-10-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohlabspectrum.cpp: updated
+	* beoh/beohoutput.cpp: updated
+	* beoh/beohpopinit.cpp: updated
+	* beoh/beohffragenergy.cpp: updated
+	* beoh/beohdataread.cpp: updated
+	* beoh/beohffrag.cpp: updated
+	* beoh/ffpoutput.cpp: updated
+	BeoH upgraded extensively to calculate statistical decay of fission products
+	and prompt fission neutron observables
+	
+	* source/beta2.h: new file
+	* source/beta2.cpp: new file
+	read beta2 deformation parameters from file
+
+	* source/outprep.h: new file
+	was a part of output.h
+
+	* source/output.cpp (outTotalResidual): updated
+	(outIsomericRatio): new function
+	they were migrated from BeoH, which prints residuals in ascending order
+
+	branch develop merged to master (tag 3.5.2-Miranda)
+
+2017-09-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/wahl.cpp: new file
+	* beoh/ffpoutput.cpp: new file
+	* beoh/ffpparameter.cpp: new file
+	* beoh/ffpyield.cpp: new file
+	* beoh/ffp.h: new file
+	* beoh/beohffrag.cpp: new file
+	* beoh/beohffragenergy.cpp: new file
+	* beoh/beohoutput.cpp: modified
+	* beoh/beohdataread.cpp (readFissionFragment): new function
+
+	fission fragment decay calculation added to BeoH
+	prompt fission observables, post-yield, neutron and gamma-ray spectra etc.
+	are printed
+	ffp-group files calculate primary fission fragment yield and excitation energy distribution
+
+	* source/statmodeltools.cpp (specGaussianBroadening): new function
+	Gaussian broadening with given resolution
+
+2017-09-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outprep.cpp: updated
+	CumulativeResidualProduct defined as a static object inside this file scope
+	memory allocation and free performed before/after printing
+	
+	* source/outprep.h: new file
+	definition of objects to help calculating final residual states
+
+	* source/output.cpp (outTotalResidual): updated
+	
+2017-09-12  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* beoh/beoh.h (BData): modified
+	calculation mode, CalcMode, added and betacalc removed
+
+	* beoh/beohmain.cpp: modified
+	this file was extensively updated in order to separate the beta-decay
+	and statistical decay parts more clearly
+
+2017-09-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outSpectrum): modified
+	skip ZA number print for the total particle spectra case
+
+	* source/cohmain.cpp (cohSuperLazy): modified
+	include charged particles for A <= 60
+
+2017-08-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/physicalconstant.h: modified
+	* source/dataread.cpp (readSystem): modified
+	instead of MACS energies, T9 is allowed as inputs
+
+2017-07-29  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohmain.cpp (beohMainLoop): modified
+	* beoh/beoh.cpp (main): modified
+	command line option -b beta2 added
+
+	* nucshape.dat: updated
+	converted beta2, beta4, and beta6 added to the data file
+
+2017-07-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/stataveragespace.cpp: modified
+	cstdlib included for gcc-4
+
+2017-04-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beoh.cpp: modified (ver. 1.1)
+	* beoh/beohpopinit.cpp (beohInitialPopulationStat): new function
+	* beoh/beohoutput.cpp: modified
+	* beoh/beohdataread.cpp (readSystem): modified
+	calculation of simple compound decay from a given excited state added
+	several functions, including the ones in the main sources, were updated
+
+	* source/statcompounddecay.cpp: new file
+	regular compound decay separated from statdecay.cpp
+
+	* source/setupinit.h: new file
+	* source/setupinit.cpp: new file
+	some functions in setup.cpp were moved into this new file, and made accessible from BeoH.
+
+	* source/statmodeltools.cpp: new file
+	FindEnergyBin and CumulativeSpectra were moved inth this file, and made accessible from BeoH.
+
+	* source/stataveragespace.cpp (statDecayWidth): modified
+	this function was moved into this file
+
+2017-03-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statdecay.cpp (specPopulationBypass): modified
+	trapped flux distributed to all discrete levels, instead of the ground state only
+
+2017-01-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eclspectra.cpp (eclSpectra): modified
+	exclusive energy spectra for 4n added, but can be activated only if defined by macro
+
+2017-01-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outParameter): modified
+	* source/parameter.h: modified
+	* source/statparm.cpp (statSetupFissionParameter): modified
+	tweakFH and FC made ineffective, since they can be changed by these input values directly
+
+2016-10-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	* source/cccalc.cpp (ccSetCouplingPotential): modified
+	* source/global.h (GlobalOption): modified
+	new option, groundstateomp, added for energy-independent optical potential
+
+2016-10-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fisdens.cpp (fldHighestTransitionState): modified
+	jcut (max J value in the discrete region) increased from 6 to 10
+
+	* tools/riplrmlev.h: new file
+	* tools/riplrmlev.cpp: new file
+	utility programs under tools directory
+	riplrmlev removes discrete levels from RIPL level database
+
+2016-09-23  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaLine): modified
+	print total photon spectrum added
+
+	* source/gampop.cpp (specTransitionGamma): bug fixed
+	* source/stattrans.cpp (statStoreGammaTransmission): bug fixed
+	when gamma transmission re-scaling factor (tweakTJ g) removed,
+	as it is applied in gtrans.cpp
+
+2016-09-22  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaLine): modified
+	photon output includes lab-energy
+
+2016-09-21  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/masstable.cpp: modified
+	Audi2012 and FRDM2012 mass table selected as default
+
+	branch develop merged to master (tag 3.5.1-Miranda)
+	
+
+2016-09-20  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/gtrans.cpp (gdrStandardLorentzian): modified
+	return zero when photon energy is zero (should not happen)
+
+	* source/output.cpp (outFissionBarrier): bug fixed
+	band energy printing bug for the K=0- case fixed
+
+2016-09-07  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/fisdens.cpp (statSetupFissionLevelDensity): modified
+	constant enhancement part simplified
+
+2016-09-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp: modified
+	fission added to name list particle_name
+
+2016-09-01  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readStatModel): modified
+	* source/fisdens.cpp (statSetupFissionLevelDensity): modified
+	the highest enegy of fission transition state provided as an input
+
+2016-08-29  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statreaddensity.cpp (statReadFissionLevelDensity): new function
+	external level density data file red and replace the internal ones
+
+	* source/knockout.cpp (preqAlphaKnockout): modified
+	* source/excitransf.cpp (preqExcitonTransfer): modified
+	* source/exciton.cpp (preqExcitonModel): modified
+	* source/spectra.cpp (specCumulativeSpectra): modified
+	* source/statmodel.cpp: modified
+	* source/statmodel.h: modified
+	* source/stattrans.cpp: modified
+	classes, Transmission and Spectra, now contain array size as private
+	memory allocation, clear, and free are by member functions
+
+2016-08-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/Makefile.am (beoh_LDADD): modified
+	* source/Makefile.am (coh_LDADD): modified
+	* source/omplib/Makefile.am (noinst_LIBRARIES): new file
+	make a library libomp.a under source/omplib
+	symbolic link to omplib from BeoH removed
+	
+
+2016-08-26  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/global.h (GlobalOption): modified
+	* source/dataread.cpp (readSystem): modified
+	* source/statmodel.cpp (statParameterSetting): modified
+	* source/statreaddensity.cpp: new file
+	new option "readdensity" added to class GlobalOption
+	statReadLevelDensity() replace calculated level densities by external file
+
+2016-08-25  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/outext.cpp (extDecayWidth): new function
+	* source/spectra.cpp (specDecayWidth): new function
+	calculate channel decay widths for low incident energy,
+	and print them when an extra-option is provided
+
+2016-08-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+        * source/gdr.cpp (gdrM1scissors): updated
+        coefficient changed again to 42.4
+        branch develop merged to master (tag 20160803)
+
+2016-08-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/gdr.cpp (gdrM1scissors): updated
+	least-squares perfomed again
+	coefficient changed from 50 to 51.8
+
+2016-08-01  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statSetupGdrParameter): updated
+	add second hump only when the deformation is large
+	
+	* source/gdr.cpp (gdrE1): updated
+	old name darig changed into just E1, since the reference is unclear
+	* source/gdr.cpp (gdrE1DoubleHump1): updated
+	CoH approximation for sigma replaced by the actual parameter (RIPL-1 has a typo)
+
+2016-07-28  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* document/option.html: new file
+	* source/coh.cpp: modified
+	* source/statmodel.cpp (statParameterSetting): modified
+	* source/global.h (GlobalOption): new class
+	* source/dataread.cpp (readSystem): modified
+	new class, GlobalOption, is defined to activate some optional features
+	two options defined for now: the Engelbrecht-Weidenmueller transformation
+	and inclusion of internal conversion
+	the flag in output.h removed
+
+2016-07-27  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/output.h: modified
+	* source/output.cpp (outGammaCascade): modified
+	* source/spectra.cpp (specCascadeGamma): modified
+	gamma-ray outputs include/exclude internal conversion
+	depending on a flag defined in output.h
+
+2016-07-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* configure.ac: modified
+	version increased to 3.5.1
+	git branch "devel" forked
+
+	* source/outext.cpp (extCumulativeLevels): modified
+	print calculated spin distributions in the discrete region
+
+2016-07-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* .gitignore: new file
+	all files transfered to Git
+
+2016-07-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp: modified
+	all source files, SVN keyword removed
+
+2016-06-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* frdm/genmesh.cpp: imported
+	* frdm/frdm.cpp: imported
+	FRLDM related files imported under SVN tree
+
+	* source/betaexpansion.cpp: modified
+	* source/FRDMmain.cpp: modified
+	* source/FRDMcoordinate.h: new file
+	to combine with FRLDM, polar coordinate object's name was changed
+	many FRDM files were adjusted (the class name was changed) accordingly.
+
+2016-06-13  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/elements.h: modified
+	new element Nh, Z=113 added
+
+2016-06-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDMsolvebcs.cpp (LNSolveBCS): modified
+	better accuracy for derivative calculation
+
+2016-06-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDM.h: modified
+	* source/FRDMmacrointegral.cpp: modified
+	* source/FRDMpotential.cpp: modified
+	inline functions moved to FRDM.h
+	
+
+2016-05-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/macs.cpp (macsPartitionFunction): bug fixed
+	partition function normalized by 2I_gs + 1, reported by Mat.
+
+2016-05-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statdecay.cpp (specTransmissionSum): modified
+	* beoh/beohstatdecay.cpp (specTransmissionSum): modified
+	in a case no-particle and no-gamma but fission can happen,
+	ground state decay enforced
+
+2016-03-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/masstable_audi2012_frdm95.h: new file
+	* source/masstable_audi2012_frdm2012.h: new file
+	Audi 2012 mass table + FRDM, created by Talou
+
+2015-12-29  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/HObasis.cpp (HOSphericalExpansion): modified
+	average parity calc part moved outside this function
+
+2015-12-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/physicalconstant.h: new file
+	a part of constant.h moved into this new file
+
+2015-12-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dwcalc.cpp (dwbaCalc): bug fixed
+	take absolute spin for ground state if it is negative
+
+	* source/stataveragespace.cpp (statCalculateD0): modified
+	* source/statparm.cpp (statSetupLevelDensity): modified
+	* source/levden.cpp (ldParityDistributionEdepend): new function
+	method to tweak parity distribution changed
+	at high energies parity fractions will be the same for even and odd
+
+2015-11-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* feoh/feohsd.h: new file
+	* feoh/feoh.h: new file
+	* feoh/feohphconfig.cpp: new file
+	* feoh/feohsd.cpp: new file
+	* feoh/feohdataread.cpp: new file
+	* feoh/feoh.cpp: new file
+	* feoh/feohprint.cpp: new file
+	microscopic level density module imported under CoH tree
+
+2015-11-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDMprint.cpp (FRDMPrintSPState): modified
+	print parities
+
+2015-11-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outext.cpp (extContinuumDensity): modified
+	print J-dependent level densities
+
+2015-10-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/stataveragespace.cpp (statCalculateD0): bug fixed
+	in case parity distribution is tweaked, D0 calc. changed
+
+	* source/gtrans.cpp (gdrDropletGammaSave): new function
+	* source/statparm.cpp (statSetupGdrParameter): modified
+	* source/gtrans.cpp (gdrModifiedLorentzian): new function
+	(gdrTempDependGamma2): new function
+	modified Lorentzian added, but not activated
+	width predicted by the droplet model, depends on mass only
+
+2015-10-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outGDR): modified
+	print <Gg> value
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): modified
+	always calculate <Gg> value, even no renormalization case
+
+2015-10-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readParSet1): modified
+	adding adjustable parameter method now by a member function
+
+	* source/parameter.h (Adjustable): new class
+	all adjustable parameters are combined into one class
+
+	* source/statmodel.cpp (statParameterSetting): modified
+	E1 renormalization moved in to this function
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): bug fixed
+	gamma-ray renormalization problem at high energies fixed
+
+2015-10-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/stataveragespace.cpp (statAdjustD0): modified
+	reuse parameter for D0SR, instead of making a new object
+
+	* source/parameter.cpp (parmCheckParameter): modified
+	each function split into check / get
+
+2015-10-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/parameter.cpp: modified
+	argument ZA now the actual instance, not a pointer
+
+	* source/stataveragespace.cpp (statAdjustD0): new function
+	search a-parameter for given D0
+
+	* source/parameter.h: modified
+	new parameter, D0SR, added, and pname[] moved from output.cpp
+
+	* source/structur.h (NuclearStructure): modified
+	class name, DiscreteLevel, changed
+
+2015-10-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/gdr.cpp (gdrM1scissors): new function
+	small M1 strength at low energies
+
+2015-09-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fileout.cpp (fioWriteCrossSection2): modified
+	change format fromt 1d to 1x, in case more than 10 particle emission
+
+2015-09-17  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/beohoutput.cpp (outGSProduction): modified
+	print result even if zero
+
+2015-09-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/omplib/dave1p.cpp: new file
+	optical potential for light elements
+
+2015-09-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dwcalc.cpp (dwbaCalc): bug fixed
+	index bug fixed
+
+2015-09-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* example/example19.dat: new file
+	new example for phonon excitation
+
+	* source/ccamp.cpp (ccAllocateAmplitute): new function
+	scattering amplitude for CC defined in ccamp.cpp
+
+	* source/intwave.cpp (ccInternalFunction): modified
+	made it in more compact form
+
+	* source/dataread.cpp (readDirect): new function
+	determine number of phonons from input
+
+	* source/ccsetform.cpp: modified
+	* source/cccalc.cpp: modified
+	* source/ccfunction.cpp: extensively updated
+	calculation scheme largely changed for vib excitation
+	coupling potential is calculated before integration
+	the nuclear matrix element and A-factor detached
+
+2015-08-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (Direct): modified
+	beta parameter changed, for rotation and vibration
+
+	* source/omsetform.cpp: modified
+	* source/cccalc.cpp: modified
+	vibrational excitation added
+
+	* source/ccsetform.cpp: new file
+	coupling form factor calculation, moved from cccalc.cpp
+
+
+2015-08-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	* source/structur.h (Pdata): modified
+	member omp contains the potential index only, no form
+
+	* source/structur.h (CrossSection): modified
+	crx data memory allocation here
+
+	* source/optical.h (Optical): modified
+	OMP index kept in private, and accessible by member functions
+
+2015-08-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outParticleProduction): bug fixed
+	not initialized array
+
+	* source/ccfunction.cpp: new file
+	* source/optical.h: modified
+	* source/cccalc.cpp: modified
+	functions and classes re-arranged for better readability
+
+	* source/asympt.cpp (omAsymptoticClosed): new function
+	* source/extwave.cpp (omExternalClosed): modified
+	* source/omsetform.cpp (ccPotentialFormDeformed): modified
+	closed channels for charged particle coupled-channels implemented
+
+2015-08-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statdecay.cpp (specCNDecayDeformed): modified
+	add S-matrix phase factors
+
+	* source/intwave.cpp (ccInternalFunction): modified
+	* source/omsetform.cpp (ccPotentialFormDeformed): modified
+	* source/cccalc.cpp (ccPreset): modified
+	allow different optical potentials for excited levels
+
+	* source/cccalc.cpp (ccCheckMatrix): new function
+	for debugging only
+
+	* source/ccfunction.cpp: new file
+	some functions transfered from cccalc.cpp
+
+2015-06-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fpotential.cpp: new file
+	* source/fpotential.h: new file
+	fission penetration calculation by solving Schroedinger equation
+
+2015-06-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciton.cpp (preqSpinDistribution): new function
+	ad-hoc preequilibrium spin distribution function
+	for future development
+
+2015-06-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciparm.cpp (preqSingleStateDensity): modified
+	g-parameter systematics from Strutinsky method
+
+2015-04-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statSetupLevelDensity): modified
+	* source/parameter.h: modified
+	add a new tweakable parameter for parity distribution
+	
+
+2015-04-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fileout.cpp (cohFileOut): modified
+	more reactions to be printed
+	total, elastic, inelastic, capture, fission output separated
+
+2015-02-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coupling.cpp (factorial): modified
+	change factorical calculation method to avoid overflow
+
+2015-02-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/parameter.h: modified
+	* source/cohmain.cpp (cohEGrid): new function
+	* source/cohegrid.h: new file
+	new key word, egrid, added for using built-in energy points
+
+	* source/output.cpp (outSetSigmaReaction): new function
+	(outReaction): modified
+	(outParticleProduction): modified
+	store reaction sigma in the local area
+	add total gamma-prod cross section
+
+	* beoh/beohdataread.cpp (readStatModel): bug fixed
+	same as dataredead.cpp
+
+2015-02-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readStatModel): bug fixed
+	second fission barriers ignored
+
+2015-01-29  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (Level): modified
+	* source/statskiplevel.cpp (statSkipDiscreteLevel): new file, new function
+	Class Level new flag added to eliminate some levels in data
+	gamma-ray branch readjusted, and particle/gamma decay to these levels skipped
+
+2015-01-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp: modified
+	* source/nucleus.h: modified
+	new global parameter, gml, added
+
+	* source/structur.h (GammaLine): new class
+	* source/outext.cpp (extGammaLine): new function
+	* source/spectra.cpp (specPrimaryGamma): modified
+	* source/spectra.cpp (specCascadeGamma): new function
+	discrete gamma lines stored in gml, and print
+
+2015-01-24  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.cpp (statParameterSetting): modified
+	* source/statparm.cpp (statAdjustDensityByExtraLevels): new function
+	* source/statparm.cpp (statAddDiscreteLevels): new function
+	allow inclusion of extra-levels to overlap discrete and continuum regions
+
+	* source/ripl2levels.cpp (riplReadDiscreteLevels): modified
+	read all levels up to MAX_LEVELS, instead nlevel
+
+2015-01-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dsd.cpp (dsdDirectCaptureModel): modified
+	* source/omsetform.cpp (omPotentialForm): modified
+	force max matching for very low energy case
+
+2015-01-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (System): bug fixed
+	memory free bug
+
+2015-01-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/stattrans.cpp: modified
+	set zero transmission coeff for very low emission energy (less than 1 meV)
+
+	* source/macs.cpp (macsStoreCrossSection): modified
+	two more cross sections (total and elastic) added to MACS
+
+2014-12-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/macs.cpp (macsStoreCrossSection): modified
+	subtract compound elastic from inelastic for MACS 
+
+2014-12-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupInitSystem): bug fixed
+	fix pid=unknown problem in the photo-induced case
+
+2014-11-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDMpotential.cpp (FRDMPotential): bug? fixed
+	replace R0 by Rpot for the FRDM Coulomb potential
+	omit diffuseness contribution to the Coulomb potential
+	both suggested by Ichikawa
+
+2014-11-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statSetupDirectInelastic): bug fixed
+	DWBA direct level search for the odd case, ignore spin
+
+2014-10-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/Makefile.link (COHDIR): new file
+	Makefile to create link from beoh to source
+
+2014-10-29  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* beoh/Makefile.am: modified
+	copy CoH files into the BeoH directory to avoid objects collision
+
+2014-10-26  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp:
+	ver. 3.4.0 Oberon release version
+
+	* source/statmodel.cpp (statModel): 
+	* source/statdecay.cpp (specCNDecayDeformed): modified
+	Engelbrecht-Wedenmueller transformation including uncoupled-levels
+
+	* source/optical.h: modified
+	CC convergence criterion to be 10^{-8}
+
+2014-10-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cohmain.cpp: modified
+	* source/HF.h: modified
+	* source/HObasis.h: modified
+	* source/HFmain.cpp: modified
+	* source/statmodel.cpp: modified
+	move some variables to data segment to avoid stack overflow
+	object memory free explicit
+
+2014-10-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (System): modified
+	bandidx added
+
+	* source/moldauer.cpp (statMoldauerCC): new function
+	* source/cccalc.cpp (ccHermiteMatrix): new function
+	* source/statdecay.cpp (specCNDecayDeformed): new function
+	Engelbrecht-Weidenmueller transformation for coupled-channel
+
+2014-10-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/complex.h: removed
+	* source/omsetform.cpp: modified
+	* source/omsetparm.cpp: modified
+	* source/dwcalc.cpp: modified
+	* source/amplitud.cpp: modified
+	* source/smatrix.cpp: modifed
+	* source/cccalc.cpp: modified
+	* source/ccamp.cpp: modified
+	* source/dsd.cpp: modified
+	* source/dsdoverlap.cpp: modified
+	* source/omcalc.cpp: modified
+	* source/omoutput.cpp: modified
+	* source/strength.cpp: modified
+	* source/extwave.cpp: modified
+	* source/intwave.cpp: modified
+	private Complex class abundonded, and C++ standard complex class adopted
+
+2014-10-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cccalc.cpp (ccCalc): modified
+	function divided into pre/main/post pieces
+
+2014-09-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eispack.cpp: modified
+	Hermite matrix diag functions added
+
+2014-09-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dsd.cpp (dsdDirectCaptureModel): modified
+	* source/cohmain.cpp (cohMainLoop): modified
+	* source/structur.h (Dcapt): modified
+	super-lazy mode bug fixed
+
+2014-09-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.cpp (statModel): modified
+	memory allocation moved to the main part
+
+2014-09-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp: 
+	3.4.0-Oberon test distribution version
+
+	* source/FRDMzeroenergy.cpp (FRDMZeropointEnergy): modified
+	zero point energy calculation by polynomial fit
+
+	* source/FRDMfileout.cpp: new file
+	functions for printing on a file gathered
+
+2014-09-17  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* document/structure.html: new file
+	input description for nuclear structure models
+
+	* source/nilsson.cpp (nilssonLevel): modified
+	weak bound approximation added
+
+	* source/dsd.cpp (dsdCalcHF): updated, bug fixed
+	* source/dsd.cpp (dsdAmplitudeDeformed): new function
+	Hartree-Fock BCS and DSD calculation
+	not used for now
+
+2014-09-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* example/example17.dat: new file
+	* example/example16.dat: new file
+	two more examples for FRDM/HF calculations
+
+	* source/MFTmain.cpp (MFTPrintNucleus): new function
+	* source/MFT.h: new file
+	system definition and printing for HF and FRDM unified
+
+2014-09-13  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/global.h (GlobalControl): modified
+	* source/HFpotential.cpp (HFInitialPotential): new function
+	Hartree-Fock starts with FRDM potential
+
+2014-09-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/FRDMsolvebcs.cpp (LNSolveBCS): modified
+	fitting parameters were adjustetd for better convergence
+
+2014-09-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outformat.h (outVal): new file
+	formatting part in several files was unified
+
+	* source/FRDMmacrointegral.cpp (FRDMMacroDoubleVolumeIntegral): new function
+	* source/FRDMmacroenergy.cpp (FRDMMacroEnergySpherical): new function
+	quick calculation of macro energy for spherical nucleus
+
+2014-09-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dsd.cpp (dsdCalcHF): new function
+	DSD cross section based on HF spherical expansion
+
+2014-09-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/HFmain.cpp (HFConstraintControl): new function
+	remove Q-constraints when iteration reached at a given number
+
+2014-09-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/polycalc.cpp (LSQMarquardt): new function
+	* source/FRDMsolvebcs.cpp (LNSolveBCS): new function
+	solving gap equation with the Levenberg-Marquardt method
+
+2014-09-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* nucshape.dat: new file
+	* source/FRDMreadshape.cpp: new file
+	read epsilons of FRDM if they are not given, or eps1 < 0
+
+2014-09-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupChain): modified
+	* source/masstable.cpp (mass_excess): new function
+	instead of terminating calculation at high energies
+	when mass is not given,	close the emission channel
+
+2014-08-29  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outBanner): modified
+	show banner according to the moon age
+
+	* source/omplib/kunieda.cpp: new file
+	Kunieda's deformed OMP added
+
+	* source/omplib.h: new file
+	* source/builtin.cpp: modfied
+	each global potential migrated under omplib directory
+
+	* source/cohmain.cpp (cohMainLoop): modified
+	* source/dataread.cpp (readMeanfield): new function
+	read parameters for mean-field theories, call from main
+
+	* source/HFinterface.h: new file
+	* source/HF.h:  new file
+	* source/HFsorteigenvalue.cpp:  new file
+	* source/HFsolvebcs.cpp:  new file
+	* source/HFprint.cpp:  new file
+	* source/HFpotential.cpp:  new file
+	* source/HFmultipole.cpp:  new file
+	* source/HFenergy.cpp:  new file
+	* source/HFdensity.cpp:  new file
+	* source/HFcoulomb.cpp:  new file
+	* source/HFmain.cpp:  new file
+	* source/FRDM.h: new file
+	* source/FRDMsolvebcs.cpp: new file
+	* source/FRDMshell.cpp: new file
+	* source/FRDMshape.cpp: new file
+	* source/FRDMprint.cpp: new file
+	* source/FRDMpotential.cpp: new file
+	* source/FRDMpairing.cpp: new file
+	* source/FRDMmicroenergy.cpp: new file
+	* source/FRDMmacroshapedepend.cpp: new file
+	* source/FRDMmacrointegral.cpp: new file
+	* source/FRDMmacroenergy.cpp:  new file
+	* source/FRDMmain.cpp:  new file
+	* source/MFTmain.cpp:  new file
+	mean-field theories - Hartree-Fock+BCS and Finite Range Droplet Model
+	incorporated into CoH
+	MFTmain interfaces these models with the CoH main part
+	this will be ver.3.4.0-Oberon
+	
+
+2014-07-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outprep.cpp: new file
+	* source/output.h (ResidualProduct): new class
+	* source/output.cpp (outTotalResidual): new function
+	sum all the production cross sections if the final state is the same
+	print all isotope production cross sections
+	3.3.3-Titania final version (r98)
+	
+
+2014-05-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cohmain.cpp (macsEGrid): modified
+	* source/macs.h: modified
+	MACS energy grid for photon induced added
+
+	* source/macs.cpp (macsPartitionFunction): new function
+	calculate partition function G
+
+2014-05-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupGeneralParameter): modified
+	stop calculation if the target is unbound
+
+	* source/statdecay.cpp: modified
+	gPopulationCut added for faster calculation
+
+	* source/setup.cpp (setupStatModel): modified
+	* source/structur.h (Nucleus): modified
+	method memclear added
+	this is called from setupStatModel to initialize population etc.
+
+	* source/cohmain.cpp (cohMainLoop): modified
+	* source/dataread.cpp (readSystem): modified
+	* source/macs.h: new file
+	* source/macs.cpp: new file
+	calculate Maxwellian average cross section, and tabulate the results
+
+	* source/cohmain.cpp (cohSuperLazy): modified
+	default gamma-ray strength renormalization added to super-lazy mode
+
+2014-05-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	input for MACS calc. added
+
+	* source/cohmain.cpp (cohMainLoop): modified
+	* source/coh.cpp (cohResetAllocationPointer): new function
+	reset pointers for ncl and dsc, when multiple incident energies are given
+
+	* source/setup.cpp (setupGeneralParameter): modified
+	target excitation part, moved from setupStatModel
+	
+	* source/setup.cpp (setupClearCrxArray): modified
+	more clean (no impact, just psychological)
+
+2014-05-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (cohAllocateDiscreteLevel): modified
+	* source/coh.cpp (cohAllocateNucleus): modified
+	check max numbers for compound nuclei
+
+2014-04-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupStatModel): bug fixed
+	for a very large jmax case, exceeds MAX_J
+
+	* source/elements.h): more elements added by Mumpower
+	* source/output.cpp (outZA): bug fixed
+	in case Z is more than 103
+
+2014-04-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fns.cpp (fnsFissionNeutronModel): modified
+	even if fission data are not given, we still calcualte the first chance
+	neutron emission.
+
+	* source/dataread.cpp (readStatModel): bug fixed
+	number of fission barriers exceeds MAX_FISS_CHANCE
+
+2014-04-13  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver. 3.3.3: BeoH synchronized version
+	some files were modified in order to export them to the BeoH code
+
+2014-04-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fispop.cpp (specTransitionFission): bug fixed
+	zero population for a single humped case
+
+2014-04-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/global.h (GlobalControl): modified
+	* source/statdecay.cpp (specCompoundDecay): modified
+	* source/setup.cpp (setupClearParameter): modified
+	* source/cohmain.cpp (cohMainLoop): modified
+	* source/coh.cpp (main): modified
+	ctl.capture removed from all files
+
+2014-04-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/omcalc.h: new file
+	* source/cohmain.cpp: modified
+	* source/fns.cpp: modified
+	* source/stattrans.cpp: modified
+	optical model functions defined in a new file.
+	header part in each file changed from coh.h to omcalc.h
+
+	* source/parpop.cpp: modified
+	* source/fispop.cpp: modified
+	* source/gampop.cpp: midified
+	unused header file, global.h, removed
+
+2014-03-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupGeneralParameter): bug fixed
+	when target is excited, not put zero as the g.s. energy
+
+2014-02-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fnsprefis.cpp (fnsPreFissionSpectrum): bug fixed
+	return zero when prefission neutron spectrum is zero
+
+	* source/statmodel.cpp (statPreequilibrium): modified
+	surpress printing evaporation spectra when fission spectrum calculation
+
+2014-02-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.3.2: new memory allocation and fission improved version
+
+	* example/exampleU238.dat: new file
+	* example/examplePu239.dat: new file
+	two example files added for fission calculations
+
+	* source/cohmain.cpp (cohSuperLazy): modified
+	include fission if heavier than Ac225 in the superlazy mode
+
+	* source/fisbar.h: new file
+	* source/fisbar.cpp: new file
+	* fisbar.dat: new file
+	default fission barrier parameter table taken from JENDL-4 by Iwamoto,
+	new interface functions
+
+	* source/fns.cpp (fnsCheckParameters): new function
+	check input parameters before calculation is performed
+
+	* source/fnscalc.cpp (fnsLABSpec): modified
+	* source/dataread.cpp (readFns): modified
+	* source/output.cpp (outChanceFispecParameter): modified
+	* source/structur.h (FChance): modified
+	anisotropy parameter added by Neudecker
+
+	* source/fispop.cpp (specRotationalBand): modified
+	return actual excitation energy instead of relative to the band head
+
+	* source/fisdens.cpp (fldHighestTransitionState): new function
+	the highest discrete transition for fission pre-calculated
+
+2014-02-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fispop.cpp (specTransitionFission): modified
+	avoid zero in denominator of TJ due to round off error
+
+2014-02-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statSetupFissionParameter): new function
+	fission parameter tweaks moved here
+
+	* source/fnscalc.cpp (fnsMadlandNixModel): modified
+	* source/structur.h (FChance): modified
+	* source/dataread.cpp (readFns): modified
+	new data, tps, added by Neudecker, which parameterizes
+	two triangular distributions of temperature
+
+	* source/structur.h (Barrier): modified
+	* source/fisdens.cpp (statSetupFissionLevelDensity): new function
+	* source/fisdens.cpp (fldDensityEnhancement): modified
+	* source/fispop.cpp (specTransitionFission): modified
+	fission level densities are pre-calculated and stored in a new array
+	in the Barrier class (was FissionBarrier)
+	The fission level density internal parameters were modified
+
+	* source/fispop.cpp (specClass2Factor): new function
+	* source/dataread.cpp (readStatModel): modified
+	* source/structur.h (Fission): modified
+	class2 and class3 parameters added
+	penetration through the class II,III states calculated
+
+2014-01-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (cohOutputOptions): modified
+	* source/global.h (GlobalPrint): modified
+	non-standard output separated from the standard outputs
+	prefix OUT_ changed into PRN_, then PEX_ made
+
+	* source/outext.cpp (extFissionDensity): new function
+	print fission level density
+
+2014-01-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/spectra.cpp (spectra): modified
+	specRenormReaction() called at the beggining
+
+	* source/exciton.cpp (preqTotalPopulation): modified
+	(preqExcitonSpectra): modified
+	renormalization runs over all J, for photon channel
+
+
+2014-01-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.h (tj_index): bug fixed
+	indexing for deuteron channel was shifted, fixed
+
+2014-01-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/exciton.cpp (preqExcitonModel): modified
+	for the photon-induced reaction, PE start with (1p,1h) state in 
+	the neutron shell, and multiplied by a phase-space factor
+	
+
+2014-01-14  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (Fission): modified
+	fission density array allocated to each nucleus for faster calculation
+
+	* source/statmodel.cpp (statAllocateMemory): new functions
+	alloc/free memory part moved to outside the main part
+
+2013-12-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.cpp (statParameterSetting): modified
+	* source/dataread.cpp (readSystem): 
+	* source/structur.h (System): 
+	add new variable, sys.energy_bin_in, for energy bin in the input file
+
+2013-12-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cohmain.cpp (cohSuperLazy): modified
+	ignore charged particle emission when Z >= 50
+
+	* source/statdecay.cpp (specCompoundElastic): 
+	* source/parleg.cpp (statInelAngularDistribution): bug fixed
+	target/incident channel id when charged particle induced was wrong
+	for inelastic scattering angular distribution calculations
+
+	* source/cohmain.cpp (cohMainLoop): bug fixed
+	move gamma-ray check in main from cohEntranceChannel
+
+2013-10-06  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/parleg.cpp (specBiedenharn): bug fixed
+	cross term appears in the elastic cross section added
+
+2013-09-16  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readStatModel): modified
+	new parameter, timecut, for isomeric state identification
+
+	* source/statmodel.cpp (statHauserFeshbach): 
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): modified
+	D0 is already calculated in statmodel.cpp
+
+	
+2013-09-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+
+	* source/gamcas.cpp (specGammaCascade): modified
+	* source/output.cpp (outGammaCascade): modified
+	remove gamma lines if parent's half life is long
+
+	* source/parameter.h (p): modified
+	new parameter, parmISOM, added for eliminating gammas from isomers
+
+	* source/parameter.cpp (parmGetValue): new function
+	set a double value as a global tuning parameter
+	parmGetNumber() changed into parmGetValue()
+
+	* source/setup.cpp: modified
+	random number seed options commended out
+
+	* source/statparm.cpp (statSetupLevelDensity): bug fixed
+	sigma0 square-root, since kcksyst.cpp returns squared value
+
+	* source/kcksyst.cpp (kckSpinCutoff): modified
+	return sigma-squared from discrete level data
+
+	* source/fns.cpp (fnsFissionNeutronModel): bug fixed
+	chi weighted by nu-total
+
+2013-08-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/moldauer.cpp (statMoldauerSystematics): modified
+	ad hoc deg-of-free calculation, when nu is a fixed vale
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): modified
+	d0 already calculated in statmodel.cpp, send the value here
+
+	* source/photoabs.cpp (photoAbsorption): modified
+	* source/gampop.cpp (specTransitionGamma): modified
+	* source/gtrans.cpp (gdrGammaTransmission): modified
+	angular momentum for each multipolarity hard coded
+
+2013-08-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/kcksyst.cpp (kckSpinCutoff): bug fixed
+	spin cut off parameter systematics squared twice
+	affect no discrete level case only
+	
+
+2013-08-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fispop.cpp (specTransitionFission): modified
+	fission barrier parameters moved into adjustable parameter class
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): modified
+	Gg/D0 parameter moved into adjustable parameter class
+
+	* source/dataread.cpp (readParSet1): modified
+	adjustable parameter read functions added
+	fission barrier stored in a new class
+
+	* source/cohmain.cpp: new file
+	main loop, better handling multiple incident energy
+	all data read in before calculation performed
+
+	* source/coh.cpp (cohAllocateNucleus): modified
+	new dynamical scheme to allocate memory
+	fission barrier data detached from ncl
+	main loop function moved to a new file
+
+2013-08-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readParSet1): new functions
+	to facilitate reading adjustable parameters
+
+	* source/fispop.cpp (specTransitionFission): modified
+	fission barrier height, curvature, level density enhancement adjustable
+
+2013-08-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/ripl2levels.cpp (riplReadDiscreteLevels): modified
+	skip discrete level data if more than MAX_LEVLES
+	to reduce the array size
+
+	* source/structur.h: modified
+	DiscreteLevel and Nucleus memory allocation separated
+
+	* source/coh.cpp (cohAllocateNucleus): new function
+	* source/coh.cpp (cohAllocateDiscreteLevel): new function
+	dynamic data array allocation, faster initialization
+
+	* source/setup.cpp (setupInitMT): modified
+	random number initialized by both PID and time
+
+	* source/cccalc.cpp (ccCalc): modified
+	diagnal Smatrix element calculation for strength function in the CC case
+
+	* source/output.cpp (outParameter): new function
+	print adjusted parameter
+
+	* source/dataread.cpp: modified
+	* source/parameter.cpp (parmCheckFactor): new function
+	parameter class modified, Gaussian perturbation included
+	the Gaussian width read in as an option
+	
+
+2013-08-05  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* levels/levels.readme (Directory): replaced
+	all discrete level data replaced by new IAEA evaluations
+
+2013-08-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/cccalc.cpp (ccCalc): modified
+	crx.totaldir, sum of direct inelastic scattering, defined
+
+2013-08-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupStatModel): modified
+	actual number of open channels, max_cahnnel, defined
+
+2013-08-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fnsprefis.cpp: new file
+	* source/fnscalc.cpp: new file
+	calculate fission neutron spectra and pre-fission neutron emission
+	
+
+	* source/spectra.cpp (spectraExclusive): modified
+	* source/statdecay.cpp: modified
+	calculate fission probability, and transter the data to ECLIPSE
+
+	* source/eclipse.cpp (eclGenerateDecayTable): modified
+	* source/eclmc.cpp (eclMCSimulation): modified
+	* source/eclspectra.cpp (eclSpectra): modified
+	add fission probability
+	eclise called by FNS to generate pre-fission spectra
+
+2013-07-24  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/moldauer.cpp (statMoldauerSystematics): new function
+	new width fluctuation model based on GOE
+
+2013-07-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coupling.cpp (wigner_3j): bug fixed
+	phase factor bug reported by D.Brown fixed
+
+2013-07-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fns.cpp: new file
+	* source/dataread.cpp (readFns): new function
+	* source/output.cpp (outFissionNeutronSpectrum): new function
+	calculation of fission neutron spectum, Madland-Nix model
+	coh.cpp, spectra.cpp, statmodel.cpp modified accrodingly
+
+2013-02-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/gampop.cpp (specTransitionGamma): modified
+	skip disc. level loop if Eg is negative
+
+	* tmp/setup.cpp (setupChain): bug fixed
+	terminate chain if lighter than He
+
+	* source/gtrans.cpp (gdrRenormE1StrengthFunction): bug fixed
+	don't normalize E1 strength when Sn is inside discrete region
+
+2012-11-24  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/polysq.cpp (polysq): modified
+	require Xdata, instead of delta-x only
+
+	* source/knockout.cpp (preqAlphaKnockout): bug fixed
+	index for an alpha channel, when no proton emission, fixed
+
+	* source/statdecay.cpp (specCompoundElastic): bug fixed
+	index of ZA for Legendre coefficient output fixed
+
+	* source/output.cpp (outLegendreCoefficient): modified
+	output CN+DI Legendre coefficients
+
+	* source/parleg.cpp (statInelAngularDistribution): modified
+	direct component added to the legendre coefficient
+	
+
+2012-10-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outext.cpp (extGammaBranch): modified
+	gamma-ray branching ratio output
+	this function, was once deleted, recovered for ENDF formatting
+
+2012-09-08  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eclipse.h (EXSpectra): modified
+	new flag, gcon, added to see if discrete gamma lines include
+	both particle and gamma-cascade components
+
+2012-09-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ../Program/code/coh3/source/coh.cpp: modified
+	minor version 3.2.0-Umbriel
+
+	* source/eclipse.cpp: merged into the main source code
+	* source/eclspectra.cpp: 
+	* source/eclddx.cpp: 
+	* source/ecloutput.cpp: 
+	* source/eclmc.cpp: 
+	* source/polysq.cpp: 
+	* source/polycalc.cpp: 
+
+	ECLIPSE, which was a different program, was now merged into
+	the main CoH3 source for better exclusive spectrum calculations
+
+	* source/spectra.cpp (spectraExclusive): modified
+	* source/outext.cpp: modified
+	many functions for writing internal values were removed
+
+	* source/statmodel.cpp (statModel): modifed
+	call ECLIPSE after statistical model calculations
+
+2012-08-21  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/structur.h (Nucleus): modified
+	unused tsum pointer deleted
+
+	* source/statparm.cpp (statFixDiscreteLevels): bug fixed
+	no-needfix case returns the number of total levels
+
+	* source/fileout.cpp: modified
+	more output cross sections
+
+	* source/parameter.cpp (parmGetFactor): new function
+	* source/omsetparm.cpp (omAdjustOmp): modified
+	* source/stattrans.cpp: modified
+	* source/dataread.cpp (readStatModel): modified
+	new adjustable parameter added, parmOC
+	adjusting transmission coeff. now requires ZA
+	
+
+2012-08-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.1.4: minor update
+
+	* source/structur.h (DiscreteLevel): new class
+	* source/setup.cpp (setupCountCompound): new function
+	* source/setup.cpp (setupStatModel): modified
+	* source/statparm.cpp (statFixDiscreteLevels): modified
+	discrete level data separated from the compounds to reduce memory
+	count the net number of nuclides appear in the chain in setupCountCompound()
+	memory allocation to the discrete levels in DiscreteLevel class
+
+	* source/statparm.cpp (statSetupGdrParameter): modified
+	* source/gtrans.cpp (gdrGammaTransmission): modified
+	* source/gampop.cpp (specTransitionGamma): modified
+	* source/gdr.cpp (gdrM2): new functions
+	add M2 and E3 strengths, simple estimate, same as GNASH
+
+2012-07-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp (readSystem): modified
+	* source/coh.cpp (cohMainLoop): modified
+	allow multiple incident energy
+
+	* source/gtrans.cpp (gdrParameterReset): new function
+	reset total number of GDR parameters in order to repeat calculation
+
+	* source/output.cpp (outLevelDensity): modified
+	redundant lines eliminated
+
+
+2012-07-27  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statCalculateD0): new function
+	* source/output.cpp (outLevelDensity): modified
+	calculate D0 for the target nucleus when neutron induced reaction
+
+	* source/setup.cpp (setupStatModel): modified
+	eliminate discrete levels if more than the separation energy,
+	which make resonances
+
+	* source/levden.cpp (ldSpinDistribution): modified
+	spin distribution set zero if too small for faster calculations
+
+	* source/ripl2levels.cpp (riplFixTransition): modified
+	levels to which no gamma branch is given are modified
+	gamma-ray branches are assumed so as to decay these levels
+	to some lower levels, instead of the ground state
+
+	* source/statlevdecay.cpp: new file
+	calculate particle decay from discrete levels
+	specLevelDecay() added spectra()
+
+2012-07-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/output.cpp (outSectionHead): modified
+	output width increased to 99
+
+	* example/example6.dat (tweakOW): modified
+	* document/tweak.html: modified
+	change some names of teakable parameters
+
+	* source/ripl2levels.cpp (riplReadDiscreteLevels): modified
+	force max gamma-ray branches to be MAX_GAMMA_BRANCH-1 if ng is larger than it
+	distribute gamma-ray strength evenly to all given final states,
+	if the branching ratios are not assinged
+
+	* source/statmodel.cpp (statPreequilibrium): modified
+	* source/exciton.cpp (preqRenormalizePopulation): new function
+	renormalize the preequilibrium contribution, when it exceeds
+	the total reaction cross section
+
+	* source/coh.cpp (cohMainLoop): modified
+	if g.s. spin is not given in the input,
+	the data are inserted from structure data for DWBA calcuations
+
+2012-06-22  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/levden.cpp (ldDensityParameter): fixed
+	return a-parameter when no matching energy defined
+	it was zero before, but made a problem in gamma strength function
+
+	* source/omoutput.cpp (outCCSmatrix): new function
+	print out S-matrix element from CC calculation
+
+2012-01-23  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.cpp (statInitialPopulation): modifed
+	connect incident channel transmission coefficient array to 
+	correct index in the CC calculation, when the target is in its excited state,
+	but not in the rotational band.
+
+	* source/cccalc.cpp (ccCalc): fixed
+	to avoid round off error
+
+2011-12-16  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (cohMainLoop): modified
+	no compound calculation if SigR = 0
+
+2011-11-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (cohLazyCalc): bug fixed
+	default alpha-potential was not defined for the super-lazy mode
+
+2011-09-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/moldauer.cpp (statMoldauerSystematics): modified
+	function for Ernebjerg, forced nu to be 1 <= nu <= 2
+
+	* source/setup.cpp (setupGeneralParameter): fixed
+	beta2 parameter was not used for CC deformed case
+
+2011-08-31  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.1.3: minor update
+
+	* source/ripl2levels.cpp: modified
+	backport from CGM, assignment of unknown spin when RIPL is not complete
+
+	* document/compound.html: updated
+	option parameters for GDR modified
+
+	* source/masstable_audi2011.h: new
+	new mass table, Audi2011 + FRDM
+
+	* source/stattrans.cpp (statStoreGammaTransmission): modified
+	default Sn of 8MeV replaced by the real one (code taken from CGM)
+
+	* source/statparm.cpp (statSetupGdrParameter): modified
+	the GDR systematics used only when no parameters given
+
+	* source/dataread.cpp (readStatModel): modified
+	the first parameter of gdr line changed into multipolarity,
+	E1, M1, or E2
+	more GDRs can be included
+
+2010-09-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.1.2: exclusive spectrum and fission improved version
+
+	* source/elements.h: modified
+	command line option -z allows an element name.
+
+	* document/index.html: updated
+
+2010-09-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statparm.cpp (statSetupLevelDensity): modified
+	when Fa != 1.0, the factor was applied to an extrapolated a-parameter.
+	However, this causes a problem when the matching energy is zero.
+	The factor is now applied to the temperature, as T' = T/Fa.
+
+2010-09-16  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fisdens.cpp (ldDensityEnhancementGNASH): new function
+	identical to level density enhancement treatment in GNASH
+
+	* source/statmodel.cpp: fixed
+	doulbe counting of DSD cross section fixed
+
+	* source/moldauer.cpp: modified
+	statMoldauer(), statWidthFluctuation()
+	when deg_free is provided, Moldauer systematics not used
+	
+	* source/fispop.cpp: modified
+	width fluctuation calculation method modified
+
+2010-09-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* eclipse/eclddx.cpp: 
+	* eclipse/ecloutput.cpp: modified
+	DDX output format changed for data processing
+
+2010-08-31  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/extwave.cpp (omExternalClosed): fixed
+	bug in derivative calculation
+
+	* source/outext.cpp: modified
+	* source/spectra.cpp: modified
+	more data output for ECLIPSE
+
+	* eclipse/eclspectra.cpp: modified
+	gamma-ray spectra updated
+	in ddx calculation, discrete gamma-lines subtracted
+
+	* eclipse/eclread.cpp: new file
+	data reading functions moved into this file
+
+	* eclipse/eclipse.cpp: modified
+	double differential cross section calculation added
+	gamma-ray multiplicity calculation
+	
+	* eclipse/eclddx.cpp: new file
+	* eclipse/polysq.cpp: new file
+	* eclipse/polycalc.cpp: new file
+	calculate Kalbach systematics, and least-squares fitting
+	to the calculated DDX
+
+2010-04-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dsd.cpp: fixed
+	constants in dsdSetConstants for a deformed case, removed (not used)
+
+2010-04-18  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.1.1: bug fixed version
+
+	* source/ripl2levels.cpp: modified
+	code stops when incomplete level information
+
+2010-04-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/stattrans.cpp: modified
+	statStoreGammaTransmission(), change a-parameter to be energy dependent
+
+	* source/fileout.cpp: modified
+	more data output options, default file names changed
+
+	* source/statparm.cpp: bug fixed
+	E0=zero bug fixed for all-constant temperature case
+
+2010-03-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.cpp: modified
+	statModel() splitted into four functions
+
+	* source/parameter.cpp: new function
+	parmGetNumber()
+	return integer for a given ZA nucleus
+
+	* source/ripl2levels.cpp: modified
+	MaxLevelCtl defined to control Ndisc
+	highest level is adjusted if spin/parity not unique
+
+	* source/statparm.cpp: new function
+	statFixDiscreteLevels()
+	generate missing spin and parity by assuming these distributions
+	this is only applied if input levelcut is bigger than internally determined Ndisc
+
+2010-02-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/dataread.cpp: modifed
+	allow input GDR parameters for E1 and pygmy resonances
+
+	* source/gtrans.cpp: modified
+	more GDR parameters stored
+
+	* source/statparm.cpp: modified
+	overrun bug in case of closed CC calc. in statDirectSpectra fixed
+
+	* document/index.html: updated
+	other files under document directory are also updated
+
+	* source/parameter.h: modified
+	factor changed from public into private
+	parameter.cpp and dataread.cpp changed accordingly
+	
+	* source/gdr.h: modified
+	function clearGDR now a member function
+	
+
+2010-02-16  KAWANO Toshihiko  <kawano@lanl.gov>
+	* ver.3.1.0: fission channel included version, Ariel
+	* source/levden.cpp: modified
+	functions defined in levden.h
+
+	* source/coh.cpp: modified
+	nucleus now uses constructor/destructor
+
+	* source/output.cpp: modified
+	all printf lines were changed into cout, for valgrind check
+	
+	* source/fisdens.cpp: new file
+	calculate fission level density and enhancement factor
+
+2010-02-03  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fispop.cpp: new file
+	fission transmission calculation
+	
+	* source/statdecay.cpp: new file
+	* source/spectra.cpp: updated
+	specCompoundElastic(), specCompoundDecay(), and
+	specTransmissionSum() in spectra.cpp moved into this file
+
+	* source/statmodel.h: updated
+	macro changed into inline functions
+	same changes applied to other source files
+	
+	* source/constant.h: updated
+	constants defined as Macro were changed into const variables
+	same changes applied to other source files
+	
+	* source/levden.cpp: new function
+	statDensityEnhancement()
+	calculate level density enhancement factor for fission
+
+2009-12-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodel.h: macro parity changed,
+	to fix a bug in Legendre coefficient
+
+2009-10-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.0.5: photo-induced reaction, including some bug fix
+
+	* source/output.cpp: updated
+	section separator modified to show an incident energy, target
+	output isomeric state production cross section
+
+	* source/excitransf.cpp: updated
+	include parameter adjustment
+
+	* source/fileout.cpp: updated
+	print out a header line for reaction cross section
+
+	* source/photoabs.cpp: new file
+	calculate photo absorption cross section,
+	and prepare entrance channel transmissions
+
+2009-09-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.0.4: document prepared
+	* document/index.html: updated
+	other html files under document directory are all updated
+
+	* source/gdr.cpp: updated
+	data structure of GDR parameters was changed, which caused
+	changes in many files that require the GDR parameters
+
+2009-09-01  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.0.3: new level density parameters
+
+	* kcksyst.dat: updated
+	new systematics
+
+	* source/kcksyst.cpp: updated
+	* source/statparm.cpp: updated
+	level density systematics updated, including spin-cutoff parameters
+
+	* source/omsetparm.cpp: updated
+	optical potential parameter adjustment
+	radius parameters can be adjusted
+
+	* source/levden.cpp: updated
+	level density formula updated
+	connection from discrete levels to Fermi gas
+
+2009-08-20  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver 3.0.2: bug fixed
+
+	* source/outext.cpp: new file
+	* source/outext.h: new file
+	non-standard outputs, for exclusive calculations, or debugging,
+	are from these files.
+
+	* source/setup.cpp: updated
+	* source/cccalc.cpp: updated
+	calculation on excited targets. many files were modified.
+	memory size bug fixed.
+
+2009-08-12  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.3.0.1: includes parameter adjustment
+
+	* source/output.cpp: new function
+	outExcitonParameter() output exciton model parameters
+
+	* source/parameter.cpp: new file
+	* source/parameter.h: new file
+	tuning parameters were introduced.
+	many of internal variables can be djusted by providng a new line
+	'tweak' in the input file
+
+	* source/dataread.cpp: updated
+	largely rewritten, due to parameter.cpp
+
+	* source/eclmc.cpp: new file
+	Monte Carlo version for exclusive spectra calculation calculation in ECLIPSE
+
+2009-07-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* tag testdist
+	test distribution version
+
+	* source/spectra.cpp: new function
+	spectraExclusive() follows the same procedure as spectra() but for 
+	exclusive spetrum calculation
+
+	* source/output.cpp: new function
+	outPopulationIncl() print out transition probability table from each CN state
+
+	* levels/zxxx.dat: updated
+	all dscrete level data files were replaced by RIPL-3
+
+	* source/eclipse.cpp: new file
+	* source/eclspectra.cpp: new file
+	supplemental code to calculate exclusive spectra
+
+2009-07-23  KAWANO Toshihiko  <kawano@lanl.gov>
+	* source/elements.h: new file
+	element, z number conversion table
+
+	* source/ripl2levels.cpp:
+	read half-life of state 
+
+	* source/stattrans.cpp:
+	transition to the top energy bin included
+
+	* source/output.cpp:
+	calculate particle production cross section
+
+	* source/dataread.cpp:
+	input data format changed into free style
+
+	* change the code name into CoH3, ver.3.0.0
+
+2009-05-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ver.0.3.6: includes angular distribution calculations
+
+	* source/cccalc.cpp: mod transmission coef. calculation
+	all excited state transmissions are calculated
+
+	* source/fileout.cpp: new function
+	write angular distributions on a file
+
+	* source/ccamp.cpp: taken from CoH source
+	angular distribution for direct reactions
+
+	* source/parleg.cpp: new added
+	angular distribution for compound calculations
+	
+
+2009-05-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* ^x 4a
+
+	* Makefile: replaced by ones from autoconf
+
+	* ver.0.3.5: tar+gz package generated

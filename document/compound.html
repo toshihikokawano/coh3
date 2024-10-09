@@ -1,0 +1,318 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: input (compound)</title>
+<!-- Generated 2009/ 9/24, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="direct.html">   [BACK] </a>
+<a href="index.html">     [UP]  </a>
+<a href="tweak.html">    [NEXT] </a>
+<hr>
+
+<h1><a name="compound">Precompound / Compound Reactions</a></h1>
+
+<h2><a name="decay">Decay Channel Definition</a></h2>
+
+<p>In the statistical model calculations for both compound and
+precompound reactions, emitted particles can be controlled by giving
+optical potential names in the <code>DATA</code> section. For
+example,</p>
+<pre>
+BEGIN    :
+DATA     :
+...(snip)...
+omp_n    : Koning
+omp_p    : Perey
+omp_a    : Avrigeanu
+...(snip)...
+ENDDATA  :
+...(snip)...
+END      :
+</pre>
+<p>means the composite system (incident + target) can emit neutrons,
+protons, and alpha-particles, but no emissions of deuteron, triton,
+nor helium-3. Once these particle emission channels are defined
+by <code>omp_?</code> in the <code>DATA</code> section, the decay
+channel transmission coefficients are calculated inside the code, and
+the emission of these particles are automatically included as long as
+excitation energy of the compound nucleus is larger than the
+separation energy.</p>
+
+<p>There are two data-definition keywords what for the compound
+reactions in the <code>DATA</code> section, which are <code>bin</code>
+and <code>partmax</code>.</p>
+<pre>
+BEGIN    :
+DATA     :
+...(snip)...
+bin      : 0.2
+partmax  : 1
+...(snip)...
+ENDDATA  :
+...(snip)...
+END      :
+</pre>
+<p><code>bin</code> is the energy width of continuum bins in
+MeV. If <code>bin</code> is not given, CoH automatically determines
+the energy width, depending on the incident energy. </p>
+
+<p><code>partmax</code> is to control the maximum number of particle
+emission. In the case of <code>partmax</code> = 1, the composite
+system is allow to emit only one particle, so that there are (n,n'),
+(n,p), (n,alpha) reactions, but no (n,2n). The <code>partmax</code> =
+2 case includes (n,2n), (n,np), (n,2p), etc. This option is
+particularly useful when particle incident energy is high, and you are
+only interested in the reactions at the earlier stage. This option
+truncates lengthy calculations of many particle emissions.<p>
+
+
+
+<h2><a name="preeq">Exciton Model</a></h2>
+
+
+<p>CoH includes the two-component exciton model for the preequilibrium
+particle emissions. This model calculation is invoked when the input
+file contains the top level keyword of <code>PREEQ</code>.
+
+<pre>
+BEGIN    :
+DATA     :
+incident : n
+target   : Tc   99
+energy   : 5.0
+omp_n    : Koning
+omp_p    : Koning
+omp_a    : Avrigeanu
+ENDDATA  :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+ENDHFS   :
+END      :
+</pre>
+
+<p>In the <code>PREEQ</code> section, there is no particular
+data-definition keyword. However, strength of the preequilibrium
+emission can be controlled in this section, by adjusting the averaged
+two-body matrix elements. This adjustment can be made by a special
+keyword <code>tweak</code>, which will be explained later.</p>
+
+
+<h2><a name="fns">Prompt Fission Neutron Spectrum Model</a></h2>
+
+<p>The prompt fission neutron energy spectra are calculated with the
+Madland-Nix mode, when the top level keyword <code>FNS</code> is given.
+This calculation invokes an exclusive particle emission spectrum
+calculation too, hence this makes the whole calculation slower. It is
+recommended that you should not use this model unless needed.</p>
+
+<p>The data section looks like,</p>
+
+<pre>
+FNS      :
+fragment :  Sr   96     Xe  140
+energies :  186.98  171.8  -0.2  6.71  4.998
+density  :  8.7273      12.7273    21.4545
+density  :  8.7273      12.5       21.2
+nuratio  : 1
+maxwell  :  1.3240
+rt       :  1.0
+tpdf_s   :  1.2
+anisotrop:  0.05
+omp      :  Koning
+ENDFNS   :
+</pre>
+
+<p> and there are seven data-fefinition kwywords.</p>
+
+<p>A pair of representative fission fragments are given at
+the <code>fragment</code> line, in the light Z, light A, heavy Z, and
+heavy A order. If not given symmetric fission is assumed.</p>
+
+<p>The keyword <code>energies</code> defines fission-related energies,
+and four values are red - the total energy release, total kinetic
+energy (TKE), energy-dependent term in TKE, average gamma-ray energy,
+and average neutron separation energy. If each of them was zero, CoH
+calculates them internally using approximated formulae.</p>
+
+<p>The fragment effective level densities are given by
+the <code>density</code> line. Three arguments are the level densities
+for the light and heavy fragments, and the compound nucleus.  If not
+given, CoH uses internal Fermi gas parameters. In this
+case, <code>rt</code> controls the temperature ratio, Tl/Th.</p>
+
+<p><code>nuratio</code> is the ratio of number of prompt fission
+neutrons from the light fragment to that from the heavy fragment. This
+will be a weight of fission neutron spectrum when the light and heavy
+fragments are averaged.</p>
+
+<p><code>tpdf_s</code> is a parameter for the temperature distribution
+employed in the modified Madland-Nix model. If tpdf_s = 1.0, the
+distribution is the same as the original triangular shape, namely a
+linear functino from zero to Tmax. If this parameter is in between 1
+and 2, another piece of triangle that drops from the top to zero is
+added above Tmax.</p>
+
+<p><code>anisotrop</code> is an anisotropy parameter often denoted by
+a b-parameter, which modifies the average CMS spectrum in the
+Madland-Nix model.</p>
+
+<p>The calculated fission spectrum is printed as the ratio to the
+Maxwellian, when the temperature <code>maxwell</code> is provided.</p>
+
+<p>You can repeat <code>fragment, energies, density, rt</code>, and
+<code> nuratio </code> several times. In this case, the first set of data
+applies to the first chance fission, and the second set is used for
+the second chance fission, etc. The total number of fission chance is
+defined in constant.h, and the default value is 5.</p>
+
+
+
+<h2><a name="hfs">Hauser-Feshbach Statistical Model</a></h2>
+
+<p>The main Hauser-Feshbach model calculation is performed when the
+top level keyword of <code>HFS</code> is defined. In this section, two
+data-definition keywords control the calculations.</p>
+
+<pre>
+BEGIN    :
+DATA     :
+target   :    Ni 58
+incident :    n
+...
+ENDDATA  :
+HFS      :
+levelcut :     Ni 59  10
+levelcut :     Ni 58   5
+photo    :     0.004
+timecut  :    10.0
+...
+ENDHFS   :
+END      :
+</pre>
+
+<p> CoH retrieves all the discrete level information (excitation
+energy, spin, parity, gamma-ray branching ratio) from RIPL. However,
+sometimes RIPL are too optimistic, and too many discrete levels are
+given up to relatively high excitation energies in some cases.
+The <code>levelcut</code> keyword, followed by the compound nucleus
+name and a number <i>N</i>, forces the highest discrete level to
+be <i>N</i>-th level.</p>
+
+
+<p> In the RIPL discrete level database, two numbers for the highest
+discrete levels are defined; NMAX to which the level scheme is assumed
+to be complete but some spin or parity might be missing, and NC to
+which all energy/spin/parity information is complete. CoH first reads
+levels up to NMAX, then re-adjusts the highest level to which unique
+spin and parity are given. If the number given
+by <code>levelcut</code> is larger than this determined level, missing
+spin and parity of the levels will be generated by a random number
+according to the distributions of spin and parity.</p>
+
+ 
+<p>In the <code>photo</code> line, an experimental gamma-ray strength
+function &Gamma; /D<sub>0</sub> is given. CoH re-normalizes the
+gamma-ray transmission coefficients to the given
+value. When <code>photo</code> = -1, CoH adopts a system default
+value. If <code>photo</code> < 0, but -1, the absolute of this value is
+treated as the average &gamma; width, and D<sub>0</sub> internally
+calculated is applied.</p>
+
+<p>In many cases the gamma-ray strength function is not so sensitive
+to the cross section calculation, except for the neutron capture and
+the photo-induced reactions, and therefore default GDR parameters
+built in the code work reasonably. When they become crucial or if you
+want to add pygmy resonances, you can provide the GDR parameters in
+the <code>gdr</code> line.
+
+<pre>
+HFS      :
+gdr      : E1 11.4  2.59  323.4   GL
+gdr      : E1 14.0  4.49  443.7   GL
+gdr      : M1  6.0  4.0     1.0   SL
+gdr      : E2 10.0  3.2     6.5   SL
+ENDHFS   :
+</pre>
+
+<p>There are five parameters in each line: the GDR multipolarity
+(should be E1, M1, or E2), the GDR energy and width in MeV, the peak
+cross section in mb, and the Lorentzian shape (GL: generalized
+Lorentzian, SL: standard Lorentzian, ML: modified Lorentzian).  The
+Lorentzian shape can be omitted, then CoH assumes the first E1 (both
+the single-hump and double-hump GDR) to be GL, and others will be
+SL. </p>
+
+
+<p>When comparing with experimental data, one may want to eliminate
+gamma-ray lines produced by the isomeric states emerged in the
+discrete gamma-ray transitions. This can be done by putting a
+threshold time in the <code>timecut</code> line. If a half-life of the
+state is longer than the given value, this transition is removed from
+the calculation. In this case the total energy and reaction cross
+section are not conserved because the gamma cascade produces isomeric
+states.</p>
+
+
+<h2><a name="fis">Fission Calculation</a></h2>
+
+<p>A simple double/triple humped fission model, with the Hill-Wheeler
+transmission calculation is implemented. The penetration probabilities
+are calculated for the discrete and continuum transitions on top of
+the fission barriers. The fission model parameters are the fission
+barrier heights, curvatures, and moment of inertia.  The heights and
+curvatures are required, while a default value of 5 keV is used if the
+inertia parameter is not given.</p>
+
+<p>For the discrete transition states, the band-head energies,
+K-values, and parities are given.</p>
+
+<p>The fission barrier parameters are given in the <code>HFS</code>
+section.  The <code>barrier</code> keyword takes five parameters: Z
+and A of fissioning nuclide, numeric character 0 or 1 or 2 to identify
+the first, second, and the third barrier, fission barrier height,
+curvature, and inertia in MeV.</p>
+
+<p>The K-band parameters are given at the <code>kband</code> line,
+followed by six parameters: Z, A, barrier identifier (0, 1, or 2), the
+band-head energy, K, and parity (+1 or -1). The excitation energies of
+J-pi states in each K-band are calculated by [(J(J+1)-K(K+1)]*inertia.
+The <code>kband</code> line for a fission barrier must be given after
+the corresponding <code>barrier</code> is defined. </p>
+
+<pre>
+HFS      :
+barrier  :  Am  242  0  6.00   0.5
+
+kband    :  Am  242  0  0.000   3.0    -1
+kband    :  Am  242  0  0.025   2.0    -1
+
+barrier  :  Am  242  1  5.50   0.40
+
+kband    :  Am  242  1  0.000   3.0    -1
+kband    :  Am  242  1  0.025   2.0    -1
+ENDHFS   :
+</pre>
+
+<p>When the band parameters are provided, the boundary energy between
+the continuum and the discrete levels is automatically determined.
+This boundary energy can be changed by the 6-th data in
+the <code>barrier</code> line.  This example cuts the discrete levels
+at 300 keV.
+
+<pre>
+barrier  :  U  239  0  6.25   0.6  0.05  0.3
+ENDHFS   :
+</pre>
+
+
+<hr>
+<a href="direct.html">   [BACK] </a>
+<a href="index.html">     [UP]  </a>
+<a href="tweak.html">    [NEXT] </a>
+</body>
+</html>

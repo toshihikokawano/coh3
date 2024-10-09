@@ -1,0 +1,86 @@
+#
+#  CoH3 Sample Data U-238
+#
+#  Fission Cross Section Calculation
+#
+
+BEGIN    :  U-238 fission calculation
+DATA     :
+target   :        92       238
+incident :         n
+energy   :    0.05
+omp_n    : Soukhovitskii
+level    : 0.0           0.0
+level    : 0.044916      2.0
+level    : 0.148380      4.0
+level    : 0.307180      6.0
+level    : 0.5181        8.0
+deform   :  2.1380e-01 9.3107e-02 -1.4759e-02
+partmax  : 3
+ENDDATA  :
+
+DWBA     :
+level    : 0.680110     -1.0  0.05
+level    : 0.731930     -3.0  0.05
+level    : 0.826640     -5.0  0.05
+nonloc   : 0.85
+ENDDWBA  :
+
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+gdr      :   E1    11.5055     2.6091 318.776865
+gdr      :   E1    14.0340     4.4993 438.765770
+gdr      :   M1     6.6067     4.0000   1.519223
+gdr      :   E2    10.1518     3.2420   6.503350
+gdr      :   M2     6.6067     4.0000   0.001215 
+gdr      :   E3    10.1518     3.2420   0.005203
+gdr      :   M1     2.6        0.5      4.33
+
+# Fission Barriers
+# O. Iwamoto, JNST 44, 687 (2007), Table I
+
+barrier  :  U 239    0  6.25   0.63
+barrier  :  U 239    1  5.52   0.52
+barrier  :  U 238    0  6.32   0.95
+barrier  :  U 238    1  4.8    0.6
+barrier  :  U 237    0  6.15   0.65
+barrier  :  U 237    1  5.65   0.5
+barrier  :  U 236    0  6.38   1.04
+barrier  :  U 236    1  5.05   0.55
+barrier  :  U 235    0  5.79   0.4
+barrier  :  U 235    1  5.47   0.3
+barrier  :  U 234    0  6.18   1.04
+barrier  :  U 234    1  5.08   0.6
+barrier  :  U 233    0  5.97   0.8
+barrier  :  U 233    1  5.45   0.52
+barrier  :  U 232    0  5.8    1.04
+barrier  :  U 232    1  5.1    0.6
+barrier  :  U 231    0  6.0    0.8
+barrier  :  U 231    1  5.6    0.52
+
+
+# K-band parameters
+# P.G. Young (probably by H.C. Britt, private communication)
+kband    :  U 239    0  0.000  2.5    1
+kband    :  U 239    0  0.025  0.5    1
+kband    :  U 239    0  0.050  3.5    1
+kband    :  U 239    0  0.100  0.5   -1
+
+kband    :  U 239    1  0.000  2.5    1
+kband    :  U 239    1  0.025  0.5    1
+kband    :  U 239    1  0.050  3.5    1
+kband    :  U 239    1  0.100  0.5   -1
+
+kband    :  U 238    0  0.000  0.0    1
+kband    :  U 238    0  0.700  2.0    1
+kband    :  U 238    0  0.700  0.0   -1
+
+kband    :  U 238    1  0.000  0.0    1
+kband    :  U 238    1  0.700  2.0    1
+kband    :  U 238    1  0.700  0.0   -1
+
+ENDHFS   :
+END      :

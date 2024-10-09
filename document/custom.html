@@ -1,0 +1,108 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: customization </title>
+<!-- Generated 1998/ 9/13, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="example.html"> [BACK] </a>
+<a href="index.html">    [UP]  </a>
+<hr>
+
+<h1><a name="custom"> Customize </a></h1>
+
+<h2><a name="potential"> User Defined Potential </a></h2>
+
+<p>An easy way to add a user defined optical potential parameters,
+edit <code>omplib/scratch.cpp</code> directly, and recompile the code.
+The optical potential name to be given will be "scratch".</p>
+
+
+<h2> <a name="maxcomp"> Maximum Number of Compound Nucleus </a></h2>
+
+<p>CoH is not so optimized to high energy reaction calculations, since
+all the reaction paths to energetically possible residual nuclei are
+calculated automatically. This may end up with a large number of
+compound nucleus those emerge in the reaction chain. To prevent high
+memory usage, the maximum number of compound nucleus is defined
+in <code>constant.h</code></p>
+
+<pre>
+const int MAX_COMPOUND      =  200 ;  // maximum number of compound nucleus
+const int MAX_NUCLIDE       =   50 ;  // number of unique nuclides in chain
+</pre>
+
+<p>If you got the error message "number of unique nuclides exceed the
+maximum", increase these numbers. <code>MAX_COMPOUND</code> is the number
+of different reactions occurred in the chain, including double-counting
+of the same residuals by different reaction paths. For example, (n,d)
+and (n,np) reactions are treated differently, hence the number is
+two. <code>MAX_NUCLIDE</code> is the actual number of compound nuclei. In
+the case of (n,d) and (n,np), this is still one, since the residual
+nuclei are the same.</p>
+
+<p>There is no easy way to know these numbers before calculation.
+Roughly speaking <code>MAX_COMPOUND</code> is four or five times larger
+than <code>MAX_NUCLIDE</code>.</p>
+
+
+<h2> <a name="angle"> Angular Distribution </a></h2>
+
+<p>Although CoH calculates elastic scattering, inelastic, and 
+compound emission angular distributions at 1-deg step,
+which is defined in a function <code>setupScatteringAngle()</code> in 
+<code>setup.cpp</code>, the output file does not contain all of the angle
+points. This can be controlled by modifying the next line
+in <code>constant.h</code></p>
+
+<pre>
+const int    ANGLE_STEP     =    5 ; // angle step for angular dist. printing
+</pre>
+
+<p>Changing this number into 2, CoH prints the angular distributions at
+every 2 deg.</p>
+
+
+<h2><a name="banner"> Banner </a></h2>
+
+<p>As a default, CoH prints out a simple heading at the beginning of the 
+output. The following banner is printed,
+<pre>
+###################################################################################################
+#                                                                                      3.4.0-Oberon
+#
+#                                                 .oooooo.             ooooo   ooooo
+#     Mondestrunken                              d8P    Y8b             888     888
+#     =============                             888           .ooooo.   888     888
+#                                               888          d88   88b  888ooooo888
+#     Den Wein, den man mit Augen trinkt,       888          888   888  888     888  dP^Y8b
+#     Giesst Nachts der Mond in Wogen nieder,    88b    ooo  888   888  888     888      8P
+#     Und eine Springflut ueberschwemmt           Y8bood8P    Y8bod8P' o888o   o888o   <8B
+#     Den stillen Horizont.                                                        8b    8b
+#                                                                                   Y8oo8P
+#
+#     Gelueste schauerlich und suess            Der Dichter, den die Andacht treibt,
+#     Durchschwimmen ohne Zahl die Fluten!      Berauscht sich an dem heilgen Tranke,
+#     Den Wein, den man mit Augen trinkt,       Gen Himmel wendet er verzuekt
+#     Giesst Nachts der Mond in Wogen nieder.   Das Haupt und taumelnd saugt und schluerft er
+#                                               Den Wein, den man mit Augen trinkt.
+#
+#                                                         Albert Giraud / Otto Erich Hartleben
+#
+######################################################################################## Moonage  2
+</pre>
+<p> when </p>
+<pre>
+#define PRINT_BANNER
+</pre>
+<p>is defined in <code>output.cpp</code>. The text will be different depending on today's moon-age.</p>
+
+<hr>
+<a href="example.html"> [BACK] </a>
+<a href="index.html">    [UP]  </a>
+
+</body>
+</html>

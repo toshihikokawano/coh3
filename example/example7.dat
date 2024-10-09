@@ -1,0 +1,64 @@
+#
+#  CoH3 Sample Data No.7
+#
+#  Neutron-Induced Reaction on Am241, including fission
+#
+
+BEGIN    :  Hauser-Feshbach calculation for Am 241
+DATA     :
+target   :   Am 241
+incident :   n
+energy   :   1.0
+
+# CC optical potential by Soukhovitskii
+# four states are coupled
+
+omp_n    : Soukhovitskii
+level    : 0.0           -2.5
+level    : 0.041176      -3.5
+level    : 0.09370       -4.5
+deform   : 0.2120
+ENDDATA  :
+
+DSD      :
+ENDDSD   :
+
+PREEQ    :
+ENDPREEQ :
+
+HFS      :
+
+# gamma strength function normalized to Gg/D0 = 0.084
+
+photo    : 0.084
+
+
+# first fission barrier, V=6.1MeV and h-bar omega = 0.45 MeV
+
+barrier  :  Am  242  0  6.10   0.45
+
+# transition states, K-band head defined
+
+kband    :  Am  242  0  0.000   3.0    -1
+kband    :  Am  242  0  0.025   2.0    -1
+kband    :  Am  242  0  0.100   4.0    -1
+kband    :  Am  242  0  0.193   3.0    -1
+kband    :  Am  242  0  0.231   4.0    -1
+kband    :  Am  242  0  0.239   2.0    -1
+kband    :  Am  242  0  0.276   3.0    -1
+kband    :  Am  242  0  0.323   4.0    -1
+
+# second fission barrier
+
+barrier  :  Am  242  1  5.15   0.40
+kband    :  Am  242  1  0.000   3.0    -1
+kband    :  Am  242  1  0.025   2.0    -1
+kband    :  Am  242  1  0.100   4.0    -1
+kband    :  Am  242  1  0.193   3.0    -1
+kband    :  Am  242  1  0.231   4.0    -1
+kband    :  Am  242  1  0.239   2.0    -1
+kband    :  Am  242  1  0.276   3.0    -1
+kband    :  Am  242  1  0.323   4.0    -1
+
+ENDHFS   :
+END      :

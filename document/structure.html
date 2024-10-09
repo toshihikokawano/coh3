@@ -1,0 +1,160 @@
+<!DOCTYPE>
+<html>
+<head>
+<title> Optical and Hauser-Feshbach Statistical Model Code, CoH: Mean-Field Theories </title>
+<!-- Generated 2014/09/17, Last modified 2024/ 5/ 4 -->
+<meta charset="us-ascii">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="option.html"> [BACK] </a>
+<a href="index.html">   [UP]  </a>
+<a href="output.html"> [NEXT] </a>
+<hr>
+
+<h1><a name="structure">Nuclear Structure Models</a></h1>
+
+<p>CoH has two nuclear structure models, the Hartree-Fock-BCS model
+(HF-BCS) and the Finite-Range Droplet model (FRDM). They are performed
+prior to the main cross section calculations when they are activated
+by the top level keyword <code> MFT </code>. </p>
+
+<p> Parameters for both FRDM and HF-BCS are given in the <code>MFT</code>
+section. Depending on the quantities given in the input, either
+FRDM or HF-BCS is performed.</p>
+
+
+<h2><a name="frdm">Finite-Range Droplet Model</a></h2>
+
+<p>The parameters related to FRDM are as follows.</p>
+
+<dl>
+   <dt> epsilon  : <dd> deformation parameters, from epsilon 1 to 6 </dd>
+   <dt> gamma    : <dd> gamma deformation parameter in degree </dd>
+</dl>
+
+<pre>
+BEGIN    :  FRDM calculation
+DATA     :
+target   :        92       208
+ENDDATA  :
+MFT      :
+# eps3 = 0.01, and others are zero
+epsilon  :  0.0  0.0  0.01
+END      :
+</pre>
+
+<p> Although epsilon 1 should be 0.0, this is always needed, since
+eps1 < 1 is treated as a special case. If a negative value of eps1 is
+given, the deformation parameters are retrieved from a data file,
+which was obtained by P.Moller et al. by minimizing the potential
+energy.</p>
+
+
+<h2><a name="hfbcs">Hartree-Fock BCS Model</a></h2>
+
+<dl>
+   <dt> force    : <dd> Skyrme force </dd>
+   <dt> pairing  : <dd> pairing model for the BCS calculation </dd>
+   <dt> strength : <dd> pairing strength </dd>
+   <dt> converge : <dd> convergence criteria </dd>
+   <dt> basis    : <dd> cylindrical HO basis parameters </dd>
+   <dt> Q20      : <dd> force constraint on Q20 in the HF calculation </dd>
+   <dt> zcm      : <dd> same as Q20 but for the Zcm. There are Q30 and Q40 too</dd>
+</dl>
+
+<pre>
+BEGIN    :  HF-BCS
+DATA     :
+target   :        92       238
+ENDDATA  :
+MFT      :
+epsilon  : -1.0
+force    :   SLy4
+pairing  : delta
+strength : -1250.0  -1250.0
+converge : 100  0.001
+ENDMFT   :
+END      :
+</pre>
+
+<p>In the example above, the Skyrme force to be SLy4. CoH has three
+Skyrme parameters - SIII, SkM*, and SLy4. One of these names is given
+at the keyword <code>force</code>, and this line is a switch to activate
+the Hartree-Fock calculation.</p>
+
+<p>Two pairing models are implemented for now. One is the density
+dependent delta interaction activated by putting the name "delta".
+Another model is a constant strength calculation by "seniority". 
+In both cases, the pairing strengths for the neutron and proton 
+shells are given in the <code>strength</code> line.</p>
+
+<p>The Hartree-Fock iteration can be controlled by
+the <code>converge</code> line. The first value is the max number of
+iteration and the second value is the convergence criterion.
+If this is not given, a default criterion is applied. </p>
+
+<p>Althtough FRDM and HF-BCS are exclusive each other, you can use the
+FRDM microscopic potential as the initial potential in the
+Hartree-Fock iteration. This can be done by adding
+the <code>epsilon</code> line and put -1 for eps1. </p>
+
+
+<h2><a name="mftprint">Mean-Field Theory Output Options</a></h2>
+
+<p>Unlike the output print control of CoH by giving command-line
+options, the printing options are provided in the input file for the
+mean-field theory calculations.</p>
+
+<pre>
+MFT      :
+print    : potential
+print    : bcs
+print    : energy
+print    : expansion
+print    : HFdensity
+print    : HFmonitor
+print    : FRDMzero
+print    : FRDMfileout
+print    : FRDMshape
+ENDMFT   :
+</pre>
+
+<p><code>potential</code> prints the single-particle potential on a 
+fixed 3D mesh. In the case of FRDM, this will be the microscopic
+part. For HF-BCS, the final (converged) potential is printed.</p>
+
+<p><code>bcs</code> gives the BCS parameters.</p>
+
+<p><code>energy</code> prints the calculated nuclear potential
+energies.</p>
+
+<p><code>expansion</code> generates a table which contains
+the single-particles levels decomposed into spherical
+Harmonic Oscillator wave functions.</p>
+
+<p><code>HFdensity</code> prints density distributions at
+each fixed 3D mesh point.</p>
+
+<p><code>HFmonitor</code> shows intrim energies during the HF
+iteration to monitor the convergence.</p>
+
+<p><code>FRDMshape</code> generates external files that contain
+3D mesh data of nuclear shape. This is only for a plotting purpose.</p>
+
+<p><code>FRDMfileout</code> generates two external files,
+and some internal values are printed on them. The values
+include parameters of the pairing and shell correction models,
+and micro/macro energy components. </p>
+
+<p>The file names for these external files are fixed, and 
+defined in FRDM.h. </p>
+
+<hr>
+<a href="option.html"> [BACK] </a>
+<a href="index.html">   [UP]  </a>
+<a href="output.html"> [NEXT] </a>
+</body>
+</html>
+

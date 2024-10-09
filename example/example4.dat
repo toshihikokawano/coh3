@@ -1,0 +1,23 @@
+#
+#  CoH3 Sample Data No.4
+#
+#  Neutron Radiative Capture Reaction on Zr90
+#
+
+BEGIN    :  Hauser-Feshbach calculation for Zr90
+DATA     :
+target   :        Zr 90
+incident :        n
+energy   :        0.1
+omp_n    : Koning
+omp_p    : Koning
+ENDDATA  :
+DSD      :
+ENDDSD   :
+PREEQ    :
+ENDPREEQ :
+HFS      :
+#           use built-in systematics for gamma-ray renormalization
+photo    :  -1
+ENDHFS   :
+END      :

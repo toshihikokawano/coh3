@@ -1,0 +1,38 @@
+#
+#  CoH3 Sample Data No.6
+#
+#  Neutron-Induced Reaction on the Excited State
+#
+
+BEGIN    :  Hauser-Feshbach calculation for Tm 169 at the first level
+DATA     :
+target   :    Tm 169
+incident :    n
+energy   :    0.1
+
+# CC optical potential approximated by a spherical one,
+# but the imaginary part is reduced to 60%
+
+omp_n    : Koning
+tweakOW  : n  0.6
+level    : 0.000e+00       0.5
+level    : 0.00841         1.5
+level    : 0.118187        2.5
+level    : 0.13893         3.5
+deform   : 0.3100
+
+# target is in its first excited state
+excite   : 0.00841
+
+ENDDATA  :
+
+DSD      :
+ENDDSD   :
+
+HFS      :
+
+# Instead of giving Gamma_g/D0, input the Gamma_g is directly
+photo    : -1.59e-8
+
+ENDHFS   :
+END      :

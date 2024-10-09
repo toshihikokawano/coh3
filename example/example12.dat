@@ -1,0 +1,45 @@
+#
+#  CoH3 Sample Data No.12
+#
+#  Coupled-Channels and DWBA mixed calculation
+#
+
+BEGIN    :  Ar40 + n reaction
+DATA     :
+target   : Ar 40
+incident :    n
+energy   :    5
+omp_n    : Koning
+omp_p    : Koning
+omp_a    : Avrigeanu2009
+omp_d    : Bojowald
+omp_t    : Becchetti
+omp_h    : Becchetti
+level    : 0.000e+00       0.0
+level    : 1.46086         2.0
+level    : 2.8926          4.0
+deform   : 0.251
+ENDDATA  :
+
+DWBA     :
+level    : 2.5241   2.0  0.15
+level    : 3.2080   2.0  0.20
+level    : 3.9188   2.0  0.15
+level    : 3.6808  -3.0  0.3143
+level    : 4.0825  -3.0  0.2
+level    : 4.3245   2.0  0.15
+nonloc   : 0.85
+ENDDWBA  :
+
+DSD      :
+ENDDSD   :
+
+PREEQ    :
+tweakSD  : p 0.94
+ENDPREEQ :
+
+HFS      :
+photo    : 0.0000031
+levelcut : Ar 40 19
+ENDHFS   :
+END      :
