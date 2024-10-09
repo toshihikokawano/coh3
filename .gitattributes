@@ -1,1 +1,3 @@
 source/*.h linguist-language=C++
+omplib/*.h linguist-language=C++
+beoh/*.h linguist-language=C++
