@@ -632,7 +632,7 @@ int readFns(char *s, FNSpec *fns)
 
     }else if(head == "rt       :"){
       if(kr < MAX_FISS_CHANCE){
-        fns->fc[kn].rt = atof(readExtractData(0));
+        fns->fc[kr].rt = atof(readExtractData(0));
         kr ++;
       }
 
