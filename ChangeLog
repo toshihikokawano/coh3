@@ -1,3 +1,10 @@
+2024-10-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp: updated
+	* source/coh.cpp: (cohNotice): updated
+	verbflag added to print some internal variables
+	many files were updated to include cohNotice()
+
 2024-10-08  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* beoh/beohoutput.cpp (outIsomericRatio): updated

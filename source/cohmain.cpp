@@ -248,11 +248,11 @@ void cohSuperLazy(const double elab, const int targz, const int targa)
   pdt[neutron].omp  =  6; // Koning-Delaroche
   /*** ignore charged particles if heavier than Nd */
   if(targz < 60){
-    if(MAX_CHANNEL>=2)  pdt[proton].omp   =  6; // Koning-Delaroche
-    if(MAX_CHANNEL>=3)  pdt[alpha].omp    = 15; // Avrigeanu2009
-    if(MAX_CHANNEL>=4)  pdt[deuteron].omp = 18; // Bojowald
-//  if(MAX_CHANNEL>=5)  pdt[triton].omp   =  2; // Becchetti
-//  if(MAX_CHANNEL>=6)  pdt[helion].omp   =  2; // Becchetti
+    if(MAX_CHANNEL >= 2)  pdt[proton].omp   =  6; // Koning-Delaroche
+    if(MAX_CHANNEL >= 3)  pdt[alpha].omp    = 16; // Avrigeanu2014
+    if(MAX_CHANNEL >= 4)  pdt[deuteron].omp = 18; // Bojowald
+//  if(MAX_CHANNEL >= 5)  pdt[triton].omp   =  2; // Becchetti
+//  if(MAX_CHANNEL >= 6)  pdt[helion].omp   =  2; // Becchetti
   }
 
   /*** default gamma-ray strength function normalization */
@@ -303,6 +303,9 @@ int cohEntranceChannel()
     jmax = omCalc(sys.cms_energy,&sys.incident,&sys.target,sys.reduced_mass,crx.transmission[0],&crx);
 
   if(crx.reaction == 0.0) jmax = 0;
+
+  message << "max J for entrance channel " << jmax;
+  cohNotice("cohEntranceChannel");
 
   return(jmax);
 }
@@ -364,6 +367,9 @@ static inline int cohEGrid(const int k, double *ein)
     message << "default energy grid option " << k << " not defined";
     cohTerminateCode("cohEgrid");
   }
+
+  message << "default energy grid option " << k << " includes " << n << " energy points";
+  cohNotice("cohEGrid");
 
   return(n);
 }

@@ -14,6 +14,7 @@
 #include "parameter.h"
 #include "mt19937.h"
 #include "metastable.h"
+#include "terminate.h"
 
 
 /**********************************************************/
@@ -32,12 +33,25 @@ bool statAddDiscreteLevels(NuclearStructure *d)
   int lcut = parmGetValue(parmLCUT,d->za);
 
   bool t = false;
-  if( (d->nlevel < lcut) && (lcut <= nhigh)){
-    d->nlevel = lcut;
-    t = true;
-  }
+  int  norg = d->nlevel;
 
-  statFixDiscreteLevels(d);
+  if(lcut <= nhigh){
+    if(d->nlevel < lcut){
+      norg = d->nlevel;
+      d->nlevel = lcut;
+      t = true;
+    }
+    statFixDiscreteLevels(d);
+  }
+  else{
+    message << "level cut number " << lcut << " larger than stored data " << nhigh;
+    cohWarningMessage("statAddDiscreteLevels");
+  }
+  
+  if(t){
+    message << "number of discrete levels for Z " << d->za.getZ() << " - A " << d->za.getA() << " extended from " << norg << " to " << lcut;
+    cohNotice("statAddDiscreteLevels");
+  }
 
   return(t);
 }
@@ -170,7 +184,12 @@ void statPopTrapMeta(NuclearStructure *d)
 {
   for(int i=1 ; i<MAX_LEVELS ; i++){
     if(d->lev[i].energy == 0.0) break;
-    if(d->lev[i].halflife > thalfmin) d->lev[i].ngamma = 0;
+    if(d->lev[i].halflife > thalfmin){
+      d->lev[i].ngamma = 0;
+
+      message << "discrete level of " << d->lev[i].energy << " marked as meta";
+      cohNotice("statPopTrapMeta");
+    }
   }
 }
 
@@ -184,6 +203,10 @@ void statCutDiscreteLevels(const double emax, Nucleus *n)
   for(int i=1 ; i<n->ndisc ; i++){
     if(n->lev[i].energy >= emax){
       nhigh = i-1;
+
+      message << "discrete level for Z " << n->za.getZ() << " - A " << n->za.getA() << " truncated at " << nhigh << " because Emax = " << emax;
+      cohNotice("statCutDiscreteLevels");
+
       break;
     }
   }

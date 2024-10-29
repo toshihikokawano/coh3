@@ -64,7 +64,10 @@ int readSystem(char *s, System *sys, Pdata *pdt, Direct *dir, double *ein, doubl
   for(int i=0 ; i<MAX_DIRECT ; i++) dir->lev[i].spin = dir->lev[i].energy = 0.0;
 
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in DATA section";
+      cohTerminateCode("readSystem");
+    }
 
     if(head == "ENDDATA  :"){
       break;
@@ -91,7 +94,7 @@ int readSystem(char *s, System *sys, Pdata *pdt, Direct *dir, double *ein, doubl
     }else if(head == "energy   :"){
       ein[kein++] = atof(readExtractData(0));
       if(kein >= MAX_EINCIDENT){
-        message << "too many incident energies " << kein;
+        message << "too many incident energies " << kein + 1;
         cohTerminateCode("readSystem");
       }
       inputcheck = inputcheck | 0x02;
@@ -101,7 +104,7 @@ int readSystem(char *s, System *sys, Pdata *pdt, Direct *dir, double *ein, doubl
       mkt[kmkt++] = (head == "t9       :") ? x * 1e+3 * BOLTZMANN : x;
       ctl.macs = true;
       if(kmkt >= MAX_MACSTEMP){
-        message << "too many Maxwellian temperatures " << kmkt;
+        message << "too many Maxwellian temperatures " << kmkt + 1;
         cohTerminateCode("readSystem");
       }
       inputcheck = inputcheck | 0x02;
@@ -165,11 +168,13 @@ int readSystem(char *s, System *sys, Pdata *pdt, Direct *dir, double *ein, doubl
       pdt[userdef].omp = find_omp(inputdata);
 
     }else if(head == "level    :"){
-      if(klev < MAX_DIRECT){
-        dir->lev[klev].energy = atof(readExtractData(0));
-        dir->lev[klev].spin   = atof(readExtractData(1));
-        dir->type[klev++]     = readDirect(readExtractData(2));
+      if(klev == MAX_DIRECT){
+        message << "too many coupled levels " << klev + 1;
+        cohTerminateCode("readSystem");
       }
+      dir->lev[klev].energy = atof(readExtractData(0));
+      dir->lev[klev].spin   = atof(readExtractData(1));
+      dir->type[klev++]     = readDirect(readExtractData(2));
 
     }else if(head == "deform   :" || head == "beta_rot :"){
       for(int l=0 ; l<MAX_LAMBDA ; l++){
@@ -270,6 +275,11 @@ int readSystem(char *s, System *sys, Pdata *pdt, Direct *dir, double *ein, doubl
     }
   }
 
+  if(klev > 0) message << "number of direct levels " << klev << " ";
+  if(kein > 0) message << "number of incident energies " << kein << " ";
+  if(kmkt > 0) message << "number of Maxwellian temperature " << kmkt;
+  if(message.str() != "") cohNotice("readSystem");
+
   return(klev);
 }
 
@@ -284,19 +294,24 @@ int readDwba(char *s, Direct *dir)
   for(int i=klev ; i<MAX_DIRECT ; i++) dir->lev[i].energy = 0.0;
 
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in DWBA section";
+      cohTerminateCode("readDwba");
+    }
 
     if(head == "ENDDWBA  :"){
-      return(klev);
+      break;
 
     }else if(head == "level    :"){
-      if(klev < MAX_DIRECT){
-        dir->lev[klev].energy = atof(readExtractData(0));
-        dir->lev[klev].spin   = fabs(atof(readExtractData(1)));
-        dir->defdwba[klev]    = atof(readExtractData(2));
-        dir->type[klev]       = dwba;
-        klev++;
+      if(klev == MAX_DIRECT){
+        message << "too many DWBA levels " << klev + 1;
+        cohTerminateCode("readDWBA");
       }
+      dir->lev[klev].energy = atof(readExtractData(0));
+      dir->lev[klev].spin   = fabs(atof(readExtractData(1)));
+      dir->defdwba[klev]    = atof(readExtractData(2));
+      dir->type[klev]       = dwba;
+      klev++;
 
     }else if(head == "nonloc   :"){
       dir->nonloc = atof(readExtractData(0));
@@ -306,6 +321,10 @@ int readDwba(char *s, Direct *dir)
       cohTerminateCode("readDwba");
     }
   }
+
+  if(klev > dir->ncc) message << "number of DWBA levels " << klev - dir->ncc;
+  if(message.str() != "") cohNotice("readDWBA");
+
   return(klev);
 }
 
@@ -316,10 +335,13 @@ int readDwba(char *s, Direct *dir)
 int readDsd(char *s, Dcapt *dsd)
 {
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
-
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in DSD section";
+      cohTerminateCode("readDsd");
+    }
+    
     if(head == "ENDDSD   :"){
-      return(0);
+      break;
 
     }else if(head == "interact :"){
       dsd->v1     =  atof(readExtractData(0));
@@ -342,6 +364,7 @@ int readDsd(char *s, Dcapt *dsd)
       cohTerminateCode("readDsd");
     }
   }
+
   return(0);
 }
 
@@ -357,10 +380,13 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
   int nfis = -1; // count number of fissioning nuclei
 
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in HFS section";
+      cohTerminateCode("readStatModel");
+    }
 
     if(head == "ENDHFS   :"){
-      return(0);
+      break;
 
     }else if(head == "photo    :"){
       readParSet1(parmGSTR);
@@ -372,35 +398,38 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
       readParSet1(parmD0SR);
 
     }else if(head == "gdr      :"){
-      if(ngdr < MAX_GDR){
-        readExtractData(0);
-        if(tolower(inputdata[0]) != 'e' && tolower(inputdata[0]) != 'm'){
-          message << "gamma-ray emission type " << inputdata[0] << " not defined";
-          cohTerminateCode("readStatModel");
-        }
-        if(inputdata[1] != '1' && inputdata[1] != '2' && inputdata[1] != '3'){
-          message << "gamma-ray multipolarity " << inputdata[1] << " should be 1, 2, or 3";
-          cohTerminateCode("readStatModel");
-        }
-
-        gdr[ngdr].setXL( inputdata );
-        gdr[ngdr].setEnergy ( atof(readExtractData(1)) );
-        gdr[ngdr].setWidth  ( atof(readExtractData(2)) );
-        gdr[ngdr].setSigma  ( atof(readExtractData(3)) );
-        std::string p = (std::string)readExtractData(4);
-        if(p == "SL" || p == "") gdr[ngdr].setProfile(SL);
-        else if(p == "GL")       gdr[ngdr].setProfile(GL);
-        else if(p == "ML")       gdr[ngdr].setProfile(ML);
-        else{
-          message << "gamma-ray profile " << p << " not defined";
-          cohTerminateCode("readStatModel");
-        }
-
-        /*** for backward compatibility */
-        if((ngdr <= 1) && (gdr[ngdr].getXL() == "E1") && (p == "")) gdr[ngdr].setProfile(GL);
-
-        ngdr++;
+      if(ngdr == MAX_GDR){
+        message << "too many GDRs " << ngdr + 1;
+        cohTerminateCode("readStatModel");
       }
+
+      readExtractData(0);
+      if(tolower(inputdata[0]) != 'e' && tolower(inputdata[0]) != 'm'){
+        message << "gamma-ray emission type " << inputdata[0] << " not defined";
+        cohTerminateCode("readStatModel");
+      }
+      if(inputdata[1] != '1' && inputdata[1] != '2' && inputdata[1] != '3'){
+        message << "gamma-ray multipolarity " << inputdata[1] << " should be 1, 2, or 3";
+        cohTerminateCode("readStatModel");
+      }
+
+      gdr[ngdr].setXL( inputdata );
+      gdr[ngdr].setEnergy ( atof(readExtractData(1)) );
+      gdr[ngdr].setWidth  ( atof(readExtractData(2)) );
+      gdr[ngdr].setSigma  ( atof(readExtractData(3)) );
+      std::string p = (std::string)readExtractData(4);
+      if(p == "SL" || p == "") gdr[ngdr].setProfile(SL);
+      else if(p == "GL")       gdr[ngdr].setProfile(GL);
+      else if(p == "ML")       gdr[ngdr].setProfile(ML);
+      else{
+        message << "gamma-ray profile " << p << " not defined";
+        cohTerminateCode("readStatModel");
+      }
+
+      /*** for backward compatibility */
+      if((ngdr <= 1) && (gdr[ngdr].getXL() == "E1") && (p == "")) gdr[ngdr].setProfile(GL);
+
+      ngdr++;
 
     }else if(head == "barrier  :"){
       z = readElementToZ(readExtractData(0));
@@ -535,6 +564,11 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
       cohTerminateCode("readStatModel");
     }
   }
+
+  if(ngdr > 0) message << "number of GDRs " << ngdr << " ";
+  if(nfis >= 0) message << "number of fissioning nuclei " << nfis + 1;
+  if(message.str() != "") cohNotice("readStatModel");
+
   return(0);
 }
 
@@ -545,10 +579,13 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
 int readExciton(char *s)
 {
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in PREEQ section";
+      cohTerminateCode("readExcition");
+    }
 
     if(head == "ENDPREEQ :"){
-      return(0);
+      break;
 
     }else if(head == "tweakM2  :"){
       readParSet1(parmM2);
@@ -570,6 +607,7 @@ int readExciton(char *s)
       cohTerminateCode("readExciton");
     }
   }
+
   return(0);
 }
 
@@ -596,63 +634,80 @@ int readFns(char *s, FNSpec *fns)
   }
 
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in FNS section";
+      cohTerminateCode("readFns");
+    }
 
     if(head == "ENDFNS   :"){
-      return(0);
+      break;
 
     }else if(head == "fragment :"){
-      if(kf < MAX_FISS_CHANCE){
-        int zl = readElementToZ(readExtractData(0));
-        int al = atoi(          readExtractData(1));
-        int zh = readElementToZ(readExtractData(2));
-        int ah = atoi(          readExtractData(3));
-        fns->fc[kf].lf.za.setZA(zl,al);
-        fns->fc[kf].hf.za.setZA(zh,ah);
-        kf ++;
+      if(kf == MAX_FISS_CHANCE){
+        message << "too many fission fragment pairs " << kf + 1;
+        cohTerminateCode("readFns");
       }
+      int zl = readElementToZ(readExtractData(0));
+      int al = atoi(          readExtractData(1));
+      int zh = readElementToZ(readExtractData(2));
+      int ah = atoi(          readExtractData(3));
+      fns->fc[kf].lf.za.setZA(zl,al);
+      fns->fc[kf].hf.za.setZA(zh,ah);
+      kf ++;
 
     }else if(head == "energies :"){
-      if(ke < MAX_FISS_CHANCE){
-        fns->fc[ke].etotal  =  atof(readExtractData(0));
-        fns->fc[ke].tke0    =  atof(readExtractData(1));
-        fns->fc[ke].tke1    =  atof(readExtractData(2));
-        fns->fc[ke].egamma  =  atof(readExtractData(3));
-        fns->fc[ke].meansep =  atof(readExtractData(4));
-        ke ++;
+      if(ke == MAX_FISS_CHANCE){
+        message << "too many fission energies " << ke + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[ke].etotal  =  atof(readExtractData(0));
+      fns->fc[ke].tke0    =  atof(readExtractData(1));
+      fns->fc[ke].tke1    =  atof(readExtractData(2));
+      fns->fc[ke].egamma  =  atof(readExtractData(3));
+      fns->fc[ke].meansep =  atof(readExtractData(4));
+      ke ++;
 
     }else if(head == "density  :"){
-      if(kd < MAX_FISS_CHANCE){
-        fns->fc[kd].lf.a    =  atof(readExtractData(0));
-        fns->fc[kd].hf.a    =  atof(readExtractData(1));
-        fns->fc[kd].ac      =  atof(readExtractData(2));
-        kd ++;
+      if(kd == MAX_FISS_CHANCE){
+        message << "too many fission level densities " << kd + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[kd].lf.a    =  atof(readExtractData(0));
+      fns->fc[kd].hf.a    =  atof(readExtractData(1));
+      fns->fc[kd].ac      =  atof(readExtractData(2));
+      kd ++;
 
     }else if(head == "rt       :"){
-      if(kr < MAX_FISS_CHANCE){
-        fns->fc[kr].rt = atof(readExtractData(0));
-        kr ++;
+      if(kr == MAX_FISS_CHANCE){
+        message << "too many Rt parameters " << kr + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[kr].rt = atof(readExtractData(0));
+      kr ++;
 
     }else if(head == "nuratio  :"){
-      if(kn < MAX_FISS_CHANCE){
-        fns->fc[kn].nuratio = atof(readExtractData(0));
-        kn ++;
+      if(kn == MAX_FISS_CHANCE){
+        message << "too many nu-ratio parameters " << kn + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[kn].nuratio = atof(readExtractData(0));
+      kn ++;
 
     }else if(head == "anisotrop:"){
-      if(ka < MAX_FISS_CHANCE){
-        fns->fc[ka].anisotropy =  atof(readExtractData(0));
-        ka ++;
+      if(ka == MAX_FISS_CHANCE){
+        message << "too many anisotropic parameters " << ka + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[ka].anisotropy =  atof(readExtractData(0));
+      ka ++;
 
     }else if(head == "tpdf_s   :"){
-      if(ks < MAX_FISS_CHANCE){
-        fns->fc[ks].tps =  atof(readExtractData(0));
-        ks ++;
+      if(ks == MAX_FISS_CHANCE){
+        message << "too many temperature distribution parameters " << ks + 1;
+        cohTerminateCode("readFns");
       }
+      fns->fc[ks].tps =  atof(readExtractData(0));
+      ks ++;
 
     }else if(head == "maxwell  :"){
       fns->maxwell =  atof(readExtractData(0));
@@ -666,6 +721,11 @@ int readFns(char *s, FNSpec *fns)
       cohTerminateCode("readFns");
     }
   }
+
+  if(kf > 0) message << "number of multi-chance fission for spectrum " << kf;
+  message << " energy " << ke << " density " << kd << " Rt " << kr << " nu-ratio " << kn << " aniso " << ka << " temp dist " << ks;
+  if(message.str() != "") cohNotice("readFns");
+
   return(0);
 }
 
@@ -676,10 +736,13 @@ int readFns(char *s, FNSpec *fns)
 int readMeanfield(char *s, MFTparm *m)
 {
   while(1){
-    if( readFgetOneline(s) < 0 ) break;
+    if( readFgetOneline(s) < 0 ){
+      message << "data structure error in MFT section";
+      cohTerminateCode("readMeanfield");
+    }
 
     if(head == "ENDMFT   :"){
-      return(0);
+      break;
 
     }else if(head == "force    :"){
       m->force = readExtractData(0);
@@ -891,10 +954,12 @@ Particle readParticleIdentify(const int n)
   case 'f' : p = fission ; break;
   default  : break;
   }
+
   if(p == unknown){
     message << "unknown particle " << i;
     cohTerminateCode("readParticleIdentify");
   }
+
   return(p);
 }
 
@@ -924,6 +989,7 @@ inline int readGetFbrIndex(const int n, const unsigned int z, const unsigned int
   for(int i=0 ; i<=n ; i++){
     if( fbr[i].za == id ) idx = i;
   }
+
   return(idx);
 }
 

@@ -40,8 +40,8 @@ int omExternalFunction(int lmax, const double rho_match, const double coulomb, W
       p1 = p2;  p2 = p3;
     }
     if(l == MAX_L-1){
-      message << "maximum angular momentum " << l << " too large";
-      cohNotice("omExternalFunction");
+      message << "maximum angular momentum too large, truncated at " << l-1;
+      cohWarningMessage("omExternalFunction");
     }
 
     lmax = (l==MAX_L-1) ? l-1 : l;

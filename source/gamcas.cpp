@@ -10,6 +10,7 @@
 #include "output.h"
 #include "parameter.h"
 #include "global.h"
+#include "terminate.h"
 
 
 /**********************************************************/
@@ -27,7 +28,11 @@ int specGammaCascade(double *spc, Nucleus *n)
   for(int i0=n->ndisc-1 ; i0>0 ; i0--){
 
     /*** if this level is long-lived, skip decay */
-    if( gcut && (n->lev[i0].halflife > tisom) ) continue;
+    if( gcut && (n->lev[i0].halflife > tisom) ){
+      message << "discrete level of Z = " << n->za.getZ() << " - A " << n->za.getA() << " at E = " << n->lev[i0].energy << " identified as isomer";
+      cohNotice("specGammaCascade");
+      continue;
+    }
 
     /*** for each gamma transition to a daughter level */
     for(int j=0 ; j<n->lev[i0].ngamma ; j++){
@@ -47,6 +52,7 @@ int specGammaCascade(double *spc, Nucleus *n)
       }
     }
   }
+
   return (m);
 }
 
