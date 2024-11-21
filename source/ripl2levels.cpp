@@ -56,9 +56,11 @@ int riplReadDiscreteLevels(ZAnumber *za, Level *lev, MaxLevelCtl ml)
     fp.open(&str[0]);
   }
 
+  file = str;
+
   if(!fp){
-    message << "discrete level data file " << str << " not found, use ground state only";
-    cohNotice("riplReadDiscreteLevels");
+    message << "discrete level data file " << file << " not found, use ground state only";
+    cohWarningMessage("riplReadDiscreteLevels");
 
     nlevel = riplGSonly(za->getZ(), za->getA(), lev);
     return(nlevel);
@@ -67,7 +69,7 @@ int riplReadDiscreteLevels(ZAnumber *za, Level *lev, MaxLevelCtl ml)
   for(int i=0 ; i<MAX_LEVELS ; i++) lev[i].energy = lev[i].spin = 0.0;
 
   bool found=false;
-  int  a=0, z=0, nol=0, nc=0, nmax=0;
+  int  a = 0, z = 0, nol = 0, nc = 0, nmax = 0;
   while(getline(fp,str)){
 
     /*** search for Z and A entry in the file */
@@ -96,11 +98,11 @@ int riplReadDiscreteLevels(ZAnumber *za, Level *lev, MaxLevelCtl ml)
     int    p=0, ng=0, f=0;
     for(int i=0 ; i<nol ; i++){
       getline(fp,str);
-      d=str.substr( 4,10);  elev = atof(&d[0]);
-      d=str.substr(15, 5);  s    = atof(&d[0]);
-      d=str.substr(20, 3);  p    = atoi(&d[0]);
-      d=str.substr(24,10);  thlf = atof(&d[0]);
-      d=str.substr(34, 3);  ng   = atoi(&d[0]);
+      d = str.substr( 4,10);  elev = atof(&d[0]);
+      d = str.substr(15, 5);  s    = atof(&d[0]);
+      d = str.substr(20, 3);  p    = atoi(&d[0]);
+      d = str.substr(24,10);  thlf = atof(&d[0]);
+      d = str.substr(34, 3);  ng   = atoi(&d[0]);
 
       f = (str[0] == '#' ) ? 1 : 0;
 
@@ -108,12 +110,19 @@ int riplReadDiscreteLevels(ZAnumber *za, Level *lev, MaxLevelCtl ml)
       for(int j=0 ; j<ng ; j++){
         getline(fp,str);
         if(j < MAX_GAMMA_BRANCH){
-          d=str.substr(39, 4);  nf[j] = atoi(&d[0]) -1;
-          d=str.substr(66,10);  pe[j] = atof(&d[0]);
-          d=str.substr(77,10);  ic[j] = atof(&d[0]);
+          d = str.substr(39, 4);  nf[j] = atoi(&d[0]) -1;
+          d = str.substr(66,10);  pe[j] = atof(&d[0]);
+          d = str.substr(77,10);  ic[j] = atof(&d[0]);
         }
       }
-      if(ng >= MAX_GAMMA_BRANCH) ng = MAX_GAMMA_BRANCH - 1;
+
+      if(ng >= MAX_GAMMA_BRANCH){
+        ng = MAX_GAMMA_BRANCH - 1;
+        if(found){
+          message << "number of gamma-ray branches for Z " << za->getZ() << " - A " << za->getA() << " at Ex = " << elev << " too many, truncated at " << ng;
+          cohWarningMessage("riplReadDiscreteLevels");
+        }
+      }
 
       /*** if found, copy data into lev array */
       if(found && i<MAX_LEVELS - 1){
@@ -170,6 +179,9 @@ int riplReadDiscreteLevels(ZAnumber *za, Level *lev, MaxLevelCtl ml)
       cohTerminateCode("riplReadDiscreteLevels");
     }
   }
+
+  message << nlevel << " discrete levels for Z " << za->getZ() << " - A " << za->getA() << " read from " << file;
+  cohNotice("riplReadDiscreteLevels");
 
   return(nlevel);
 }

@@ -21,6 +21,11 @@ static double specRenormReaction (void);
 static void specPopCheck (Nucleus *);
 #endif
 
+#undef DEBUG_EXCHECK
+#ifdef DEBUG_EXCHECK
+static void specExCheck (Nucleus *);
+#endif
+
 
 /**********************************************************/
 /*      Decay of each compound nucleus                    */
@@ -65,6 +70,10 @@ void    spectra
 
 #ifdef DEBUG_POPCHECK
       if(k0 == 0) specPopCheck(&ncl[c0]);
+#endif
+
+#ifdef DEBUG_EXCHECK
+      if(k0 == 0) specExCheck(&ncl[c0]);
 #endif
 
       spc->memclear("dp");
@@ -267,7 +276,8 @@ double  specRenormReaction()
 #ifdef DEBUG_POPCHECK
 void specPopCheck(Nucleus *n)
 {
-  double s1 = 0.0, s2 = 0.0;
+  const int ncolumn = 10; // number of J printed
+  double s1 = 0.0, s2 = 0.0, j1 = 0.0, j2 = 0.0;
 
   std::cout << "#  ";
   std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
@@ -280,32 +290,73 @@ void specPopCheck(Nucleus *n)
     std::cout.setf(std::ios::scientific, std::ios::floatfield);
 
     double s3 = 0.0;
-    for(int j=0 ; j<10 ; j++) {
-      s1 += n->pop[k][j].even+n->pop[k][j].odd;
-      s3 += n->pop[k][j].even+n->pop[k][j].odd;
-      std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].even;
+    for(int j=0 ; j<n->jmax ; j++) {
+      s1 += n->pop[k][j].even + n->pop[k][j].odd;
+      s3 += n->pop[k][j].even + n->pop[k][j].odd;
+      j1 += (n->pop[k][j].even + n->pop[k][j].odd) * j;
+      if(j < ncolumn){
+        std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].even;
+      }
     }
     std::cout << std::endl;
 
     std::cout << "       ";
-    for(int j=0 ; j<10 ; j++) {
-      std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].odd;
+    for(int j=0 ; j<n->jmax ; j++) {
+      if(j < ncolumn){
+        std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].odd;
+      }
     }
     std::cout << std::setprecision(4) << std::setw(11) << s3 << std::endl;
   }
 
   s2 = 0.0;
-  for(int k=0;k<n->ndisc;k++){
+  for(int k=0 ; k<n->ndisc ; k++){
     s2 += n->lpop[k];
+    j2 += n->lpop[k] * n->lev[k].spin;
     std::cout << std::setw(5) << k
          << std::setprecision(4) << std::setw(13) << n->lev[k].energy
          << std::setw(13) << n->lpop[k] << std::endl;
   }
 
-  std::cout << "# SUMcont " << s1 << std::endl;
-  std::cout << "# SUMdisc " << s2 << std::endl;
-  std::cout << "# SUMall  " << s1+s2 << std::endl;
+  double st = s1 + s2;
+  double jt = j1 + j2;
+  j1 = (s1 > 0.0) ? j1 / s1 : 0.0;
+  j2 = (s2 > 0.0) ? j2 / s2 : 0.0;
+  jt = (st > 0.0) ? jt / st : 0.0;
+
+
+  std::cout << "# SUMcont, <J>  " << s1 << " " << j1 <<std::endl;
+  std::cout << "# SUMdisc, <J>  " << s2 << " " << j2 << std::endl;
+  std::cout << "# SUMall,  <J>  " << st << " " << jt << std::endl;
   std::cout << std::endl;
+}
+#endif
+
+
+#ifdef DEBUG_EXCHECK
+void specExCheck(Nucleus *n)
+{
+  double ex = 0.0, sx = 0.0;
+
+  for(int k=0 ; k<n->ncont ; k++){
+    double s3 = 0.0;
+    for(int j=0 ; j<n->jmax ; j++) s3 += n->pop[k][j].even + n->pop[k][j].odd;
+    sx += s3;
+    ex += s3 * n->excitation[k];
+  }
+
+  for(int k=0 ; k<n->ndisc ; k++){
+    sx += n->lpop[k];
+    ex += n->lpop[k] * n->lev[k].energy;
+  }
+
+  if(sx > 0.0) ex = ex / sx;
+  else ex = 0.0;
+
+  std::cout << "#  ";
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getA();
+  std::cout << " Ex(average) " << ex << std::endl;
   std::cout << std::endl;
 }
 #endif

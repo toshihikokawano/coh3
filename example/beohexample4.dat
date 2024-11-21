@@ -7,6 +7,7 @@
 
 BEGIN    :  BeoH test input file 4
 DATA     :
+incident :    n
 target   :    U   235
 energy   : 0.0
 omp_n    : Koning
@@ -14,17 +15,20 @@ bin      :  0.1
 ENDDATA  :
 
 FFRAG    :
-#ffydata  :  Wahl
-ffydata  :  internal
-rt       :  1.2
-spinfact :  2.8
-ycutoff  :  1e-2
-maxtemp  :   1.42
-
-gauss1   :  7.8000e-01  4.6748e+00  2.3193e+01
-gauss2   :  2.1854e-01  2.8076e+00  1.5806e+01
-gausssym :  2.9160e-03  8.6000e+00
-
+ycutoff  :  1e-6
+maxtemp  :   1.32
 #chicalc  :
 ENDFFRAG :
+
+MCF      :
+#ffydata  :  Wahl
+ffydata  :  internal
+tke      : 170.5
+rt       :  1.2
+spinfact :  2.8
+ENDMCF   :
+
+CFY      :
+decayfile: decaybranchENDF.dat
+ENDCFY   :
 END      :

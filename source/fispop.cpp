@@ -12,7 +12,6 @@
 #include "levden.h"
 #include "nucleus.h"
 #include "parameter.h"
-#include "terminate.h"
 
 static double specFissionTransmission (const int, const int, const int, const double, double *, Barrier *, Nucleus *);
 static double specFissionDoubleHumpModel (const int, const int, const int, const double, double *, Nucleus *);

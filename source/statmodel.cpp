@@ -184,7 +184,7 @@ void statHauserFeshbach(System *sys, Pdata *pdt, Direct *dir)
   else
     spectra(sys,pdt,&tin,tc,td,tg,dir,&spc);
 
-  /*** before output, store re-calculated sigmaR int output area */
+  /*** before output, store re-calculated sigmaR in output area */
   outSetSigmaReaction(sys->max_compound);
   
   /*** output total emission spectra */
@@ -225,13 +225,16 @@ void statParameterSetting(System *sys, Pdata *pdt, GDR *gdr)
   if(sys->energy_bin_in == 0.0) sys->energy_bin = statBinWidth(sys->lab_energy);
   else                          sys->energy_bin = sys->energy_bin_in;
 
+  message << "default energy bin " << sys->energy_bin;
+  cohNotice("statParameterSetting");
+
   /*** suppress resonances in the initial CN */
   statCutDiscreteLevels(sys->ex_total,&ncl[0]);
 
   /*** continuum binning and level density */
   for(int i=0 ; i<sys->max_compound ; i++){
     ncl[i].de = sys->energy_bin;
-    statSetupEnergyBin(&ncl[i]); 
+    statSetupEnergyBin(&ncl[i]);
     statSetupLevelDensity(&ncl[i],&ncl[i].ldp);
   }
 
@@ -288,6 +291,10 @@ void statParameterSetting(System *sys, Pdata *pdt, GDR *gdr)
     }
   }
   else ctl.fluctuation = false;
+
+  message << "width fluctuation is ";
+  if(ctl.fluctuation) message << "ON"; else message << "OFF";
+  cohNotice("statParameterSetting");
 
   /*** check Engelbrecht-Weidenmueller transformation option */
   if(opt.ewtransformation){

@@ -344,7 +344,7 @@ int ddxDiscreteGamma(int n, double *e, double *x, const double f, EXSpectra *dat
 /**********************************************************/
 void ddxLegNormalize(const int km, const int nleg, const double f, double *ep, double **cl)
 {
-  if(km<=1) return;
+  if(km <= 1) return;
 
  /*** replace the Km-2 point to adjust the highest bin integral */
   double d1 = ep[km-2]-ep[km-3];

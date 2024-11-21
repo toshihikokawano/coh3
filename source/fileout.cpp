@@ -92,21 +92,23 @@ void cohFileOut(int nc, int tid, double elab)
     fn << filename_cross_section << "." << file_extension;
     fioWriteCrossSectionMain(fioCheckExist(fn.str()), fn.str(), nc, elab);
 
-    /*** all reaction cross sections */
-    fn.str("");
-    fn << filename_particle_production << "." << file_extension;
-    fioWriteCrossSectionParticle(fioCheckExist(fn.str()), fn.str(), nc, elab);
-
-    /*** radioactive isotopes */
-    fn.str("");
-    fn << filename_radioactive_production << "." << file_extension;
-    fioWriteCrossSectionRadioactive(fioCheckExist(fn.str()), fn.str(), nc, elab);
-
-    /*** multi-chance fission cross sections */
-    if(ctl.fission){
+    if(nc > 0){
+      /*** all reaction cross sections */
       fn.str("");
-      fn << filename_fission << "." << file_extension;
-      fioWriteCrossSectionFission(fioCheckExist(fn.str()), fn.str(), nc, elab);
+      fn << filename_particle_production << "." << file_extension;
+      fioWriteCrossSectionParticle(fioCheckExist(fn.str()), fn.str(), nc, elab);
+
+      /*** radioactive isotopes */
+      fn.str("");
+      fn << filename_radioactive_production << "." << file_extension;
+      fioWriteCrossSectionRadioactive(fioCheckExist(fn.str()), fn.str(), nc, elab);
+
+      /*** multi-chance fission cross sections */
+      if(ctl.fission){
+        fn.str("");
+        fn << filename_fission << "." << file_extension;
+        fioWriteCrossSectionFission(fioCheckExist(fn.str()), fn.str(), nc, elab);
+      }
     }
   }
 

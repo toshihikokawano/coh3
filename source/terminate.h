@@ -9,5 +9,6 @@ extern std::ostringstream  message;
 /**************************************/
 /*      main.cpp                      */
 /**************************************/
-int     cohTerminateCode      (std::string);
-void    cohNotice             (std::string);
+int     cohTerminateCode (std::string);
+void    cohWarningMessage (std::string module);
+void    cohNotice (std::string);

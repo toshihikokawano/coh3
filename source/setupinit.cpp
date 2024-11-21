@@ -249,6 +249,9 @@ int setupChain(const int pmax, const double ex, ZAnumber *cZA, Pdata *pdt)
  
   delete [] gen;
 
+  message << "max excitation energy " << ex << " total number of CN " << n;
+  cohNotice("setupChain");
+
   return(n);
 }
 
@@ -275,6 +278,9 @@ int setupCountCompound(const int n)
     message << "maximum number of unique nuclide reached " << c;
     cohTerminateCode("setupCountCompound");
   }
+
+  message << "number of unique nuclide " << c;
+  cohNotice("setupCountCompound");
 
   return(c);
 }

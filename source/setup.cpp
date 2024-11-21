@@ -228,6 +228,9 @@ int setupStatModel(const int jmax, System *sys, Pdata *pdt)
   }
   sys->max_channel ++;
 
+  message << "max J for initial CN " << ncl[0].jmax;
+  cohNotice("setupStatModel");
+
   return(sys->max_compound);
 }
 
@@ -325,5 +328,8 @@ void setupEnergy(System *sys)
 
   /*** in the case of excited target */
   if(sys->excitation>0.0) sys->ex_total += sys->excitation;
+
+  message << "target mass " << tmx << " compound mass " << cmx;
+  cohNotice("setupEnergy");
 }
 

@@ -31,12 +31,15 @@ void massReadFile(std::string filename)
   int n = atoi(str.c_str());
   int m = sizeof(MassTable)/sizeof(MassExcess);
 
-  if(n > m) std::cerr << "too big mass data might be truncated" << std::endl;
+  if(n > m){
+    message << "too big mass data " << n << " might be truncated";
+    cohWarningMessage("massReadFile");
+  }
 
   /*** overwrite existing mass table */
   unsigned int za;
   float mass;
-  int i=0;
+  int i = 0;
   while(!fp.eof()){
     fp >> za >> mass;
     MassTable[i].za   = za;
@@ -49,8 +52,10 @@ void massReadFile(std::string filename)
     }
   }
   fp.close();
-}  
 
+  message << "total number of masses " << nMassTable << " read from file " << filename;
+  cohNotice("massReadFile");
+}  
 
 
 /*************************************************/

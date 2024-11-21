@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include "exciton.h"
+#include "terminate.h"
 
 
 /**********************************************************/
@@ -62,5 +63,9 @@ void  preqPOccupation(double **p, double **t1, double **t2, double **tzp,double 
 */
     if(conv) break;
   }
-  if(!conv) std::cout << "P calc. not converged" << std::endl;
+
+  if(!conv){
+    message << "P calc. for occupation probabilities did not converge";
+    cohWarningMessage("preqPOccupation");
+  }
 }
