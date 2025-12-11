@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 2025-12-10  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* source/statmodeltools.cpp (specGaussianBroadening): updated
@@ -68,7 +66,6 @@
 	* mfld/mfld.cpp: new file
 	new module mfld to calculate intrinsic level density added
 
->>>>>>> main
 2024-11-13  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* source/statmaniplevel.cpp (statFixDiscreteLevels): update
@@ -80,13 +77,8 @@
 2024-10-28  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* source/coh.cpp: updated
-<<<<<<< HEAD
-	* source/coh.cpp: (cohNotice): updated
-	verbflag added to print some internal variables
-=======
 	* source/coh.cpp (cohNotice): updated
 	verbflag -v added to print some internal variables
->>>>>>> main
 	many files were updated to include cohNotice()
 
 2024-10-08  KAWANO Toshihiko  <kawano@lanl.gov>
