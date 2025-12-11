@@ -140,8 +140,8 @@ void cohMainLoop(const double elab, const int targz, const int targa, const unsi
 
         if(prn.system) outParameter();
 
-        /*** write production cross sections on file */
-        if(ctl.fileout){
+        /*** write production cross sections on file, no exclusice mode */
+        if(ctl.fileout && !ctl.exclusive){
           cohFileOut(sys.max_compound,sys.target_id,sys.lab_energy);
         }
 
@@ -326,7 +326,6 @@ void cohCheckRange(ZAnumber *t, const double e)
   const unsigned int amin =    11;
   const unsigned int amax =   300;
 
-  std::string msg;
   bool rangechk = false;
   if((e <= 0.0) || (e > emax)){
     message << "incident energy " << e << " out of range";

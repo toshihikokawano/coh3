@@ -152,6 +152,21 @@ void FFPSplit(const CalcMode mode, System *sys, FFragData *fdt, const int ompid)
 
 
 /**********************************************************/
+/*      Determine Energy Bin Width in Continuum           */
+/**********************************************************/
+double FFPBinWidth(const double e)
+{
+  return(  (  0.0<e && e<=  0.1)* 0.02
+          +(  0.1<e && e<=  2.0)* 0.05
+          +(  2.0<e && e<= 10.0)* 0.1
+          +( 10.0<e && e<= 20.0)* 0.1
+          +( 20.0<e && e<= 50.0)* 0.2
+          +( 50.0<e && e<=100.0)* 0.5
+          +(100.0<e            )* 1.0 );
+}
+
+
+/**********************************************************/
 /*      Selected Fragment Calculation                     */
 /**********************************************************/
 bool FFPSelectZA(const unsigned int zcn, const unsigned int acn, ZAPair frag, FFragData *fdt)
@@ -560,6 +575,12 @@ void FFPPost(const int nc, System *sys, BData *bdt, const double yield, Fragment
 
   /*** average spin of initial compound */
   fob.javeragedist[sys->compound.getA()] += yield * bdt[0].averagespin;
+
+  /*** average neutron separation energy */
+  fo->sepaverage = 0.0;
+  for(int j=0 ; j<sys->max_compound ; j++){
+    fo->sepaverage += crx.prod[j].xsec * ncl[j].cdt[neutron].binding_energy;
+  }
 }
 
 
@@ -578,6 +599,9 @@ void FFPCombined(void)
     fob.eaverage[p]     += eave;
     fob.etotal[p]       += etot;
   }
+
+  /*** average neutron separation energy */
+  fob.sepaverage += yieldL * fob.L.sepaverage + yieldH * fob.H.sepaverage;
 
   /*** calculate neutron emission probability distribution
        P(0) = Pl(0) * Ph(0), P(1) = Pl(0) * Ph(1) + Pl(1) * Ph(0),

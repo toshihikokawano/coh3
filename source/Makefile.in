@@ -117,21 +117,22 @@ am_coh_OBJECTS = MFTmain.$(OBJEXT) FRDMfileout.$(OBJEXT) \
 	betaexpansion.$(OBJEXT) bstatsolve.$(OBJEXT) \
 	bstatwav.$(OBJEXT) coh.$(OBJEXT) cohmain.$(OBJEXT) \
 	coulomb.$(OBJEXT) dataread.$(OBJEXT) datatable.$(OBJEXT) \
-	dsd.$(OBJEXT) dsdoverlap.$(OBJEXT) eclddx.$(OBJEXT) \
-	eclipse.$(OBJEXT) eclmc.$(OBJEXT) ecloutput.$(OBJEXT) \
-	eclspectra.$(OBJEXT) eispack.$(OBJEXT) exciton.$(OBJEXT) \
-	excitransf.$(OBJEXT) excilambda.$(OBJEXT) exciparm.$(OBJEXT) \
-	excipop.$(OBJEXT) fileout.$(OBJEXT) fisbar.$(OBJEXT) \
-	fisdens.$(OBJEXT) fispop.$(OBJEXT) fns.$(OBJEXT) \
-	fnscalc.$(OBJEXT) fnsprefis.$(OBJEXT) fnssystematics.$(OBJEXT) \
-	fpotential.$(OBJEXT) gampop.$(OBJEXT) gamcas.$(OBJEXT) \
-	gdr.$(OBJEXT) gtrans.$(OBJEXT) gtransread.$(OBJEXT) \
-	knockout.$(OBJEXT) levden.$(OBJEXT) macs.$(OBJEXT) \
-	moldauer.$(OBJEXT) nilsson.$(OBJEXT) outprep.$(OBJEXT) \
-	output.$(OBJEXT) outext.$(OBJEXT) parleg.$(OBJEXT) \
-	parpop.$(OBJEXT) photoabs.$(OBJEXT) polysq.$(OBJEXT) \
-	polycalc.$(OBJEXT) popinit.$(OBJEXT) setup.$(OBJEXT) \
-	setupinit.$(OBJEXT) skyrmeparameter.$(OBJEXT) \
+	ddxkalbach.$(OBJEXT) dsd.$(OBJEXT) dsdoverlap.$(OBJEXT) \
+	eclcheckenergy.$(OBJEXT) eclddx.$(OBJEXT) \
+	eclddxinclusive.$(OBJEXT) eclipse.$(OBJEXT) eclmc.$(OBJEXT) \
+	ecloutput.$(OBJEXT) eclspectra.$(OBJEXT) eispack.$(OBJEXT) \
+	exciton.$(OBJEXT) excitransf.$(OBJEXT) excilambda.$(OBJEXT) \
+	exciparm.$(OBJEXT) excipop.$(OBJEXT) fileout.$(OBJEXT) \
+	fisbar.$(OBJEXT) fisdens.$(OBJEXT) fispop.$(OBJEXT) \
+	fns.$(OBJEXT) fnscalc.$(OBJEXT) fnsprefis.$(OBJEXT) \
+	fnssystematics.$(OBJEXT) fpotential.$(OBJEXT) gampop.$(OBJEXT) \
+	gamcas.$(OBJEXT) gdr.$(OBJEXT) gtrans.$(OBJEXT) \
+	gtransread.$(OBJEXT) knockout.$(OBJEXT) levden.$(OBJEXT) \
+	macs.$(OBJEXT) moldauer.$(OBJEXT) nilsson.$(OBJEXT) \
+	outprep.$(OBJEXT) output.$(OBJEXT) outext.$(OBJEXT) \
+	parleg.$(OBJEXT) parpop.$(OBJEXT) photoabs.$(OBJEXT) \
+	polysq.$(OBJEXT) polycalc.$(OBJEXT) popinit.$(OBJEXT) \
+	setup.$(OBJEXT) setupinit.$(OBJEXT) skyrmeparameter.$(OBJEXT) \
 	spectra.$(OBJEXT) stataveragespace.$(OBJEXT) \
 	statdirect.$(OBJEXT) statmaniplevel.$(OBJEXT) \
 	statmodel.$(OBJEXT) statmodeltools.$(OBJEXT) \
@@ -188,36 +189,38 @@ am__depfiles_remade = ./$(DEPDIR)/FRDMfileout.Po \
 	./$(DEPDIR)/coh.Po ./$(DEPDIR)/cohmain.Po \
 	./$(DEPDIR)/coulomb.Po ./$(DEPDIR)/coupling.Po \
 	./$(DEPDIR)/dataread.Po ./$(DEPDIR)/datatable.Po \
-	./$(DEPDIR)/dsd.Po ./$(DEPDIR)/dsdoverlap.Po \
-	./$(DEPDIR)/dwcalc.Po ./$(DEPDIR)/eclddx.Po \
-	./$(DEPDIR)/eclipse.Po ./$(DEPDIR)/eclmc.Po \
-	./$(DEPDIR)/ecloutput.Po ./$(DEPDIR)/eclspectra.Po \
-	./$(DEPDIR)/eispack.Po ./$(DEPDIR)/etc.Po \
-	./$(DEPDIR)/excilambda.Po ./$(DEPDIR)/exciparm.Po \
-	./$(DEPDIR)/excipop.Po ./$(DEPDIR)/exciton.Po \
-	./$(DEPDIR)/excitransf.Po ./$(DEPDIR)/extwave.Po \
-	./$(DEPDIR)/fileout.Po ./$(DEPDIR)/fisbar.Po \
-	./$(DEPDIR)/fisdens.Po ./$(DEPDIR)/fispop.Po \
-	./$(DEPDIR)/fns.Po ./$(DEPDIR)/fnscalc.Po \
-	./$(DEPDIR)/fnsprefis.Po ./$(DEPDIR)/fnssystematics.Po \
-	./$(DEPDIR)/fpotential.Po ./$(DEPDIR)/gamcas.Po \
-	./$(DEPDIR)/gampop.Po ./$(DEPDIR)/gdr.Po ./$(DEPDIR)/gtrans.Po \
-	./$(DEPDIR)/gtransread.Po ./$(DEPDIR)/intwave.Po \
-	./$(DEPDIR)/kcksyst.Po ./$(DEPDIR)/knockout.Po \
-	./$(DEPDIR)/levden.Po ./$(DEPDIR)/macs.Po \
-	./$(DEPDIR)/masstable.Po ./$(DEPDIR)/moldauer.Po \
-	./$(DEPDIR)/mt19937.Po ./$(DEPDIR)/nilsson.Po \
-	./$(DEPDIR)/omcalc.Po ./$(DEPDIR)/omoutput.Po \
-	./$(DEPDIR)/omsetform.Po ./$(DEPDIR)/omsetparm.Po \
-	./$(DEPDIR)/outext.Po ./$(DEPDIR)/outprep.Po \
-	./$(DEPDIR)/output.Po ./$(DEPDIR)/parameter.Po \
-	./$(DEPDIR)/parleg.Po ./$(DEPDIR)/parpop.Po \
-	./$(DEPDIR)/photoabs.Po ./$(DEPDIR)/polycalc.Po \
-	./$(DEPDIR)/polysq.Po ./$(DEPDIR)/popinit.Po \
-	./$(DEPDIR)/ripl2levels.Po ./$(DEPDIR)/setup.Po \
-	./$(DEPDIR)/setupinit.Po ./$(DEPDIR)/skyrmeparameter.Po \
-	./$(DEPDIR)/smatrix.Po ./$(DEPDIR)/spectra.Po \
-	./$(DEPDIR)/spline.Po ./$(DEPDIR)/stataveragespace.Po \
+	./$(DEPDIR)/ddxkalbach.Po ./$(DEPDIR)/dsd.Po \
+	./$(DEPDIR)/dsdoverlap.Po ./$(DEPDIR)/dwcalc.Po \
+	./$(DEPDIR)/eclcheckenergy.Po ./$(DEPDIR)/eclddx.Po \
+	./$(DEPDIR)/eclddxinclusive.Po ./$(DEPDIR)/eclipse.Po \
+	./$(DEPDIR)/eclmc.Po ./$(DEPDIR)/ecloutput.Po \
+	./$(DEPDIR)/eclspectra.Po ./$(DEPDIR)/eispack.Po \
+	./$(DEPDIR)/etc.Po ./$(DEPDIR)/excilambda.Po \
+	./$(DEPDIR)/exciparm.Po ./$(DEPDIR)/excipop.Po \
+	./$(DEPDIR)/exciton.Po ./$(DEPDIR)/excitransf.Po \
+	./$(DEPDIR)/extwave.Po ./$(DEPDIR)/fileout.Po \
+	./$(DEPDIR)/fisbar.Po ./$(DEPDIR)/fisdens.Po \
+	./$(DEPDIR)/fispop.Po ./$(DEPDIR)/fns.Po \
+	./$(DEPDIR)/fnscalc.Po ./$(DEPDIR)/fnsprefis.Po \
+	./$(DEPDIR)/fnssystematics.Po ./$(DEPDIR)/fpotential.Po \
+	./$(DEPDIR)/gamcas.Po ./$(DEPDIR)/gampop.Po ./$(DEPDIR)/gdr.Po \
+	./$(DEPDIR)/gtrans.Po ./$(DEPDIR)/gtransread.Po \
+	./$(DEPDIR)/intwave.Po ./$(DEPDIR)/kcksyst.Po \
+	./$(DEPDIR)/knockout.Po ./$(DEPDIR)/levden.Po \
+	./$(DEPDIR)/macs.Po ./$(DEPDIR)/masstable.Po \
+	./$(DEPDIR)/moldauer.Po ./$(DEPDIR)/mt19937.Po \
+	./$(DEPDIR)/nilsson.Po ./$(DEPDIR)/omcalc.Po \
+	./$(DEPDIR)/omoutput.Po ./$(DEPDIR)/omsetform.Po \
+	./$(DEPDIR)/omsetparm.Po ./$(DEPDIR)/outext.Po \
+	./$(DEPDIR)/outprep.Po ./$(DEPDIR)/output.Po \
+	./$(DEPDIR)/parameter.Po ./$(DEPDIR)/parleg.Po \
+	./$(DEPDIR)/parpop.Po ./$(DEPDIR)/photoabs.Po \
+	./$(DEPDIR)/polycalc.Po ./$(DEPDIR)/polysq.Po \
+	./$(DEPDIR)/popinit.Po ./$(DEPDIR)/ripl2levels.Po \
+	./$(DEPDIR)/setup.Po ./$(DEPDIR)/setupinit.Po \
+	./$(DEPDIR)/skyrmeparameter.Po ./$(DEPDIR)/smatrix.Po \
+	./$(DEPDIR)/spectra.Po ./$(DEPDIR)/spline.Po \
+	./$(DEPDIR)/stataveragespace.Po \
 	./$(DEPDIR)/statcompounddecay.Po ./$(DEPDIR)/statdecay.Po \
 	./$(DEPDIR)/statdirect.Po ./$(DEPDIR)/statlevdecay.Po \
 	./$(DEPDIR)/statmaniplevel.Po ./$(DEPDIR)/statmodel.Po \
@@ -412,9 +415,12 @@ coh_SOURCES = \
 	coulomb.cpp \
 	dataread.cpp \
 	datatable.cpp \
+	ddxkalbach.cpp \
 	dsd.cpp \
 	dsdoverlap.cpp \
+	eclcheckenergy.cpp \
 	eclddx.cpp \
+	eclddxinclusive.cpp \
 	eclipse.cpp \
 	eclmc.cpp \
 	ecloutput.cpp \
@@ -505,6 +511,7 @@ coh_SOURCES = \
 	coulomb.h \
 	coupling.h \
 	datatable.h \
+	ddxkalbach.h \
 	dir.h \
 	dsd.h \
 	eclipse.h \
@@ -681,10 +688,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/coupling.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dataread.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datatable.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ddxkalbach.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dsd.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dsdoverlap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dwcalc.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eclcheckenergy.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eclddx.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eclddxinclusive.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eclipse.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eclmc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ecloutput.Po@am__quote@ # am--include-marker
@@ -948,10 +958,13 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/coupling.Po
 	-rm -f ./$(DEPDIR)/dataread.Po
 	-rm -f ./$(DEPDIR)/datatable.Po
+	-rm -f ./$(DEPDIR)/ddxkalbach.Po
 	-rm -f ./$(DEPDIR)/dsd.Po
 	-rm -f ./$(DEPDIR)/dsdoverlap.Po
 	-rm -f ./$(DEPDIR)/dwcalc.Po
+	-rm -f ./$(DEPDIR)/eclcheckenergy.Po
 	-rm -f ./$(DEPDIR)/eclddx.Po
+	-rm -f ./$(DEPDIR)/eclddxinclusive.Po
 	-rm -f ./$(DEPDIR)/eclipse.Po
 	-rm -f ./$(DEPDIR)/eclmc.Po
 	-rm -f ./$(DEPDIR)/ecloutput.Po
@@ -1111,10 +1124,13 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/coupling.Po
 	-rm -f ./$(DEPDIR)/dataread.Po
 	-rm -f ./$(DEPDIR)/datatable.Po
+	-rm -f ./$(DEPDIR)/ddxkalbach.Po
 	-rm -f ./$(DEPDIR)/dsd.Po
 	-rm -f ./$(DEPDIR)/dsdoverlap.Po
 	-rm -f ./$(DEPDIR)/dwcalc.Po
+	-rm -f ./$(DEPDIR)/eclcheckenergy.Po
 	-rm -f ./$(DEPDIR)/eclddx.Po
+	-rm -f ./$(DEPDIR)/eclddxinclusive.Po
 	-rm -f ./$(DEPDIR)/eclipse.Po
 	-rm -f ./$(DEPDIR)/eclmc.Po
 	-rm -f ./$(DEPDIR)/ecloutput.Po

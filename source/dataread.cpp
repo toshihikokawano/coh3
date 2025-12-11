@@ -486,7 +486,7 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
         }
       }
 
-    }else if(head == "levcomp  :" || head == "levcomp+ :"){
+    }else if(head == "levcomp  :"){
       z = readElementToZ(readExtractData(0));
       a = atoi(          readExtractData(1));
 
@@ -494,21 +494,8 @@ int readStatModel(char *s, GDR *gdr, Fission *fbr)
         int i3 = readGetFbrIndex(nfis,z,a,fbr);
         if(i3 >= 0){
           fbr[i3].za.setZA(z,a);
-          fbr[i3].fisenhance.compfact1p = atof(readExtractData(2));
-          fbr[i3].fisenhance.compfact2p = atof(readExtractData(3));
-        }
-      }
-
-    }else if(head == "levcomp- :"){
-      z = readElementToZ(readExtractData(0));
-      a = atoi(          readExtractData(1));
-
-      if( nfis < MAX_FISS_CHANCE ){
-        int i3 = readGetFbrIndex(nfis,z,a,fbr);
-        if(i3 >= 0){
-          fbr[i3].za.setZA(z,a);
-          fbr[i3].fisenhance.compfact1n = atof(readExtractData(2));
-          fbr[i3].fisenhance.compfact2n = atof(readExtractData(3));
+          fbr[i3].fisenhance.compfact1 = atof(readExtractData(2));
+          fbr[i3].fisenhance.compfact2 = atof(readExtractData(3));
         }
       }
 

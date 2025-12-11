@@ -1,5 +1,5 @@
 const int HF_MAX_EXPANSION =  40;
-const int HF_MAX_SPSTATE   = 100;
+const int HF_MAX_SPSTATE   = 300;
 
 
 /**********************************************************/
@@ -70,6 +70,7 @@ class HFInterface{
   double   b;
   double   lambda;
   double   delta;
+  double   emax;
   HFState *state;
 
   HFInterface(){
@@ -77,6 +78,7 @@ class HFInterface{
     b      = 0.0;
     lambda = 0.0;
     delta  = 0.0;
+    emax   = 0.0;
     allocated = false;
   }
 

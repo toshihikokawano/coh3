@@ -8,6 +8,7 @@
 
 #include "structur.h"
 #include "eclipse.h"
+#include "terminate.h"
 
 /*** skip loop if probability is less than this value */
 static const double gProbabilityCut = 0.0;
@@ -15,17 +16,13 @@ static const double gProbabilityCut = 0.0;
 /*** include/exclude 4th neutron emission */
 static const bool include4n = true;
 
-/*** calculation monitor */
-static const bool monitor = false;
-
 static void eclGammaSpec (const int, const int, const int, const double, double ***, double *, double *);
-//static void eclGammaCapt (const int, const int, const int, const double, double ***, double *, double *);
 
 
 /**********************************************************/
 /*      Calculation of Particle Emission Spectra          */
 /*      -----                                             */
-/*           The most complicated subroutine in CoH       */
+/*           The most complicated subroutine in CoH.      */
 /*           You are not supposed to understand this.     */
 /**********************************************************/
 void eclSpectra(const bool ddx, const bool fns, const int cm, int *ktot, int **cidx, double ****ptbl, EXSpectra *dat)
@@ -33,15 +30,17 @@ void eclSpectra(const bool ddx, const bool fns, const int cm, int *ktot, int **c
   const int c0 = 0;
   int ncut = -1;
 
-  /*** special case for the capture gamma-ray */
+  /*** capture gamma-ray */
   if(ddx) ncut = dat[c0].getNc();
-//eclGammaCapt(ncut,0,ktot[c0],1.0,ptbl[c0],dat[c0].spec[0],dat[c0].glin);
   eclGammaSpec(ncut,0,ktot[c0],1.0,ptbl[c0],dat[c0].spec[0],dat[c0].glin);
+
 
   /*** first gamma-ray before particle emission */
   for(int k0=0 ; k0<=ktot[c0] ; k0++){
 
-    if(monitor) std::cerr << "monitor " << k0 << " / " << ktot[c0] << std::endl;
+    message << "exclusive spectrum construction monitor, k0 = " << k0 << " out of " << ktot[c0];
+    cohNotice("eclSpectra");
+
 
     if(ptbl[c0][k0][0][k0] < 0.0) continue;
 
@@ -80,7 +79,8 @@ void eclSpectra(const bool ddx, const bool fns, const int cm, int *ktot, int **c
         /*** exclude binary reactions for which the final states are
              in the discrete levels. we can know this by
                k0 = 0, which means that the transition is from the initial state, and
-               j0 > Nc, the final state is below the continuum boundary. */
+               j0 > Nc, the final state is below the continuum boundary.
+             see the note blow. */
         if(ddx){
           ncut = dat[c1].getNc();
           if(dat[c1].getNl() == 1){
@@ -88,19 +88,25 @@ void eclSpectra(const bool ddx, const bool fns, const int cm, int *ktot, int **c
             eclGammaSpec(-1,j0,ktot[c1],s1,ptbl[c1],dat[c1].spec[0],dat[c1].glin);
           }
           else{
-            eclGammaSpec(ncut,j0,ktot[c1],s1,ptbl[c1],dat[c1].spec[0],dat[c1].glin);
-            /*** binary reaction, residual is in a discrete level */
-            if( (k0 == 0) && (j0 >= ncut-1) ) dat[c1].sbin[j0-k0] += s1;
-            /*** residual is in a continuum */
-            else dat[c1].spec[i0][j0-k0] += s1;
+            /*** gammas from inelastic scattering, or (n,p1) etc. */
+            if( dat[c1].isBinary() && (k0 == 0) && (j0 >= ncut) ){
+              eclGammaSpec(ncut,j0,ktot[c1],s1,ptbl[c1],dat[c1].spec[0],dat[c1].gbin);
+            }
+            else{
+              eclGammaSpec(ncut,j0,ktot[c1],s1,ptbl[c1],dat[c1].spec[0],dat[c1].glin);
+            }
           }
+          /*** binary reaction, residual is in a discrete level */
+          if( (k0 == 0) && (j0 >= ncut) ) dat[c1].sbin[j0-k0] += s1;
+          /*** residual is in a continuum */
+          else dat[c1].spec[i0][j0-k0] += s1;
         }
         else{
-          dat[c1].spec[i0][j0-k0] += s1;
+          dat[c1].spec[i0][j0-k0] += s1; // particle energy j0-k0
           eclGammaSpec(-1,j0,ktot[c1],s1,ptbl[c1],dat[c1].spec[0],dat[c1].glin);
         }
-
         if(k0 != 0) dat[c1].spec[0][k0] += s1;
+
 
         /*** second gamma-ray before second particle emission */
         for(int k1=j0 ; k1<=ktot[c1] ; k1++){
@@ -249,12 +255,32 @@ void eclSpectra(const bool ddx, const bool fns, const int cm, int *ktot, int **c
     }
   }
 }
+/*
+  Note on binary reaction
+  In the inelastic scattering, there are several paths that emit gamma rays. 
+  1. emitted neutron leaves the residual in its discrete state: true inelastic scattering
+  2. emitted neutron leaves the residual in its continuum, then gamma emission
+  3. first CN emit gammas, then netutron is evaporated: (n,gn)
+
+  When setBinary(false):
+     all neutron and gamma spectra stored in "spec"
+
+  When setBinary(true):
+     neutron spectrum stored in "spec" and "sbin", and
+     gamma ray spectrum is split into:
+       process 1 is stored in "gbin"
+       process 2 in "glin" for discrete transition, and
+       process 3 in "spec" for continuum
+
+    total neutron spectrum = spec + sbin
+    total gamma spectrum   = spec + gbin + glin
+*/
 
 
 /**********************************************************/
 /*      Calculation of Gamma-Ray Spectra                  */
 /**********************************************************/
-void eclGammaSpec(const int ncut, const int k0, const int ktot, const double f, double ***ptbl, double *gray, double *glin)
+void eclGammaSpec(const int ncut, const int k0, const int ktot, const double f, double ***ptbl, double *gcont, double *gdisc)
 {
   if(f == 0.0) return;
   if(k0 == ktot) return;
@@ -275,8 +301,8 @@ void eclGammaSpec(const int ncut, const int k0, const int ktot, const double f, 
     for(int k2=k1 ; k2<=ktot ; k2++) g0 += ptbl[k1][0][k2];
     g0 *= f*p0;
 
-    if( (ncut >= 0) && (k0 >= ncut-1) ) glin[k1-k0] += g0;
-    else                                gray[k1-k0] += g0;
+    if( (ncut >= 0) && (k0 >= ncut) ) gdisc[k1-k0] += g0; // first gamma then decay to discrete state
+    else gcont[k1-k0] += g0; // from continuum
     gpop[k1] = g0;
   }
 
@@ -295,91 +321,12 @@ void eclGammaSpec(const int ncut, const int k0, const int ktot, const double f, 
       double g1 = g0 * ptbl[k1][0][k2];
       if(g1 <= gProbabilityCut) continue;
 
-      if( (ncut >= 0) && (k1 >= ncut-1) ) glin[k2-k1] += g1;
-      else                                gray[k2-k1] += g1;
+      if( (ncut >= 0) && (k1 >= ncut) ) gdisc[k2-k1] += g1;
+      else gcont[k2-k1] += g1;
+
       gpop[k2] += g1;
     }
   }
 
   delete [] gpop;
 }
-
-
-/*** multiplicity summed up to five */
-/*
-void eclGammaCapt(int ncut, int k0, int ktot, double f, double ***ptbl, double *gray, double *glin)
-{
-  if(f == 0.0) return;
-
-  for(int k1=k0 ; k1<=ktot ; k1++){
-
-    if(ptbl[k1][0][k1] < 0.0) continue;
-
-    double p1 = ptbl[k0][0][k1];
-    if(p1 == 0.0) continue;
-
-    double x1 = f*p1;
-    double g1 = 0.0;
-    for(int m1=k1 ; m1<=ktot ; m1++) g1 += ptbl[k1][0][m1];
-    gray[k1-k0] += x1*g1;
-
-    for(int k2=k1+1 ; k2<=ktot ; k2++){
-
-      if(ptbl[k2][0][k2] < 0.0) continue;
-
-      double p2 = ptbl[k1][0][k2];
-      if(p2 == 0.0) continue;
-
-      double x2 = x1*p2;
-      double g2 = 0.0;
-      for(int m2=k2 ; m2<=ktot ; m2++) g2 += ptbl[k2][0][m2];
-
-      if( (ncut >= 0) && (k1 > ncut) ) glin[k2-k1] += x2*g2;
-      else                             gray[k2-k1] += x2*g2;
-
-      for(int k3=k2+1 ; k3<=ktot ; k3++){
-
-        if(ptbl[k3][0][k3] < 0.0) continue;
-
-        double p3 = ptbl[k2][0][k3];
-        if(p3 == 0.0) continue;
-
-        double x3 = x2*p3;
-        double g3 = 0.0;
-        for(int m3=k3 ; m3<=ktot ; m3++) g3 += ptbl[k3][0][m3];
-
-        if( (ncut >= 0) && (k2 > ncut) ) glin[k3-k2] += x3*g3;
-        else                             gray[k3-k2] += x3*g3;
-
-        for(int k4=k3+1 ; k4<=ktot ; k4++){
-
-          if(ptbl[k4][0][k4] < 0.0) continue;
-
-          double p4 = ptbl[k3][0][k4];
-          if(p4 == 0.0) continue;
-
-          double x4 = x3*p4;
-          double g4 = 0.0;
-          for(int m4=k4 ; m4<=ktot ; m4++) g4 += ptbl[k4][0][m4];
-
-          if( (ncut >= 0) && (k3 > ncut) ) glin[k4-k3] += x4*g4;
-          else                             gray[k4-k3] += x4*g4;
-
-          for(int k5=k4 ; k5<=ktot ; k5++){
-
-            if(ptbl[k5][0][k5] < 0.0) continue;
-
-            double p5 = ptbl[k4][0][k5];
-            if(p5 == 0.0) continue;
-
-            double x5 = x4*p5;
-            if( (ncut >= 0) && (k4 > ncut) ) glin[k5-k4] += x5;
-            else                             gray[k5-k4] += x5;
-          }
-        }
-      }
-    }
-  }
-}
-*/
-

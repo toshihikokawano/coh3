@@ -47,12 +47,8 @@ double preqLambdaPlusZ(Preeq *q, Exconf *e)
  xr[3].set(e->zp,e->zh,e->np,e->nh-1);
  xw[3].set(    1,    1,    0,      1);
 
- double c1 = PI2 * q->m2zz;
- double c2 = PI2 * q->m2nz;
-
  const int ndiv = 100;
- double lambda  = 0.0;
-
+ double x[4];
  for(int k=0 ; k<4 ; k++){
    double e1 = epauli(1,1,0,0,e,q) - ep[k];
    double e2 = q->ex_total         - ep[k];
@@ -61,16 +57,16 @@ double preqLambdaPlusZ(Preeq *q, Exconf *e)
    double f1 = 2.0*f0;
    double f2 = 4.0*f0;
 
-   lambda += ( densinteg(e1,q,&xw[k],&xp[k],&xr[k])
-              +densinteg(e2,q,&xw[k],&xp[k],&xr[k]) )*f0;
-
+   x[k] = ( densinteg(e1,q,&xw[k],&xp[k],&xr[k])
+           +densinteg(e2,q,&xw[k],&xp[k],&xr[k]) ) * f0;
    for(int i=1 ; i<ndiv ; i++){
-     lambda += ((i%2==0) ? f1 : f2) * ((k<2) ? c1 : c2)
-              *densinteg(e1+i*de,q,&xw[k],&xp[k],&xr[k]);
+     x[k] += ((i%2 == 0) ? f1 : f2) * densinteg(e1+i*de,q,&xw[k],&xp[k],&xr[k]);
    }
  }
 
- return( lambda/q->omega_total );
+ double lambda  = PI2 * ((x[0] + x[1]) * q->m2zz + (x[2] + x[3]) * q->m2nz) / q->omega_total;
+
+ return(lambda);
 }
 
 
@@ -105,12 +101,8 @@ double preqLambdaPlusN(Preeq *q, Exconf *e)
  xr[3].set(e->zp,e->zh-1,e->np,e->nh);
  xw[3].set(    0,      1,    1,    1);
 
- double c1 = PI2 * q->m2nn;
- double c2 = PI2 * q->m2zn;
-
  const int ndiv = 100;
- double lambda  = 0.0;
-
+ double x[4];
  for(int k=0 ; k<4 ; k++){
    double e1 = epauli(0,0,1,1,e,q) - ep[k];
    double e2 = q->ex_total         - ep[k];
@@ -119,16 +111,17 @@ double preqLambdaPlusN(Preeq *q, Exconf *e)
    double f1 = 2.0*f0;
    double f2 = 4.0*f0;
 
-   lambda += ( densinteg(e1,q,&xw[k],&xp[k],&xr[k])
-              +densinteg(e2,q,&xw[k],&xp[k],&xr[k]) )*f0;
+   x[k] = ( densinteg(e1,q,&xw[k],&xp[k],&xr[k])
+           +densinteg(e2,q,&xw[k],&xp[k],&xr[k]) ) * f0;
 
    for(int i=1 ; i<ndiv ; i++){
-     lambda += ((i%2==0) ? f1 : f2) * ((k<2) ? c1 : c2)
-              *densinteg(e1+i*de,q,&xw[k],&xp[k],&xr[k]);
+     x[k] += ((i%2 == 0) ? f1 : f2) * densinteg(e1+i*de,q,&xw[k],&xp[k],&xr[k]);
    }
  }
 
- return(lambda/q->omega_total);
+ double lambda  = PI2 * ((x[0] + x[1]) * q->m2nn + (x[2] + x[3]) * q->m2zn) / q->omega_total;
+
+ return(lambda);
 }
 
 
@@ -197,7 +190,7 @@ double preqLambdaZeroZ(Preeq *q, Exconf *e)
  double f2 = 4.0*f0;
 
  lambda += ( densinteg(e1,q,&xw,&xp,&xr)
-            +densinteg(e2,q,&xw,&xp,&xr) )*f0;
+            +densinteg(e2,q,&xw,&xp,&xr) ) * f0 * c1;
 
  for(int i=1 ; i<ndiv ; i++){
    lambda += ((i%2==0) ? f1 : f2) * c1
@@ -233,7 +226,7 @@ double preqLambdaZeroN(Preeq *q, Exconf *e)
  double f2 = 4.0*f0;
 
  lambda += ( densinteg(e1,q,&xw,&xp,&xr)
-            +densinteg(e2,q,&xw,&xp,&xr) )*f0;
+            +densinteg(e2,q,&xw,&xp,&xr) ) * f0 * c1;
 
  for(int i=1 ; i<ndiv ; i++){
    lambda += ((i%2==0) ? f1 : f2) * c1

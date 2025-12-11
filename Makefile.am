@@ -1,7 +1,8 @@
 EXTRA_DIST = example/*.dat document/*.html document/style.css document/cohlogo.jpg
-SUBDIRS = omplib source beoh
+SUBDIRS = omplib source beoh mfld
 cohdir = $(datarootdir)/coh
 bohdir = $(datarootdir)/beoh
+mfldir = $(datarootdir)/mfld
 nobase_coh_DATA = kcksyst.dat fisbar.dat nucshape.dat decaybranchENDF.dat decaybranchJENDL.dat\
 	levels/z000.dat levels/z001.dat levels/z002.dat levels/z003.dat levels/z004.dat \
 	levels/z005.dat levels/z006.dat levels/z007.dat levels/z008.dat levels/z009.dat \

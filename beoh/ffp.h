@@ -259,6 +259,5 @@ void   FFPOutputSpec (const double, const double, FissionObservable *);
 void   FFPOutputPairs (const double, FissionFragmentPair *);
 void   FFPOutputTXEDistribution (FissionFragmentPair *);
 void   FFPOutputTKEDistribution (const int, FissionFragmentPair *);
-void   FFPOutputYield (const int, const int, const int, double *, double *, double *);
 void   FFPOutputIndividualSpectrum (ZAPair *, const int, const double, double *, double *, double *);
 

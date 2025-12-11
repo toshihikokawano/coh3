@@ -84,6 +84,7 @@ class Spectra{
   int       csize;            // number of channels
   int       nsize;            // number of energy bins
   int       lsize;            // number of discrete levels
+  int       ncmax;            // max continuum bin number currently in use
   bool      allocated;
  public:
   double   **pe;              // preequilibrium spectrum
@@ -97,6 +98,7 @@ class Spectra{
     npg   = 0;
     csize = 0;
     nsize = 0;
+    ncmax = 0;
   }
 
   ~Spectra(){
@@ -171,9 +173,13 @@ class Spectra{
     }
   }
 
-  int getCsize(){return csize;}
-  int getNsize(){return nsize;}
-  int getLsize(){return lsize;}
+  void setNCmax(const int n){ ncmax = n; }
+
+  int  getNCmax(){ return ncmax; }
+  int  getCsize(){ return csize; }
+  int  getNsize(){ return nsize; }
+  int  getLsize(){ return lsize; }
+
 };
 
 
@@ -192,7 +198,7 @@ void    statSetupFissionParameter (Fission *);
 /**************************************/
 /*      statdirect.cpp                */
 /**************************************/
-void    statSetupDirectInelastic (Level *, Nucleus *, CrossSection *);
+void    statSetupDirectInelastic (Level *, Nucleus *, const int, CrossSection *);
 void    statDirectSpectra (const double, const double, Level *, double *, double *);
 
 
@@ -243,7 +249,7 @@ void    statStoreDiscreteGammaTransmission (const double, double *, Nucleus *);
 /**************************************/
 double  statStoreInitPopulation (const int, const int, const int, const double, Transmission *);
 double  statStoreInitPopulationPhoton (const int, const int, const double, Transmission *);
-void    statAdjustInitPopulation (const double);
+double  statAdjustInitPopulation (const double);
 
 
 /**************************************/
@@ -276,8 +282,8 @@ void    spectraExclusive (System *, Pdata *, Transmission *, Transmission **, Tr
 /**************************************/
 int     specFindEnergyBin (double, const double);
 void    specCumulativeSpectra (const int, const int, double  **, Nucleus *);
-void    specGaussianBroadening (const int, const double, const double, double *);
-void    specGaussianBroadening (const int, const double, const double, double *, const double, const double);
+int     specGaussianBroadening (const int, const double, const double, double *);
+int     specGaussianBroadening (const int, const double, const double, double *, const double, const double);
 int     specStorePrimaryGamma (Nucleus *, double **, GammaProduction *);
 int     specStoreDiscreteGamma (Nucleus *, GammaProduction *);
 void    specSortDiscreteGamma (GammaProduction *);
@@ -287,6 +293,7 @@ void    specSortDiscreteGamma (GammaProduction *);
 /*      statdecay.cpp                 */
 /**************************************/
 void    specCompoundElastic (System *, double, Transmission *, Transmission **, Transmission **, double **, Direct *, Spectra *);
+void    specCompoundPhoton (System *, double, Transmission *, Transmission **, Transmission **, double **, Spectra *);
 
 
 /**************************************/
@@ -375,6 +382,12 @@ double  preqExcitonSpectra (Spectra *);
 void    preqExcitonPopulation (const int, Transmission *, Transmission *, double *);
 double  preqTotalPopulation (void);
 void    preqRenormalizePopulation (const double);
+
+
+/**************************************/
+/*      excilp.cpp                    */
+/**************************************/
+void    exlpExcitonModel (System *, Pdata *, Transmission **, Transmission **, Spectra *);
 
 
 /**************************************/

@@ -24,7 +24,11 @@ const int MAX_GAMMALINE     =  2000;  // maximum number of gamma lines printed
 const int MAX_J             =    60;  // maximum J-value  = MAX_L
 const int MAX_LEVELS        =   300;  // maximum discrete levels
 const int MAX_GAMMA_BRANCH  =   100;  // maximum gamma-ray branches
+<<<<<<< HEAD
 const int MAX_MULTIPOL      =     5;  // multipolarity, E1, M1, E2, M2, E3
+=======
+const int MAX_MULTIPOL      =     5;  // multipolarity, E1, M1, E2, M2, E3, ...
+>>>>>>> main
 const int MAX_GDR           =     8;  // maximum GDRs and pygmy resonance
 const int MAX_LAMBDA        =     5;  // lambda_max = (MAX_LAMBDA-1)*2
 const int MAX_ANGDIST       =   180;  // maximum angular distribution points

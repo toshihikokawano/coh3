@@ -213,6 +213,11 @@ void  cohOutputOptions(unsigned int p, unsigned int q)
   pex.gammaline    = q & PEX_GAMMALINE;
   pex.decaywidth   = q & PEX_DECAYWIDTH;
   pex.gammastf     = q & PEX_GAMMASTF;
+
+  if(pex.ddx){
+    prn.angdist = true;
+    ctl.ewtransform = false;
+  }
 }
 
 
@@ -245,7 +250,7 @@ void cohHelp(void)
   std::cerr << "                   2 : cumulative discrete levels" << std::endl;
   std::cerr << "                   4 : level densities" << std::endl;
   std::cerr << "                   8 : fission level densities" << std::endl;
-  std::cerr << "                  16 : DDX data for ENDF formatting" << std::endl;
+  std::cerr << "                  16 : DDX data (with -x for ENDF formatting)" << std::endl;
   std::cerr << "                  32 : compound nucleus decay probability matrix" << std::endl;
   std::cerr << "                  64 : all gamma lines including primary gamma" << std::endl;
   std::cerr << "    -f          : generate tabulated cross section output" << std::endl;

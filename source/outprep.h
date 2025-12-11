@@ -148,10 +148,11 @@ class CumulativeResidualProduct{
 /*      outprep.cpp                   */
 /**************************************/
 void    outPrepTotalResidual (const int, const int);
+void    outPrepAddShapeElastic (const int, const int);
+void    outPrepAllocateResidual (const int);
+void    outPrepFreeResidual (void);
 void    outPrepCumulativeResidual (const int, const double);
 void    outPrepPrintResidual (void);
 void    outPrepPrintIsomericRatio (void);
-void    outPrepAllocateResidual (const int);
-void    outPrepFreeResidual (void);
 
 CumulativeResidualProduct *outPrepObjectPointer (void);

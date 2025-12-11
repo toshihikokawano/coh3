@@ -395,19 +395,15 @@ class FisEnhance{
     double     energy;        // enhancement of fission
     double     width;
     double     peak;
-    double     compfact1p;     // level compression parameter 1
-    double     compfact2p;     // level compression parameter 2
-    double     compfact1n;     // parameter 1 for negative parity
-    double     compfact2n;     // parameter 2 for negative parity
+    double     compfact1;      // level compression parameter 1
+    double     compfact2;      // level compression parameter 2
 
     FisEnhance(){
       energy = 0.0;
       width  = 0.0;
       peak   = 0.0;
-      compfact1p = 0.0;
-      compfact2p = 0.0;
-      compfact1n = 0.0;
-      compfact2n = 0.0;
+      compfact1 = 0.0;
+      compfact2 = 0.0;
     }
 };
 

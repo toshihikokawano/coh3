@@ -140,6 +140,7 @@ void outLevelExcite(const int n0, const int n1, const double ecms, const double 
   outSectionHead("DISCRETE DIRECT CROSS SECTION");
   std::cout << cline << "    Ex[MeV]     Spin    Eout[MeV]  Sigma[mb]" << std::endl;
 
+  double s = 0.0;
   for(int i=n0 ; i<n1 ; i++){
     if(cdir[i] < 0.0) continue;
     std::cout << "  Direct" << std::setw(3) << i;
@@ -149,7 +150,11 @@ void outLevelExcite(const int n0, const int n1, const double ecms, const double 
     outVal(ecms-lev[i].excitation+ex);
     outVal(cdir[i]);
     std::cout << std::endl;
+    s += cdir[i];
   }
+  std::cout << blank << blank << blank << "        Sum";
+  outVal(s);
+  std::cout << std::endl;
 }
 
 

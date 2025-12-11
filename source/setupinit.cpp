@@ -294,7 +294,7 @@ void setupInitMT(void)
   unsigned long seed = 87545L;
 
 #ifdef RANDOM_SEED_BY_SYSTEM
-  random_device seedgen;
+  std::random_device seedgen;
   seed = (unsigned long)seedgen();
 #endif
 

@@ -93,7 +93,7 @@ void ccScatteringAmplitude(const int jj, const int nmax, double *th, Collective 
       for(int mm0=-i0 ; mm0<=i0 ; mm0+=2){  int mm0k = (mm0+i0 )/2; // target M
         int mp0 = m0+mm0;
 
-        double cg0 = clebsh_gordan(l0,is0,0,m0,j0)*clebsh_gordan(j0,i0,m0,mm0,jj)*sqrt(l0+1.0); 
+        double cg0 = clebsch_gordan(l0,is0,0,m0,j0)*clebsch_gordan(j0,i0,m0,mm0,jj)*sqrt(l0+1.0); 
         if(cg0 == 0.0) continue;
 
         /*** for each discrete level */
@@ -128,7 +128,7 @@ void ccScatteringAmplitude(const int jj, const int nmax, double *th, Collective 
 
               idx = (unsigned int)(  (i1+1)*((is1+1)*((i0+1)*m0k+mm0k)+m1k)+mm1k  );
 
-              double cg1 = clebsh_gordan(l1,is1,ml1,m1,j1)*clebsh_gordan(j1,i1,ml1+m1,mm1,jj)*sqrt(l1+1.0);
+              double cg1 = clebsch_gordan(l1,is1,ml1,m1,j1)*clebsch_gordan(j1,i1,ml1+m1,mm1,jj)*sqrt(l1+1.0);
               if(cg1 == 0.0) continue;
 
               double x2 = x1*cg0*cg1;

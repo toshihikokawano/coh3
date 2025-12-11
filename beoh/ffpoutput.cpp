@@ -9,7 +9,7 @@
 #include "beoh.h"
 #include "outformat.h"
 
-static void FFPOutputMultiplicity (double, double *, double *, double *, double, double);
+static void FFPOutputMultiplicity (double, double *, double *, double *, double, double, double);
 static void FFPOutputPnu (const int, double *);
 static void FFPOutputYield (const int, double *, double *, double **, double **, double *);
 static void FFPOutputnuTKE (const int, double *);
@@ -70,7 +70,7 @@ void FFPOutput(const double de, const double dmass, const double maxtemp, Fissio
 
 
   /*** average multiplicity */
-  FFPOutputMultiplicity(ytot,fob->multiplicity,fob->eaverage,fob->etotal,fob->eprefis,fob->nprefis);
+  FFPOutputMultiplicity(ytot,fob->multiplicity,fob->eaverage,fob->etotal,fob->eprefis,fob->nprefis,fob->sepaverage);
 
   /*** print multiplicity distributions */
   FFPOutputPnu(fob->getLsize(),fob->Pn);
@@ -328,7 +328,7 @@ void FFPOutputIndividualSpectrum(ZAPair *zap, const int m, const double de, doub
 /**********************************************************/
 /*      Print Average Multiplicity                        */
 /**********************************************************/
-void FFPOutputMultiplicity(double ytot, double *mult, double *eave, double *etot, double ep, double np)
+void FFPOutputMultiplicity(double ytot, double *mult, double *eave, double *etot, double ep, double np, double sep)
 {
   std::cout.setf(std::ios::scientific, std::ios::floatfield);
   std::cout << std::setprecision(4);
@@ -350,6 +350,8 @@ void FFPOutputMultiplicity(double ytot, double *mult, double *eave, double *etot
     std::cout << std::setw(12) << eave[0]/ytot << std::setw(12) << eave[1]/ytot << std::endl;
     std::cout << "# Average Multiplicity";
     std::cout << std::setw(12) << mult[0]/ytot << std::setw(12) << mult[1]/ytot << std::endl;
+    std::cout << "# Average Separation[MeV]         ";
+    std::cout << std::setw(12) << sep << std::endl;
   }
   else{
     std::cout << "#                            gamma     neutron +prefission" << std::endl;
@@ -359,6 +361,8 @@ void FFPOutputMultiplicity(double ytot, double *mult, double *eave, double *etot
     std::cout << std::setw(12) << eave[0]/ytot << std::setw(12) << eave[1]/ytot << std::setw(12) << x3 << std::endl;
     std::cout << "# Average Multiplicity";
     std::cout << std::setw(12) << mult[0]/ytot << std::setw(12) << mult[1]/ytot << std::setw(12) << x2 << std::endl;
+    std::cout << "# Average Separation[MeV]         ";
+    std::cout << std::setw(12) << sep << std::endl;
   }
   nl(); nl();
 }

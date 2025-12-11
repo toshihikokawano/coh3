@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #include "physicalconstant.h"
 #include "structur.h"
@@ -17,11 +18,13 @@
 
 static void   preqParameterSetting (System *, Preeq *, SPdens *);
 static void   preqExcitonCalc (System *, Pdata *, double, Exconf *, Preeq *, Transmission **, Transmission **, double **);
+static void   preqExcitonCalcUnbound (System *, Pdata *, double, Exconf *, Preeq *, Transmission **, Transmission **, double **);
 static void   preqTransitionRate (System *, Pdata *, Exconf *, Preeq *, Transmission **);
 static void   preqAddPopulation (double, Pdata *, Exconf *, Preeq *, Transmission **, Transmission **, double **);
 static void   preqPrepareExcitonParameter (System *, Exconf *, Preeq *);
 static double preqEmissionRate (Pdata *,Transmission **, Preeq *,Exconf *);
 static void   preqLifeTime (const int, const int, Preeq *, Exconf *);
+static void   preqExcitonPopulationJdist (const int, Pdata *, Preeq *, Exconf *, Transmission *, Transmission *, double *);
 static void   preqLevelPopulation (const int, Transmission *, double *, Nucleus *);
 static void   preqAllocateMemory (void);
 static void   preqDeleteAllocated (void);
@@ -39,7 +42,10 @@ static double  **tnp;  // lambda n+
 static double  **tz0;  // lambda z0
 static double  **tn0;  // lambda n0
 
-#undef LEVEL_POPULATION
+static const bool phspindist = false;
+static const bool include_unboundstates = true;
+static       bool level_population = false;
+
 #undef DEBUG
 
 //#define FKK_SPIN_DISTRIBUTION
@@ -54,7 +60,6 @@ static double  preqSpinDistribution (double, double);
 void preqExcitonModel(System *sys, Pdata *pdt, Transmission **tc, Transmission **td, Spectra *spc)
 {
   Preeq    prq;               // preequilibrium parameters
-  Exconf   exc;               // exciton configuration
   SPdens   spd[MAX_CHANNEL];  // single-particle state densities
 
   /*** Clear spc array */
@@ -79,16 +84,20 @@ void preqExcitonModel(System *sys, Pdata *pdt, Transmission **tc, Transmission *
   /*** photo induced reaction case */
   if(sys->incident.pid == gammaray){
 
-    double sigcn = crx.reaction;
+    double sigcn  = crx.reaction;
     double sigQDB = sigcn * photoQDratio();
     double sigGDR = sigcn * (1.0 - photoQDratio());
+    double sigUNB = 0.0; // if doorway state is unbound
 
     /*** Total CN formation cross section for GDR, scaled by phase space factor
          R = omega_B(1p,1h)/omega(1p,1h) = B/(E-delta) */
     double bn = ncl[0].cdt[neutron].binding_energy;
     double e0 = prq.ex_total - spd[neutron].pairing;
     double r  = (e0 > 0.0) ? bn/e0 : 0.0;
-    if((0.0 < r) && (r <= 1.0)) sigGDR *= r;
+    if((0.0 < r) && (r <= 1.0)){
+      sigUNB  = sigGDR * (1 - r);
+      sigGDR *= r;
+    }     
 
     /*** Initial number of particle/holes
          GDR reaction: start with (1p,1h) in n-shell
@@ -97,11 +106,17 @@ void preqExcitonModel(System *sys, Pdata *pdt, Transmission **tc, Transmission *
     Exconf exQDB(1,1,1,1);
 
     /*** GDR */
+    level_population = false; 
     preqExcitonCalc(sys,pdt,sigGDR,&exGDR,&prq,tc,td,spc->pe);
 
     /*** QD */
     preqExcitonCalc(sys,pdt,sigQDB,&exQDB,&prq,tc,td,spc->pe);
 
+    /*** Unbound */
+    if(include_unboundstates){
+      level_population = true; // distribute PE strength over the discrete region
+      preqExcitonCalcUnbound(sys,pdt,sigUNB,&exGDR,&prq,tc,td,spc->pe);
+    }
 
 //    double sigcn = crx.reaction;
 //    Exconf ex0(0,0,2,1);
@@ -156,8 +171,10 @@ void preqParameterSetting(System *sys, Preeq *prq, SPdens *spd)
 /**********************************************************/
 void preqExcitonCalc(System *sys, Pdata *pdt, double sigcn, Exconf *ex0, Preeq *prq, Transmission **tc, Transmission **td, double **spc)
 {
-  /*** Transition Rates for Each Configuration */
+  /*** clear working arrays */
   preqClearMemory();
+
+  /*** Transition Rates for Each Configuration */
   preqTransitionRate(sys,pdt,ex0,prq,tc);
 
   /*** Ocupation Probability for Each Configuration */
@@ -168,6 +185,37 @@ void preqExcitonCalc(System *sys, Pdata *pdt, double sigcn, Exconf *ex0, Preeq *
 
   /*** Exciton Model Parameter Output */
   if(prn.preeqparm) preqPrepareExcitonParameter(sys,ex0,prq);
+}
+
+
+/**********************************************************/
+/*      Unbound Configuration for Doorway State           */
+/**********************************************************/
+void preqExcitonCalcUnbound(System *sys, Pdata *pdt, double sigcn, Exconf *ex0, Preeq *prq, Transmission **tc, Transmission **td, double **spc)
+{
+  /*** clear working arrays */
+  preqClearMemory();
+
+  /*** Total exciton state density omega(p,h,Ex) */
+  prq->omega_total = preqStateDensity(prq->ex_total,prq->spd,ex0);
+
+  /*** Ocupation Probability for the doorway state */
+  pop[0][0] = 1.0;
+
+  /*** Particle emission rate */
+  wk[0][0] = preqEmissionRate(pdt,tc,prq,ex0);
+
+  /*** Effective squared matrix elements */
+  preqMSquare(sys->target.getA()+sys->incident.za.getA(),ex0->sum(),prq);
+
+  /*** Lambdas for the doorway state */
+  preqLifeTime(0,0,prq,ex0);
+
+  double d = tnp[0][0] * 0.5 + wk[0][0];
+  tau[0][0] = (d > 0.0) ? 1.0/d : 0.0;
+
+  /*** Add to Population */
+  preqAddPopulation(sigcn,pdt,ex0,prq,tc,td,spc);
 }
 
 
@@ -209,6 +257,7 @@ void preqTransitionRate(System *sys, Pdata *pdt, Exconf *ex0, Preeq *prq, Transm
 /**********************************************************/
 void preqAddPopulation(double sigcn, Pdata *pdt, Exconf *ex0, Preeq *prq, Transmission **tc, Transmission **td, double **spc)
 {
+  double *spn = new double [MAX_ENERGY_BIN]; // spectra at each step N
   Exconf exc;
 
   for(int i=0 ; i<MAX_PREEQ ; i++){
@@ -222,22 +271,37 @@ void preqAddPopulation(double sigcn, Pdata *pdt, Exconf *ex0, Preeq *prq, Transm
       prq->omega_total = preqStateDensity(prq->ex_total,prq->spd,&exc);
       if(prq->omega_total == 0.0) continue;
 
+      /*** calculate emission rate Wk again from each configuration */
       preqEmissionRate(pdt,tc,prq,&exc);
 
-      double taup = tau[i][j] * pop[i][j];
+      for(int k=0 ; k<MAX_ENERGY_BIN ; k++) spn[k] = 0.0;
 
+      /*** calculate particle emission spectra */
+      double taup = tau[i][j] * pop[i][j];
       for(int id=1 ; id<MAX_CHANNEL ; id++){
         if(!ncl[0].cdt[id].status) continue;
+
         int ip = ncl[0].cdt[id].next;
-        for(int k=1 ; k<ncl[ip].ntotal ; k++) spc[id][k] += sigcn * wkc[id][k] * taup;
+        for(int k=1 ; k<ncl[ip].ntotal ; k++){
+          spn[k] = sigcn * wkc[id][k] * taup;
+          spc[id][k] += spn[k];
+        }
+
+        /*** spin distribution for each of p-h configurations */
+        if(phspindist) preqExcitonPopulationJdist(id,pdt,prq,&exc,tc[id],td[id],spn);
       }
     }
   }
 
-  for(int id=1 ; id<MAX_CHANNEL ; id++){
-    if(!ncl[0].cdt[id].status) continue;
-    preqExcitonPopulation(id,tc[id],td[id],spc[id]);
+  /*** spin distribution by compound reaction */
+  if(!phspindist){
+    for(int id=1 ; id<MAX_CHANNEL ; id++){
+      if(!ncl[0].cdt[id].status) continue;
+      preqExcitonPopulation(id,tc[id],td[id],spc[id]);
+    }
   }
+
+  delete [] spn;
 }
 
 
@@ -294,14 +358,12 @@ double preqEmissionRate(Pdata *pdt, Transmission **tc, Preeq *prq, Exconf *exc)
 
     int j = ncl[0].cdt[id].next;
 
-    Exconf res(exc->zp - pdt[id].za.getZ(),exc->zh,
-               exc->np - pdt[id].za.getN(),exc->nh);
+    Exconf res(exc->zp - pdt[id].za.getZ(),exc->zh,exc->np - pdt[id].za.getN(),exc->nh);
     if(res.zp < 0 || res.np < 0) continue;
 
-    double rm = ncl[j].mass * pdt[id].mass
-              /(ncl[j].mass + pdt[id].mass);
+    double rm = ncl[j].mass * pdt[id].mass / (ncl[j].mass + pdt[id].mass);
 
-    double x  = c * rm * (pdt[id].spin2+1.0)/prq->omega_total;
+    double x  = c * rm * (pdt[id].spin2+1.0) / prq->omega_total;
 
     for(int k=1 ; k<ncl[j].ntotal ; k++){
       double omega = preqStateDensity(ncl[j].excitation[k],&prq->spd[id],&res);
@@ -310,13 +372,11 @@ double preqEmissionRate(Pdata *pdt, Transmission **tc, Preeq *prq, Exconf *exc)
       wkc[id][k]   = x * tc[id][k].ecms * tc[id][k].sigr * omega * coll;
       wt += wkc[id][k] * ncl[j].de;
 #ifdef DEBUG
-      if( (res.zp + res.np + res.zh + res.nh) == 2 ){
-        std::cout << std::setw(2) << exc->zp << std::setw(2) << exc->zh << std::setw(2) << exc->np << std::setw(2) << exc->nh;
-        std::cout << std::setw(4) << id << std::setw(4) << k;
-        std::cout << std::setw(11) << tc[id][k].ecms << std::setw(11) << ncl[j].excitation[k];
-        std::cout << std::setw(11) << omega << std::setw(11) << coll << std::setw(11) << prq->omega_total;
-        std::cout << std::setw(11) << tc[id][k].sigr << std::setw(11) << wkc[id][k]/HBAR << std::endl;
-      }
+      std::cout << std::setw(2) << exc->zp << std::setw(2) << exc->zh << std::setw(2) << exc->np << std::setw(2) << exc->nh;
+      std::cout << std::setw(4) << id << std::setw(4) << k;
+      std::cout << std::setw(11) << tc[id][k].ecms << std::setw(11) << ncl[j].excitation[k];
+      std::cout << std::setw(11) << omega << std::setw(11) << coll << std::setw(11) << prq->omega_total;
+      std::cout << std::setw(11) << tc[id][k].sigr << std::setw(11) << wkc[id][k]/HBAR << std::endl;
 #endif
     }
   }
@@ -340,6 +400,78 @@ void preqLifeTime(const int i, const int j, Preeq *prq, Exconf *exc)
   double d2 = tzp[i][j] + tnp[i][j]                         + wk[i][j];
   tau[i][j] = (d1 > 0.0) ? 1.0/d1 : 0.0;
   tap[i][j] = (d2 > 0.0) ? 1.0/d2 : 0.0;
+/*
+  std::cout << std::setw(2) << i;
+  std::cout << std::setw(2) << j;
+  std::cout << std::setw(11) << tzp[i][j];
+  std::cout << std::setw(11) << tnp[i][j];
+  std::cout << std::setw(11) << tz0[i][j];
+  std::cout << std::setw(11) << tn0[i][j];
+  std::cout << std::setw(11) << tau[i][j];
+  std::cout << std::setw(11) << tap[i][j] << std::endl;
+*/
+}
+
+
+/**********************************************************/
+/*      Pre-Equilibrium Population Increment              */
+/*      with p-h Spin Distribution, only for inelastic    */
+/**********************************************************/
+void  preqExcitonPopulationJdist(const int id, Pdata *pdt, Preeq *prq, Exconf *exc, Transmission *tc, Transmission *td, double *spc)
+{
+  int i = ncl[0].cdt[id].next;
+
+  Exconf res(exc->zp - pdt[id].za.getZ(),exc->zh,
+             exc->np - pdt[id].za.getN(),exc->nh);
+  if(res.zp < 0 || res.np < 0 || res.sum() == 0) return;
+
+  double *sdist = new double [MAX_J];
+
+  /*** exciton spin distribution */
+  double sigma2 = 0.24 * res.sum() * pow(ncl[i].za.getA(),2.0/3.0);
+//double sigma2 = 0.11 * pow(res.sum()*res.sum()*ncl[i].za.getA(),2.0/3.0);
+
+  /*** Distribute pre-equilibrium cross section to each spin state */
+  for(int k=1 ; k<ncl[i].ncont ; k++){
+
+    double omega = preqStateDensity(ncl[i].excitation[k],&prq->spd[id],&res);
+
+    for(int j=0 ; j<MAX_J ; j++) sdist[j] = 0.0;
+
+    int jmax0 = 0;
+    for(int jcn=0 ; jcn<ncl[0].jmax ; jcn++){
+      double pop0 = ncl[0].pop[0][jcn].even + ncl[0].pop[0][jcn].odd;
+
+      for(int lp=0 ; lp<=tc[k].lmax ; lp++){
+
+        double t = preqTransmissionAverage(ncl[0].cdt[id].spin2,lp,&tc[k].tran[3*lp]);
+
+        int jmin = std::abs(jcn-lp);
+        int jmax =          jcn+lp ; if(jmax > MAX_J-1) jmax = MAX_J-1;
+        if(jmax > jmax0) jmax0 = jmax;
+
+        for(int j=jmin ; j<=jmax ; j++){
+          double rj = exp( -(j+0.5)*(j+0.5) / (2.0*sigma2) );
+          sdist[j] += t * pop0 * omega * rj;
+        }
+      }
+    }
+
+    /*** normalized spin distribution */
+    double s = 0.0;
+    for(int j=0 ; j<=jmax0 ; j++) s += sdist[j];
+    if(s > 0.0){
+      for(int j=0 ; j<=jmax0 ; j++){
+        double x = sdist[j]/s * 0.5;
+        ncl[i].pop[k][j].even += spc[k] * x * ncl[i].de;
+        ncl[i].pop[k][j].odd  += spc[k] * x * ncl[i].de;
+      }
+    }
+  }
+
+  if(ncl[i].ndisc > 1) preqLevelPopulation(id,td,spc,&ncl[i]);
+
+  delete [] sdist;
 }
 
 
@@ -351,7 +483,7 @@ void  preqExcitonPopulation(const int id, Transmission *tc, Transmission *td, do
 {
   int i = ncl[0].cdt[id].next;
 
-  double sdist[MAX_J];
+  double *sdist = new double [MAX_J];
 
   /*** Distribute pre-equilibrium cross section to each spin state */
   /*** This part emulates compound J-distributions at each excitation */
@@ -367,7 +499,7 @@ void  preqExcitonPopulation(const int id, Transmission *tc, Transmission *td, do
 
         int jmin = std::abs(jcn-lp);
         int jmax =          jcn+lp ; if(jmax > MAX_J-1) jmax = MAX_J-1;
-        if(jmax>jmax0) jmax0 = jmax;
+        if(jmax > jmax0) jmax0 = jmax;
 
         for(int j=jmin ; j<=jmax ; j++){
           sdist[j] += t*(ncl[i].density[k][j].even + ncl[i].density[k][j].odd)
@@ -385,8 +517,9 @@ void  preqExcitonPopulation(const int id, Transmission *tc, Transmission *td, do
     }
 #endif
 
+    /*** normalized spin distribution */
     double s = 0.0;
-    for(int j=0 ; j<=jmax0 ; j++) s+=sdist[j];
+    for(int j=0 ; j<=jmax0 ; j++) s += sdist[j];
     if(s > 0.0){
       for(int j=0 ; j<=jmax0 ; j++){
         double x = sdist[j]/s * 0.5;
@@ -396,27 +529,9 @@ void  preqExcitonPopulation(const int id, Transmission *tc, Transmission *td, do
     }
   }
 
-  if(ncl[i].ndisc > 1) preqLevelPopulation(id,td,spc,&ncl[i]);
-/*
-  for(int k=ncl[i].ncont ; k<ncl[i].ntotal ;  k++){
-    if(spc[k]==0.0) continue;
-    double e1 = ncl[i].excitation[k+1];
-    double e2 = ncl[i].excitation[k  ];
-    int m=0;
-    for(int n=1 ; n<ncl[i].ndisc ; n++){
-      if( (e1<=ncl[i].lev[n].energy) && (ncl[i].lev[n].energy<e2) ){
-        m++;
-      }
-    }
-    if(m>0){
-      for(int n=1 ; n<ncl[i].ndisc ; n++){
-        if( (e1<=ncl[i].lev[n].energy) && (ncl[i].lev[n].energy<e2) ){
-          ncl[i].lpop[n] += spc[k] * ncl[i].de /(double)m;
-        }
-      }
-    }
-  }
-*/
+  if((ncl[i].ndisc > 1) && level_population) preqLevelPopulation(id,td,spc,&ncl[i]);
+
+  delete [] sdist;
 }
 
 
@@ -429,7 +544,7 @@ void preqLevelPopulation(const int id, Transmission *td, double *spc, Nucleus *n
        weighted by the inverse reaction cross section */
 
   double spcsum = 0.0;
-  for(int k=n->ncont ; k<n->ntotal ;  k++) spcsum += spc[k];
+  for(int k=n->ncont ; k<n->ntotal ; k++) spcsum += spc[k];
   if(spcsum == 0.0) return;
 
   int    m = 0;    // number of open levels
@@ -443,9 +558,8 @@ void preqLevelPopulation(const int id, Transmission *td, double *spc, Nucleus *n
   /*** distribute spcsum to the levels,
        in the case of charged particles, no SigR weight,
        because they are almost zero */
-  w = (id == 1) ? w*m : m;
+  w = (id == 1) ? w : m;
 
-#ifdef LEVEL_POPULATION
   if(m > 0){
     for(int i=1 ; i<n->ndisc ; i++){
       if(td[i].lmax <= 0) continue;
@@ -453,21 +567,21 @@ void preqLevelPopulation(const int id, Transmission *td, double *spc, Nucleus *n
       else        n->lpop[i] += spcsum * n->de              / w;
     }
   }
-#endif
 }
+
 
 /**********************************************************/
 /*      Spin-Averaged Transmission Coefficients           */
 /**********************************************************/
 double preqTransmissionAverage(int spin2, int l, double *tj)
 {
-  double t=0.0;
+  double t = 0.0;
 
-  if(spin2==0)       t  = tj[0];
-  else if(spin2==1)  t  = ( (l+1.0)*tj[0] + l *tj[1] )/(2.0*l+1.0);
-  else if(spin2==2)  t  = ( (2.0*l+3.0)*tj[0]
-                           +(2.0*l+1.0)*tj[1]
-                           +(2.0*l-1.0)*tj[2] )/(6.0*l+3.0);
+  if(spin2 == 0)       t  = tj[0];
+  else if(spin2 == 1)  t  = ( (l+1.0)*tj[0] + l *tj[1] )/(2.0*l+1.0);
+  else if(spin2 == 2)  t  = ( (2.0*l+3.0)*tj[0]
+                             +(2.0*l+1.0)*tj[1]
+                             +(2.0*l-1.0)*tj[2] )/(6.0*l+3.0);
   return (t);
 }
 
@@ -544,7 +658,7 @@ double preqExcitonSpectra(Spectra *spc)
       double e1 = e0 - ncl[i].lev[k].energy;
       int    kp = 0;
       for(kp=0 ; kp<MAX_ENERGY_BIN ; kp++){
-        if( (ncl[i].de*kp<= e1) && (e1 < ncl[i].de*(kp+1)) ){
+        if( (ncl[i].de*kp <= e1) && (e1 < ncl[i].de*(kp+1)) ){
            break;
         }
       }
@@ -670,7 +784,7 @@ double preqSpinDistribution(double ein, double eout)
       4.40937, 4.22281, 4.02479, 3.7522 , 3.40316, 3.1018 , 2.89923, 2.90000, 2.90000, 2.90000}};
 */
   /*** data for Ir191 */
-/*
+
   static double sigma[ne][nm] ={
     {6.29812, 5.87556, 5.60913, 5.43508, 5.30576, 5.23844, 5.19664, 5.16545, 5.10267, 5.70000,
      5.70000, 5.70000, 5.70000, 5.70000, 5.70000, 5.70000, 5.70000, 5.70000, 5.70000, 5.70000},
@@ -684,7 +798,7 @@ double preqSpinDistribution(double ein, double eout)
      5.47471, 5.22899, 5.12851, 4.94994, 4.90000, 4.90000, 4.90000, 4.90000, 4.90000, 4.90000},
     {21.5658, 20.3883, 19.3842, 18.0372, 16.9426, 15.8209, 14.2163, 12.4219, 10.8042, 9.16168,
      7.61702, 6.4267 , 5.6695 , 5.27737, 5.11846, 4.97934, 4.66004, 4.60000, 4.60000, 4.60000}};
-*/
+
   /*** data for Ir193 */
 /*
   static double sigma[ne][nm] ={
@@ -702,7 +816,7 @@ double preqSpinDistribution(double ein, double eout)
      7.69411, 6.35831, 5.55102, 5.10142, 4.82158, 4.49316, 4.07305, 4.00000, 4.00000, 4.00000}};
 */
   /*** data for U238 */
-
+/*
   static double sigma[ne][nm] ={
     {7.34803, 6.18125, 5.88896, 5.7306 , 5.74426, 5.86739, 6.04142, 6.19847, 6.20506, 6.20000,
      6.20000, 6.20000, 6.20000, 6.20000, 6.20000, 6.20000, 6.20000, 6.20000, 6.20000, 6.20000},
@@ -716,7 +830,7 @@ double preqSpinDistribution(double ein, double eout)
      5.63924, 5.40432, 5.38634, 5.39488, 5.40000, 5.40000, 5.40000, 5.40000, 5.40000, 5.40000},
     {22.5612, 20.7902, 19.5887, 18.3384, 16.9733, 15.7226, 14.1647, 12.4242, 10.7686, 9.36118,
      7.97722, 6.70136, 5.85954, 5.46075, 5.34639, 5.32269, 5.14016, 5.20000, 5.20000, 5.20000}};
-
+*/
 
   int k1 = 0, k2 = 0;
   if(     ein < esig[0   ]) k1 = k2 = 0;

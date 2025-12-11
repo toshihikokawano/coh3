@@ -31,7 +31,7 @@ enum parameterType{
      parmD0SR,    // search level density parameter for given D0 value
      parmESET,    // built-in incident energy grid
      parmBROD,    // photon spectrum Gaussian broadening
-     parmCOLL     // collective ehnancement in pre-equilibrium level density
+     parmCOLL,    // collective ehnancement in pre-equilibrium level density
 };
 typedef enum parameterType ParmType;
 

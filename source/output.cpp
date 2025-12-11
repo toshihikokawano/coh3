@@ -22,13 +22,6 @@
 
 extern std::string version;
 
-static std::string particle_name[9]={
-   "      gamma","    neutron","     proton","      alpha",
-   "   deuteron","     triton","     helion","    fission",
-   "    unknown"};
-
-static std::string p_name = "gnpadth";
-
 static double labE = 0.0;   // laboratory energy
 static double sigR = 0.0;   // total reaction cross section
 static ZAnumber targZA(0,0);
@@ -367,7 +360,7 @@ void outFissionBarrier(const int n)
   for(int i=0 ; i<n ; i++){
     if(ncl[i].fissile){
       if(ncl[i].fission->fisenhance.energy != 0.0) f1 = true;
-      if( (ncl[i].fission->fisenhance.compfact1p != 0.0) || (ncl[i].fission->fisenhance.compfact2p != 0.0) ) f2 = true;
+      if( (ncl[i].fission->fisenhance.compfact1 != 0.0) || (ncl[i].fission->fisenhance.compfact2 != 0.0) ) f2 = true;
     }
   }
 
@@ -389,20 +382,9 @@ void outFissionBarrier(const int n)
     std::cout << cline << blank << "     Factor Damp[/MeV]" << std::endl;
     for(int i=0 ; i<n ; i++){
       if(ncl[i].fissile){
-
-        if(ncl[i].fission->fisenhance.compfact1n > 0.0){
-          outZA(&ncl[i].za); std::cout << " CmprsF(+)";
-          outVal(11,4,ncl[i].fission->fisenhance.compfact1p);
-          outVal(11,4,ncl[i].fission->fisenhance.compfact2p); nl();
-          outZA(&ncl[i].za); std::cout << " CmprsF(-)";
-          outVal(11,4,ncl[i].fission->fisenhance.compfact1n);
-          outVal(11,4,ncl[i].fission->fisenhance.compfact2n); nl();
-        }
-        else{
-          outZA(&ncl[i].za); std::cout << " CmprsFact";
-          outVal(11,4,ncl[i].fission->fisenhance.compfact1p);
-          outVal(11,4,ncl[i].fission->fisenhance.compfact2p); nl();
-        }
+        outZA(&ncl[i].za); std::cout << " CmprsFact";
+        outVal(11,4,ncl[i].fission->fisenhance.compfact1);
+        outVal(11,4,ncl[i].fission->fisenhance.compfact2); nl();
       }
     }
   }
@@ -499,7 +481,6 @@ void outTotalResidual(CumulativeResidualProduct *res)
   }
   std::cout << cline << blank << blank << "         g.s.sum";
   outVal(lowfilter(sum)); nl();
-  nl(); nl();
 }
 
 
@@ -548,7 +529,6 @@ void outIsomericRatio(CumulativeResidualProduct *res)
       }
     }
   }
-  nl(); nl();
 }
 
 
@@ -578,7 +558,7 @@ void outFission(const int n)
   std::cout << blank << " TotFission";
   outVal(lowfilter(sum)); nl();
   std::cout << blank << "  Fiss+Prod";
-  outVal(lowfilter(sum+sigR)); nl();
+  outVal(lowfilter(sum + sigR)); nl();
 }
 
 
@@ -601,7 +581,7 @@ void outParticleProduction(const int n, Channel *cdt, double **spc)
   }
 
   /*** for gamma-ray, use the emission spectrum */
-  int kmax = (int)(ncl[0].max_energy/ncl[0].de) +1;
+  int kmax = (int)(ncl[0].max_energy/ncl[0].de) + 1;
   for(int k=0 ; k<kmax ; k++){
     sum[gammaray] += spc[gammaray][k] * ncl[0].de;
     for(int j=0 ; j<MAX_CHANNEL ; j++){
@@ -627,19 +607,18 @@ void outParticleProduction(const int n, Channel *cdt, double **spc)
     double em = (sum[j] == 0.0) ? 0.0 : ave[j] / sum[j];
     outVal(lowfilter(sum[j])); outVal(lowfilter(mp)); outVal(lowfilter(em)); nl();
   }
-  nl();
-  nl();
 }
 
 
 /**********************************************************/
 /*      Scattering Angular Distribution                   */
 /**********************************************************/
-void outAngularDistribution(const int ctl, int n0, int np, int step, ZAnumber *za)
+void outAngularDistribution(const int ctl, const int n0, int np, int step, ZAnumber *za)
 {
   if(crx.theta[0] == 0.0) return;
+  if(pex.ddx) return;
 
-  const int column = 8;
+  const int column = 8; // number of data columns per page
   int page = 1, m = 0;
 
   switch(ctl){
@@ -654,7 +633,7 @@ void outAngularDistribution(const int ctl, int n0, int np, int step, ZAnumber *z
     break;
   case 3:
     outSectionHead("COMPOUND PLUS DIRECT SCATTERING ANGULAR DISTRIBUTION");
-    if(np > MAX_ANGDISTLEVELS) np=MAX_ANGDISTLEVELS;
+    if(np > MAX_ANGDISTLEVELS) np = MAX_ANGDISTLEVELS;
     for(int k=np-1 ; k>=0 ; k--){
       if(crx.angdist[k][0] > 0.0){
         np = k+1;
@@ -693,9 +672,10 @@ void outAngularDistribution(const int ctl, int n0, int np, int step, ZAnumber *z
 /**********************************************************/
 /*      Legendre Coefficients                             */
 /**********************************************************/
-void outLegendreCoefficient(const int ctl, int n0, int np, int id, ZAnumber *za, double ***cl)
+void outLegendreCoefficient(const int ctl, const int n0, int np, int id, ZAnumber *za, double ***cl)
 {
   if(crx.theta[0] == 0.0) return;
+  if(pex.ddx) return;
 
   const int column = 8;
   int page = 1, m = 0;
@@ -769,7 +749,7 @@ void outLegendreCoefficient(const int ctl, int n0, int np, int id, ZAnumber *za,
 /**********************************************************/
 /*      Particle Emission Spectra                         */
 /**********************************************************/
-void outSpectrum(const int ctl, double **spc, Nucleus *n)
+void outSpectrum(const int ctl, double **spc, Nucleus *n, const int kelastic)
 {
   int kmax = (int)(n->max_energy/n->de) +1;
 
@@ -809,7 +789,12 @@ void outSpectrum(const int ctl, double **spc, Nucleus *n)
     }
     for(int j=0 ; j<MAX_CHANNEL ; j++){
       if(!n->cdt[j].status) continue;
-      outVal(lowfilter(spc[j][k]));
+
+      double s = spc[j][k];
+      /*** add shape elastic if neutron-incident */
+      if( (ctl == 2) && (k == kelastic) && (j == neutron) ) s += crx.elastic / n->de;
+
+      outVal(lowfilter(s));
     }
     nl();
   }

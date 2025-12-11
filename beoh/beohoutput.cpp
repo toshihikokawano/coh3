@@ -20,11 +20,6 @@
 
 extern std::string version;
 
-static std::string particle_name[7]={
-   "      gamma","    neutron","     proton","      alpha",
-   "   deuteron","     triton","     helion"};
-
-static std::string p_name = "gnpadth";
 static double Qbeta = 0.0;
 static ZAnumber targZA(0,0);
 

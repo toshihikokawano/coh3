@@ -179,12 +179,14 @@ double FFPSystematics_TKE_A_Width(const bool sf, const int zf, const int af, con
   else{
     if(zf == 92){
       if((230 <= af) && (af <= 236)) dtke = TKEwidth_U235(constwidth);
-      else if((237 <= af) && (af <= 239)) dtke = TKEwidth_U238(constwidth);
+      else if((237 <= af) && (af <= 240)) dtke = TKEwidth_U238(constwidth);
     }
     else if(zf == 94){
       if((236 <= af) && (af <= 243)) dtke = TKEwidth_Pu239(constwidth,ah);
     }
   }
+
+  if(dtke == 0.0) dtke = TKEsave * 0.04;
 
   return dtke;
 }
@@ -406,12 +408,13 @@ double TKEmass_Pu239(int ah, double am)
 
 double TKEwidth_Pu239(const bool cw, const int ah)
 {
-  static double a0 = 128.0;
+  static const double d0 = 8.0;
+  static const double a0 = 128.0;
   static double p[] = {  7.5837e+00,  1.0168e-01, -1.6588e-02,  3.9178e-04,  0.0000e+00,
                          0.0000e+00,  0.0000e+00,  0.0000e+00,  0.0000e+00};
   double dtke = 0.0;
 
-  if(cw) dtke = 8.0;
+  if(cw) dtke = d0;
   else{
     dtke = p[0];
     double x = ah - a0;
@@ -420,6 +423,7 @@ double TKEwidth_Pu239(const bool cw, const int ah)
       x *= ah - a0;
     }
   }
+  if(dtke > d0) dtke = d0;
 
   return dtke;
 }

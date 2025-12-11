@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 
+#include "physicalconstant.h"
 #include "structur.h"
 #include "nucleus.h"
 #include "statmodel.h"
@@ -59,37 +60,49 @@ void specCumulativeSpectra(const int csize, const int nsize, double **spc, Nucle
 /**********************************************************/
 /*      Gaussian Broadening Results by Given Resolution   */
 /**********************************************************/
-void specGaussianBroadening(const int m, const double de, const double dm, double *y0)
+int specGaussianBroadening(const int m, const double de, const double dm, double *y0)
 {
   double *y1 = new double [m];
+  double sum0 = 0.0;
 
+  /*** number of broadened mesh, about 3-sigma */
   int d = 3 * (int)(dm / de) + 1;
 
-  for(int i0=0 ; i0<m ; i0++){
+  for(int i=0 ; i<m ; i++) sum0 += y0[i]; // save total area
+  if(sum0 == 0.0) return 0;
 
-    double z = 0.0;
-    y1[i0] = 0.0;
+  for(int i0=0 ; i0<m ; i0++){
+    double y2 = 0.0;
+    double z  = 0.0;
     for(int i1=i0-d ; i1<=i0+d ; i1++){
       if((i1 < 0) || (i1 >= m)) continue;
-      double e0 = i0 * de;
-      double e1 = i1 * de;
-      double w = exp(-(e0-e1)*(e0-e1)/(2*dm*dm));
-      z += w;
-      y1[i0] += w * y0[i1];
+      double dx = (i0 - i1) * de;
+      double w  = exp( -dx * dx / (2 * dm * dm) ) / sqrt(PI2) / dm * de;
+      z  += w;
+      y2 += w * y0[i1];
     }
-    y1[i0] = (z > 0.0) ? y1[i0]/z : 0.0;
+    y1[i0] = (z > 0.0) ? y2 / z : 0.0;
   }
 
-  for(int i=0 ; i<m ; i++) y0[i] = y1[i];
+  /*** normalize to original area */
+  double sum1 = 0.0;
+  for(int i=0 ; i<m ; i++) sum1 += y1[0];
+  for(int i=0 ; i<m ; i++) y0[i] = (sum1 > 0.0) ?  y1[i] * sum0 / sum1 : 0.0;
+
+  /*** determine the highest data bin */
+  int imax = m-1;
+  for(imax=m-1 ; imax>=0 ; imax--) if( y0[imax] != 0.0 ) break;
 
   delete [] y1;
+
+  return imax;
 }
 
 
 /**********************************************************/
 /*      Add Gaussian Broadened Line to Continuum          */
 /**********************************************************/
-void specGaussianBroadening(const int m, const double de, const double dm, double *y0, const double x1, const double y1)
+int specGaussianBroadening(const int m, const double de, const double dm, double *y0, const double x1, const double y1)
 {
   int d = 3 * (int)(dm / de) + 1;
   double *y2 = new double [2*d+1];
@@ -103,7 +116,7 @@ void specGaussianBroadening(const int m, const double de, const double dm, doubl
       break;
     }
   }
-  if(i0 < 0) return;
+  if(i0 < 0) return 0;
 
   double z = 0.0;
   for(int k = 0 ; k<=2*d ; k++){
@@ -125,7 +138,13 @@ void specGaussianBroadening(const int m, const double de, const double dm, doubl
 
   for(int k = 0 ; k<=2*d ; k++) y0[i0-d+k] += y2[k];
 
+  /*** determine the highest data bin */
+  int imax = m-1;
+  for(imax=m-1 ; imax>=0 ; imax--) if( y0[imax] != 0.0 ) break;
+
   delete [] y2;
+
+  return imax;
 }
 
 

@@ -25,7 +25,7 @@ static std::string DEFAULT_DECAY_FILE = "decaybranchENDF.dat";
 static double DEFAULT_LONG_LIVED = 1000.0; // 1000 years
 
 static int MAX_NUCLIDES =   2000;
-static int MAX_NUKINDEX = 150000;
+static int MAX_NUKINDEX = 330000;    // 0x04ffff = 327679, up to 4 meta
 
 static Isotope      *nuk = nullptr;  // properties of each nuclide
 static unsigned int *idx = nullptr;  // idx[MZA] = sequential number in the data file

@@ -12,9 +12,9 @@ static const int MAX_DECAYMODE   =    4; // maximum number of decay mode
 inline unsigned int tomza(int m, int z, int a)
 { return (  ((char)m << 16) | ((char)z << 8) | (unsigned int)a  ); }
 /*
- MZA alignment
-    Z        | A            | M
-    01234567 | 0123456789ab | 0123
+ MZA alignment: 24bit
+    M        | Z        | A
+    01234567 | 01234567 | 01234567
  */
 
 class DecayMode{

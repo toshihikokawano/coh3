@@ -197,6 +197,6 @@ void statStoreGammaTransmission(const double eg, const double sn, double *tg, Nu
   std::cout << std::setprecision(4) << std::setw(11) << tg[E1]/(PI2*pow(eg,3.0));
   std::cout << std::setprecision(4) << std::setw(11) << tg[M1]/(PI2*pow(eg,3.0));
   std::cout << std::setprecision(4) << std::setw(11) << tg[E2]/(PI2*pow(eg,5.0)) << std::endl;
+  std::cout << "TRAP" << std::endl;
 #endif
-
 }

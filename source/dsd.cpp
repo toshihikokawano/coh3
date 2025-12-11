@@ -361,9 +361,9 @@ bool    dsdAmplitudeDeformed(const int nlev, const int ip, const int l2, const i
 
   tdir = rmtd * phasefactor(bw[ip].l) * z1 * const1;
 
-  double cg00 = clebsh_gordan(2,j2, 0,bw[ip].k2  ,bw[ip].j2);
-  double cg01 = clebsh_gordan(2,j2, 2,bw[ip].k2-2,bw[ip].j2);
-  double cg02 = clebsh_gordan(2,j2,-2,bw[ip].k2+2,bw[ip].j2);
+  double cg00 = clebsch_gordan(2,j2, 0,bw[ip].k2  ,bw[ip].j2);
+  double cg01 = clebsch_gordan(2,j2, 2,bw[ip].k2-2,bw[ip].j2);
+  double cg02 = clebsch_gordan(2,j2,-2,bw[ip].k2+2,bw[ip].j2);
 
   tcol = std::complex<double>(0.0,0.0);
   for(int iq=0 ; iq<nlev ; iq++){
@@ -381,9 +381,9 @@ bool    dsdAmplitudeDeformed(const int nlev, const int ip, const int l2, const i
     cnu0 = std::complex<double>(const30,0.0)
           /std::complex<double>(cdt->lev->energy-gdr0.getEnergy()-bw[iq].bind,gdr0.getWidth()/2.0);
 
-    double cg10 = clebsh_gordan(2,j2, 0,bw[iq].k2  ,bw[iq].j2)*cg00;
-    double cg11 = clebsh_gordan(2,j2, 2,bw[iq].k2-2,bw[iq].j2)*cg01;
-    double cg12 = clebsh_gordan(2,j2,-2,bw[iq].k2+2,bw[iq].j2)*cg02;
+    double cg10 = clebsch_gordan(2,j2, 0,bw[iq].k2  ,bw[iq].j2)*cg00;
+    double cg11 = clebsch_gordan(2,j2, 2,bw[iq].k2-2,bw[iq].j2)*cg01;
+    double cg12 = clebsch_gordan(2,j2,-2,bw[iq].k2+2,bw[iq].j2)*cg02;
 
     cnu = cg10*cnu0 + cg11*cnu1 + cg12*cnu2;
     tcol += rmtc*cnu * z2 * const2;

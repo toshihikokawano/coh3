@@ -17,6 +17,7 @@
 #include "levden.h"
 #include "eclipse.h"
 #include "terminate.h"
+#include "fileout.h"
 
 
 static void   fnsCheckParameters (const int, FChance *);
@@ -159,6 +160,8 @@ void fnsFissionNeutronModel(System *sys, Pdata *pdt, double *chi, FNSpec *fns)
   if(prn.system)    outFissionNeutronEnergy(mch-1,eavrg,nutot,pf,fns);
   if(prn.spectra)   outFissionNeutronSpectrum(ne,eout,chi,fns->maxwell);
   if(prn.fisenergy) outFissionNeutronEnergyTable(mch-1,pf,fns);
+
+  if(ctl.fileout && prn.spectra)   cohFileOutFissionSpectrum(ne,sys->lab_energy,eout,chi);
 
 #ifdef DEBUG_EXFISS
   fnsExfissCheck(mch, sys->lab_energy, pf, fns);
@@ -514,7 +517,7 @@ void fnsExfissCheck (const int m, const double elab, double *pf, FNSpec *fns)
   }
 
   std::cout.setf(std::ios::scientific, std::ios::floatfield);
-  std::cout << setprecision(5);
+  std::cout << std::setprecision(5);
 
   std::cout << "# " << elab << std::endl;
   std::cout << "#";

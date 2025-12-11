@@ -105,7 +105,7 @@ void ccMatrixElementRot(const int k2, Collective *col)
       /*** lambda is limited to even numbers */
       for(int l=0 ; l<MAX_LAMBDA ; l++){
         int lambda = 2*l;
-        col->qmatrix[l][ij] = clebsh_gordan(si2, 2*lambda, k2, 0, sj2) * yi / yj;
+        col->qmatrix[l][ij] = clebsch_gordan(si2, 2*lambda, k2, 0, sj2) * yi / yj;
       }
     }
   }
@@ -157,14 +157,14 @@ void ccMatrixElementVib(Collective *col)
         /*** ground state : two-quadrupole-phonon */
         else if((pj == 0) && (pi == 2)){
           if(lambda2 == si2){
-            q = col->beta[0] * col->beta[0] * clebsh_gordan(4,4,0,0,lambda2) / sqrt(PI2);
+            q = col->beta[0] * col->beta[0] * clebsch_gordan(4,4,0,0,lambda2) / sqrt(PI2);
             col->pindex[ij] = 2;
           }
         }
         /*** one-quadrupole-phonon : one-octupole-two-phonon */
         else if((pj == 1) && (pi == 1)){
           if((sj2 == 4) && (si2*pti == -6)){
-            q = col->beta[0] * col->beta[1] * clebsh_gordan(4,6,0,0,lambda2) / sqrt(PI4);
+            q = col->beta[0] * col->beta[1] * clebsch_gordan(4,6,0,0,lambda2) / sqrt(PI4);
             col->pindex[ij] = 2;
           }
         }
@@ -214,7 +214,6 @@ void ccCouplingPotential(const NuclearModel model, const int m, const int jj, do
             }
           }
           Vpot[k][id1] -= 0.5*(vi+vj) * cv[l][id1];
-
         }
       }
 
@@ -274,7 +273,7 @@ double ccGeometricalFactor(const int jj, const int lambda, Chspin *ci, Chspin *c
   /*** parity(L) = i^L, parity(2J) = i^{2J} = (-)^J  */
 
   double a = parity(jj - ci->st2 - ci->si2) * parity(ci->l - cj->l - lambda)
-           * clebsh_gordan(li2, lj2, 0, 0, lambda2)
+           * clebsch_gordan(li2, lj2, 0, 0, lambda2)
            * racah(ci->j2, cj->j2, li2, lj2, lambda2, ci->si2)
            * racah(ci->j2, cj->j2, ci->st2, cj->st2, lambda2, jj)
            * xi * xj * yj
@@ -283,7 +282,7 @@ double ccGeometricalFactor(const int jj, const int lambda, Chspin *ci, Chspin *c
   /*** Tamura Eq. (28), with a factor of sqrt{2I'+1} */
 /*
   double a = parity(jj - cj->st2 - ci->si2 + ci->l + 3*cj->l)
-           * clebsh_gordan(li2, lj2, 0, 0, lambda2)
+           * clebsch_gordan(li2, lj2, 0, 0, lambda2)
            * racah(ci->j2, ci->st2, cj->j2, cj->st2, jj, lambda2)
            * racah(li2, ci->j2, lj2, cj->j2, ci->si2, lambda2)
            * xi * xj * yj;

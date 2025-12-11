@@ -33,7 +33,7 @@ static int  spinproj = 0, spings = 0, spintarg = 0, paritarg = 0;
 static double ***cleg; // Legendre coefficients in continuum, optional calc
 
 #undef SelectJPi
-//#define SelectJPi 0
+//#define SelectJPi 4
 
 
 /**********************************************************/
@@ -88,7 +88,6 @@ void specCompoundElastic
 
   /*** Hauser-Feshbach-Moldauer calculation */
   else{
-
     /*** Loop over CN J and Parity*/
     int jmax = ncl[c0].jmax*2 + spings;
     for(int j0=spings ; j0<=jmax ; j0+=2){
@@ -100,6 +99,45 @@ void specCompoundElastic
   }
 
   if(ctl.fluctuation) statWidthFluctuationReset(0.0);
+
+  /*** Post processing */
+  specCNDecayPostProcess(td,spc);
+}
+
+
+/**********************************************************/
+/*      Photon-Induced Compound Reaction                  */
+/**********************************************************/
+void specCompoundPhoton
+( System       *sys,               // system parameters
+  double       renorm,             // re-normalizatoin of total CN cross section
+  Transmission *tin,               // transmission coefficient for entrance channel
+  Transmission **tc,               // transmission in the continuum region
+  Transmission **td,               // transmission for the discrete levels
+  double       **tg,               // gamma-ray transmission
+  Spectra      *spc)               // particle emission spectra
+{
+  const int c0 = 0;
+  const int k0 = 0;
+
+  /*** Store some global variables */
+  specCNDecayPreProcess(sys,c0);
+
+  double c1 = NORM_FACT*PI/(sys->wave_number*sys->wave_number) * renorm;
+  double c2 = c1 /((spintarg+1.0)*(spinproj+1.0)) / 2.0;
+
+  /*** Copy channel status to tstat array */
+  for(int id=0 ; id<MAX_CHANNEL ; id++) tstat[id] = ncl[c0].cdt[id].status;
+  tstat[gammaray] = true;
+
+  /*** Loop over CN J and Parity*/
+  int jmax = ncl[c0].jmax*2 + spings;
+  for(int j0=spings ; j0<=jmax ; j0+=2){
+    double c3 = c2 * (j0+1.0);
+    for(int p0=-1 ; p0<=1 ; p0+=2){
+      specCNDecaySpherical(c0,k0,j0,p0,c3,tin,tc,td,tg,spc);
+    }
+  }
 
   /*** Post processing */
   specCNDecayPostProcess(td,spc);
@@ -368,15 +406,16 @@ void    specCNDecayPostProcess(Transmission **td, Spectra *spc)
 
 
 /**********************************************************/
-/*      Pring Continuum Angular Distribution              */
+/*      Print Continuum Angular Distribution              */
 /**********************************************************/
 void specContinuumAngularDistribution(const int id, const int jmax, Nucleus *n)
 {
+  std::cout << "# Ex[MeV]    Ang[deg]" << std::endl;
   for(int k=0 ; k<n->ncont ; k++){
     for(int i=0 ; i<MAX_ANGDIST ; i++){
       double x = 0.0;
       for(int l=0 ; l<jmax ; l+=2) x += cleg[id][k][l] * legendre(l,crx.costh[i]);
-      std::cout << std::setw(11) << cleg[id][k][MAX_J];
+      std::cout << std::setw(11) << cleg[id][k][MAX_J]; // contains excitation energy
       std::cout << std::setw(11) << crx.theta[i];
       std::cout << std::setw(11) << x << std::endl;
     }

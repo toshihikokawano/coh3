@@ -48,16 +48,8 @@ double  specFissionPotentialModel(const int k0, const int p0, const int j0, cons
   double w0 = sqrt(2.0 * mu * ex);
 
   /*** level compression factor */
-  double compfact1p = fb->fisenhance.compfact1p;
-  double compfact2p = fb->fisenhance.compfact2p;
-  double compfact1n = fb->fisenhance.compfact1n;
-  double compfact2n = fb->fisenhance.compfact2n;
-
-  if(compfact1n == 0.0){
-    compfact1n = compfact1p;
-    compfact2n = compfact2p;
-  }
-
+  double compfact1 = fb->fisenhance.compfact1;
+  double compfact2 = fb->fisenhance.compfact2;
 
   /*** integration over beta up to 3.0, at each 0.2/k */
   double dx = 0.2 / w0;
@@ -89,8 +81,7 @@ double  specFissionPotentialModel(const int k0, const int p0, const int j0, cons
       if( ((int)(2.0*n->lev[k].spin) != j0) || (n->lev[k].parity != p0) ) continue;
 
       /*** solve Schroedinger equation */
-      if(p0 > 0) nm = fpotPotentialExcited(nx,compfact1p,compfact2p,n->lev[k].energy,vpot0,vpot1);
-      else       nm = fpotPotentialExcited(nx,compfact1n,compfact2n,n->lev[k].energy,vpot0,vpot1);
+      nm = fpotPotentialExcited(nx,compfact1,compfact2,n->lev[k].energy,vpot0,vpot1);
 
       double trn = fpotInternalFunction(nm,ex,mu,dx,w0,vpot1);
 
@@ -107,8 +98,8 @@ double  specFissionPotentialModel(const int k0, const int p0, const int j0, cons
                              : n->density[k][idx].odd ) * n->de;
 
       /*** solve Schroedinger equation */ 
-      if(p0 > 0) nm = fpotPotentialExcited(nx,compfact1p,compfact2p,n->excitation[k],vpot0,vpot1);
-      else       nm = fpotPotentialExcited(nx,compfact1n,compfact2n,n->excitation[k],vpot0,vpot1);
+      nm = fpotPotentialExcited(nx,compfact1,compfact2,n->excitation[k],vpot0,vpot1);
+
       double trn = fpotInternalFunction(nm,ex,mu,dx,w0,vpot1);
 
       tj += trn * rho;
