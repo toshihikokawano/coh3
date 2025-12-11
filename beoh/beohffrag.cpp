@@ -66,6 +66,12 @@ void beohFissionFragmentMain(System *sys, BData *bdt, FFragData *fdt, unsigned i
   beohReadInputFiles(sys,fdt);
   beohEnergyDependentParameters(fdt);
 
+  /*** determine energy bin width if not provided */
+  if(sys->energy_bin_in == 0.0){
+    sys->energy_bin_in = ENERGY_BIN;
+    if(sys->input_energy >= 20.0) sys->energy_bin_in *= 2.0; // doubled for high energy calculation
+  }
+
   /*** prepare fission fragment pair object and allocate memory */
   beohFFPAllocateMemory(fdt->getMaxFissionChance());
   beohFFDecayAllocateMemory();
@@ -151,7 +157,6 @@ void beohFissionFragmentMain(System *sys, BData *bdt, FFragData *fdt, unsigned i
   /*** supplemental output */
   if(PRINT_FISSION_PAIR_SUPPL){
     for(int nc=0 ; nc < fdt->getFissionChance() ; nc++){
-      FFPOutputYield(ffp[0].nmass,ffp[nc].ac,ffp[nc].mass_first,fdt->mc[nc].GaussSigma,fdt->mc[nc].GaussDelta,fdt->mc[nc].GaussFract);
       FFPOutputTKEDistribution(3,&ffp[nc]);
       FFPOutputTXEDistribution(&ffp[nc]);
     }
@@ -226,6 +231,16 @@ void beohFissionFragmentInit(System *sys, BData *bdt, FFragData *fdt)
           fdt->mc[nc].spinfactor = fdt->mc[0].spinfactor;
           fdt->mc[nc].rt         = fdt->mc[0].rt;
           fdt->mc[nc].ffydata    = fdt->mc[0].ffydata;
+
+          if(fdt->mc[nc].ffydata == "input"){
+            for(int i=0 ; i<8 ; i++){
+              fdt->mc[nc].GaussSigma[i] = fdt->mc[0].GaussSigma[i];
+              fdt->mc[nc].GaussDelta[i] = fdt->mc[0].GaussDelta[i];
+              fdt->mc[nc].GaussFract[i] = fdt->mc[0].GaussFract[i];
+            }
+          }
+
+          fdt->inclFissionChance();
         }
       }
 

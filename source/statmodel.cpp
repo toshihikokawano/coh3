@@ -65,7 +65,6 @@ int statModel
   spc.memclear("pe");
   crx.specclear();
 
-
 //---------------------------------------
 //      Statistical Model Main Part
 
@@ -74,14 +73,14 @@ int statModel
   statStoreDiscreteTransmission(0,ncl[0].excitation[0],pdt,td);
 
   /*** in the case of deformed nucleus, replace Tj by the CC calc. */
-  if(ctl.deformed && sys->inc_id != gammaray){
+  if(ctl.deformed || sys->inc_id == gammaray){
     statReplaceTransmission(sys->target_level,dir->lev,&ncl[sys->target_id],sys->bandidx,td[sys->target_id],crx.transmission);
   }
 
   /***  direct/semidirect nucleon capture */
   if(ctl.dsd){
     dsdDirectCaptureModel(sys->inc_id,sys->cms_energy,&sys->incident,&sys->target,sys->reduced_mass,cap,sys->beta2,spc.cn[0]);
-    specCumulativeSpectra(spc.getCsize(),spc.getNsize(),spc.cn,&ncl[0]);
+    specCumulativeSpectra(spc.getCsize(),spc.getNCmax(),spc.cn,&ncl[0]);
   }
 
   /*** preequilibrium spectrum */
@@ -101,6 +100,14 @@ int statModel
 //     Exclusive Particle Energy Spectra
 
   if(ctl.exclusive) eclCalc(sys,spc.pe,nsim);
+
+
+//---------------------------------------
+//     Inclusive Double-Differential Particle Energy Spectra
+
+  if(pex.ddx && !ctl.exclusive){
+    eclDDXInclusiveSpectra(sys,spc.pe,&ncl[0]);
+  }
 
 
 //---------------------------------------
@@ -152,10 +159,10 @@ void statPreequilibrium(System *sys, Pdata *pdt)
   preqExcitonSpectra(&spc);
 
   /*** add to total particle energy spectra */
-  specCumulativeSpectra(spc.getCsize(),spc.getNsize(),spc.pe,&ncl[0]);
+  specCumulativeSpectra(spc.getCsize(),spc.getNCmax(),spc.pe,&ncl[0]);
 
   if(!ctl.fns){
-    if(prn.spectra)  outSpectrum(1,spc.pe,&ncl[0]);
+    if(prn.spectra)  outSpectrum(1,spc.pe,&ncl[0],0);
     if(prn.xsection) outSpectrumSum(1,spc.pe,&ncl[0]);
   }
 }
@@ -169,9 +176,10 @@ void statHauserFeshbach(System *sys, Pdata *pdt, Direct *dir)
   spc.memclear("cn");
 
   /*** add direct inelastic scattering */
-  statSetupDirectInelastic(dir->lev,&ncl[sys->target_id],&crx);
+  statSetupDirectInelastic(dir->lev,&ncl[sys->target_id],sys->target_level,&crx);
   statDirectSpectra(sys->cms_energy,ncl[sys->inc_id].de,dir->lev,spc.cn[sys->inc_id],crx.direct);
-  specCumulativeSpectra(spc.getCsize(),spc.getNsize(),spc.cn,&ncl[0]);
+
+  specCumulativeSpectra(spc.getCsize(),spc.getNCmax(),spc.cn,&ncl[0]);
 
   /*** compound decay chain start */
   if(ctl.exclusive){
@@ -184,15 +192,18 @@ void statHauserFeshbach(System *sys, Pdata *pdt, Direct *dir)
   else
     spectra(sys,pdt,&tin,tc,td,tg,dir,&spc);
 
-  /*** before output, store re-calculated sigmaR int output area */
+  /*** before output, store re-calculated sigmaR in output area */
   outSetSigmaReaction(sys->max_compound);
-  
+
   /*** output total emission spectra */
   if(prn.spectra & !ctl.fns){
     /*** if Gaussian width is given, broaden the photon spectrum */
     double gw = parmGetValue(parmBROD);
     if(gw > 0.0) specGaussianBroadening(MAX_ENERGY_BIN,ncl[0].de,gw,crx.spectra[0]);
-    outSpectrum(2,crx.spectra,&ncl[0]);
+
+    int kel = -1;
+    if(sys->incident.pid == neutron) kel = specFindEnergyBin(ncl[sys->target_id].max_energy,sys->energy_bin); // elastic bin number
+    outSpectrum(2,crx.spectra,&ncl[0],kel);
 
     /*** if finegammaspectrum option, print gamma-ray spectrum at finer energy grid */
     if(opt.finegammaspectrum) outSpectrumFineGamma(crx.spectra[gammaray],&gml,&ncl[0]);
@@ -225,16 +236,23 @@ void statParameterSetting(System *sys, Pdata *pdt, GDR *gdr)
   if(sys->energy_bin_in == 0.0) sys->energy_bin = statBinWidth(sys->lab_energy);
   else                          sys->energy_bin = sys->energy_bin_in;
 
+  message << "default energy bin " << sys->energy_bin;
+  cohNotice("statParameterSetting");
+
   /*** suppress resonances in the initial CN */
   statCutDiscreteLevels(sys->ex_total,&ncl[0]);
 
   /*** continuum binning and level density */
   for(int i=0 ; i<sys->max_compound ; i++){
     ncl[i].de = sys->energy_bin;
-    statSetupEnergyBin(&ncl[i]); 
+    statSetupEnergyBin(&ncl[i]);
     statSetupLevelDensity(&ncl[i],&ncl[i].ldp);
   }
 
+  /*** set the largest spectrum bin number 
+       add 2 bins to make sure the last point is zero */
+  spc.setNCmax( ncl[0].ntotal + 2 );
+  
   /*** adjust level density, if D0 is given */
   statAdjustD0(ncl[0].cdt[sys->inc_id].binding_energy,&ncl[0],&ncl[sys->target_id]);
 
@@ -289,6 +307,10 @@ void statParameterSetting(System *sys, Pdata *pdt, GDR *gdr)
   }
   else ctl.fluctuation = false;
 
+  message << "width fluctuation is ";
+  if(ctl.fluctuation) message << "ON"; else message << "OFF";
+  cohNotice("statParameterSetting");
+
   /*** check Engelbrecht-Weidenmueller transformation option */
   if(opt.ewtransformation){
     ctl.ewtransform = true;
@@ -296,6 +318,8 @@ void statParameterSetting(System *sys, Pdata *pdt, GDR *gdr)
     if(!ctl.fluctuation) ctl.ewtransform = false;
     /*** when angular distribution is on, we don't calculate EWT */
     if(prn.angdist)      ctl.ewtransform = false;
+    /*** photonuclear reaction */
+    if(sys->incident.pid == gammaray) ctl.ewtransform = false;
   }
 
   /*** fission level density */
@@ -452,7 +476,7 @@ void statAllocateMemory()
     /*** allocate particle transmission arrays */
     tc = new Transmission * [MAX_CHANNEL];
     td = new Transmission * [MAX_CHANNEL];
-    for(int j=1 ; j<MAX_CHANNEL ; j++){
+    for(int j=0 ; j<MAX_CHANNEL ; j++){
       tc[j] = new Transmission [MAX_ENERGY_BIN];
       td[j] = new Transmission [MAX_LEVELS    ];
 
@@ -480,7 +504,7 @@ void statAllocateMemory()
 /**********************************************************/
 void statDeleteAllocated()
 {
-  for(int j=1 ; j<MAX_CHANNEL ; j++){
+  for(int j=0 ; j<MAX_CHANNEL ; j++){
     for(int k=0 ; k<MAX_ENERGY_BIN ; k++) tc[j][k].memfree();
     for(int k=0 ; k<MAX_LEVELS     ; k++) td[j][k].memfree();
     delete [] tc[j];

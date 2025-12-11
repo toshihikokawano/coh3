@@ -11,6 +11,7 @@ class FragmentObservable{
   double    multiplicity[2];       // neutron and photon multiplicities
   double    etotal[2];             // total energies
   double    eaverage[2];           // average energies
+  double    sepaverage;            // average separation energy
   double    *spectrum[2];          // CMS energy spectra
   double    *speclab;              // LAB energy spectra
   double    *Pn;                   // P(nu)
@@ -31,6 +32,7 @@ class FragmentObservable{
 
   void clear(){
     for(int p=0 ; p<2 ; p++) multiplicity[p] =  eaverage[p] = etotal[p] = 0.0;
+    sepaverage = 0.0;
     if(allocated){
       for(int i=0 ; i<nsize ; i++) speclab[i] = 0.0;
       for(int p=0 ; p<2 ; p++){
@@ -91,6 +93,7 @@ class FissionObservable{
   double    multiplicity[2];       // neutron and photon multiplicities
   double    etotal[2];             // total energies
   double    eaverage[2];           // average energies
+  double    sepaverage;            // average separation energy
   double    *spectrum[2];          // average CMS energy spectra
   double    *chi;                  // prompt fission neutron spectrum
   double    *multiplicitydist[2];  // multiplicities as function of A
@@ -126,6 +129,7 @@ class FissionObservable{
       H.memalloc(lsize,nsize,ksize);
 
       for(int p=0 ; p<2 ; p++) multiplicity[p] =  eaverage[p] = etotal[p] = 0.0;
+      sepaverage = 0.0;
 
       for(int p=0 ; p<2 ; p++){
         spectrum[p] = new double[nsize];

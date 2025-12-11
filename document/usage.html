@@ -2,7 +2,7 @@
 <html>
 <head>
 <title> Optical and Hauser-Feshbach Statistical Model Code, CoH: usage </title>
-<!-- Generated 1997/ 8/27, Last modified 2016/ 9/ 1 -->
+<!-- Generated 1997/ 8/27, Last modified 2024/10/29 -->
 <meta charset="us-ascii">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -39,6 +39,8 @@ and calculation sequence. The available  options are,</p>
       <li>  128 : scattering angular distributions </li>
       <li>  256 : parameters in preequilibrium model </li>
       <li>  512 : S-matrix elements for the entrance channel</li>
+      <li> 1024 : particle emission history in the Monte Carlo mode</li>
+      <li> 2048 : fission energy table
     </ul>
          For example, "-p 66" tells CoH to print cross sections and 
          transmission coefficients.
@@ -51,7 +53,7 @@ and calculation sequence. The available  options are,</p>
       <li>    2 : cumulative discrete levels </li>
       <li>    4 : level densities </li>
       <li>    8 : fission level densities </li>
-      <li>   16 : double differential cross sections for ENDF formatting </li>
+      <li>   16 : double differential cross sections (with -x option for ENDF formatting) </li>
       <li>   32 : compound nucleus decay probabilities </li>
       <li>   64 : discrete gamma-ray lines </li>
     </ul>
@@ -91,12 +93,16 @@ and calculation sequence. The available  options are,</p>
 
 <dt> <b>-x</b>
 <dd> Calculate exclusive particle energy spectra for each residual nucleus.
-     If -q16 option is provided, CoH produces DDX data, which can be
+     If -q16 option is provided, CoH produces exclusive DDX data, which can be
      used for ENDF-6 formatting.
 
 <dt> <b>-m</b> <i> Nsimulaiton </i>
 <dd> Perform Monte Carlo simulation for <i>Nsimulation</i> times. CoH prints out
      particle and gamma-ray emissions with their energies.
+
+<dt> <b>-v</b>
+<dd> Verbose mode. Print more information.
+
 </dl>
 
 

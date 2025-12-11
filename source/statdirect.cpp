@@ -16,7 +16,7 @@
 /**********************************************************/
 /*     Add Direct Cross Section to Level Excite           */
 /**********************************************************/
-void statSetupDirectInelastic(Level *dir, Nucleus *n, CrossSection *crx)
+void statSetupDirectInelastic(Level *dir, Nucleus *n, const int tlev, CrossSection *crx)
 {
   const double e1 = 0.01, e2 = 1e-6;
   double *ap[MAX_DIRECT];
@@ -81,10 +81,12 @@ void statSetupDirectInelastic(Level *dir, Nucleus *n, CrossSection *crx)
       /*** add direct excitation to the level population,
            exclude elastic cross section */
 
-      if(i != 0) n->lpop[j] += fabs(crx->direct[i]);
+      if(i != tlev) n->lpop[j] += fabs(crx->direct[i]);
 
       /*** point ang-dist arrays that contain DI cross sections */
-      if(j<MAX_ANGDISTLEVELS && prn.angdist) crx->angdist[j] = ap[i];
+      if(j < MAX_ANGDISTLEVELS && prn.angdist){
+        crx->angdist[j] = ap[i];
+      }
     }
     else{
       /*** shift ang-dist pointer */

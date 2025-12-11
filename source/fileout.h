@@ -7,6 +7,7 @@
 #define filename_level_excite           "CoHLevelExcite"
 #define filename_angular_distribution   "CoHAngularDistribution"
 #define filename_legendre_coefficient   "CoHLegendreCoefficient"
+#define filename_fission_spectrum       "CoHFissionSpectrum"
 #define file_extension                  "dat"
 
 
@@ -75,4 +76,5 @@ class Radioisotope{
 /**************************************/
 /*      fileout.cpp                   */
 /**************************************/
-void    cohFileOut (int, int, double);
+void    cohFileOut (const int, const int, const double);
+void    cohFileOutFissionSpectrum (const int, const double, double *, double *);

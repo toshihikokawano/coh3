@@ -10,6 +10,7 @@
 #include "eclipse.h"
 #include "global.h"
 #include "mt19937.h"
+#include "outformat.h"
 
 static const int MAX_CASCADE = 100;
 //#define CALC_MONITOR
@@ -30,11 +31,13 @@ void eclMC(const int nmax, const int kmax, const int cmax, int *ktot, int **cidx
 {
   unsigned long ***hist;    // Monte Carlo history for particle and gamma emissions
   unsigned long  **npar;    // particle and gamma multiplicity
-  unsigned long nevt[nmax]; // total events
+  unsigned long   *nevt;    // total events
+
 
   /*** allocate memory */
   hist = new unsigned long ** [nmax];
   npar = new unsigned long *  [nmax];
+  nevt = new unsigned long [nmax];
   for(int n=0 ; n<nmax ; n++){
     hist[n] = new unsigned long * [cmax];
     npar[n] = new unsigned long   [cmax];
@@ -75,6 +78,7 @@ void eclMC(const int nmax, const int kmax, const int cmax, int *ktot, int **cidx
   }
   delete [] hist;
   delete [] npar;
+  delete [] nevt;
 }
 
 
@@ -159,8 +163,6 @@ int eclMCSimulation(const int cmax, int *ktot, int **cidx, const double de, doub
 /*************************************************/
 void eclMCHistory(const int c0, int mc, int *iout, int *kout, unsigned long ***hist, unsigned long **npar, unsigned long *nevt, const double de)
 {
-  static char pname[] = {'g','n','p','a','d','t','h','f',' '};
-
   /*** eliminate the last gamma if energy is zero */
   if( (iout[mc-1] == 0) && (kout[mc-1] == 0) ) mc--;
   
@@ -183,9 +185,9 @@ void eclMCHistory(const int c0, int mc, int *iout, int *kout, unsigned long ***h
     std::cout << std::setw(5) << mc <<" : ";
     for(int i=0 ; i<mc ; i++){
       double ep = kout[i] * de;
-      std::cout << std::setw(2) << pname[ iout[i] ] << std::setw(12) << ep;
+      std::cout << std::setw(2) << p_name[ iout[i] ] << std::setw(12) << ep;
     }
-    if(fission_event) std::cout << std::setw(2) << pname[7] << std::setw(12) << 0.0;
+    if(fission_event) std::cout << std::setw(2) << p_name[7] << std::setw(12) << 0.0;
 
     std::cout << std::endl;
   }

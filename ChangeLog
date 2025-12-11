@@ -1,3 +1,86 @@
+2025-12-10  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmodeltools.cpp (specGaussianBroadening): updated
+	Gaussian broadening also applied to DDX
+	currently photon spectrum broadening is treated separately
+
+2025-12-09  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eclipse.cpp (eclDDXInclusiveSpectra): new function
+	* source/eclddxinclusive.cpp: new file
+	* source/ecloutput.cpp (eclOutInclusiveSpectrum): new function
+	option "-q16" without "-x" now produces inclusive particle energy spectra,
+	the double differential cross section
+	
+
+2025-12-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eclddx.cpp (ddxContGammaMultiplicity): updated
+	more precise determination of gamma multiplicity for binary reaction
+	energy balance improved
+
+	* source/eclspectra.cpp (eclSpectra): updated
+	separate discrete gamma-ray from binary reaction, gbin
+	but only for debuggin purpose
+
+	* source/eclcheckenergy.cpp: new file
+	energy balance check for exclusive spectra
+
+2025-04-25  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/eclddx.cpp (ddxMainInclusive): new function
+	print incluive DDX by -q16 option
+
+	* source/ddxkalbach.cpp: new file
+	separated from eclddx.cpp
+
+2025-04-11  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statcompounddecay.cpp (specCompoundDecay): modified
+	subtract missing flux due to spin mismatch from the total reaction
+	for more accurate calculation of fission population at higher energies
+
+2025-03-15  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/fns.cpp (fnsFissionNeutronModel): modified
+	* source/fileout.cpp (fioWriteFissionSpectrum): new file
+	new function to print fission spectrum on file
+
+2025-02-07  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statdirect.cpp (statSetupDirectInelastic): modified
+	exclude direct cross section when the target is in its excited state
+
+2024-12-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/excilambda.cpp (preqLambdaPlusZ): bug fixed
+	lambda integration |M|2 factor missing at the integration limits
+
+2024-11-24  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* mfld/mfldFRDM.cpp: new file
+	* mfld/mfldsd.cpp: new file
+	* mfld/mfldphconfig.cpp: new file
+	* mfld/mfldprint.cpp: new file
+	* mfld/mflddataread.cpp: new file
+	* mfld/mfld.cpp: new file
+	new module mfld to calculate intrinsic level density added
+
+2024-11-13  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/statmaniplevel.cpp (statFixDiscreteLevels): update
+	debug option to fix all the unknown spins and parities added
+
+	* source/fileout.cpp (cohFileOut): updated
+	skip printing when OM calculation only
+
+2024-10-28  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp: updated
+	* source/coh.cpp (cohNotice): updated
+	verbflag -v added to print some internal variables
+	many files were updated to include cohNotice()
+
 2024-10-08  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* beoh/beohoutput.cpp (outIsomericRatio): updated
@@ -499,7 +582,7 @@
 	gbin member removed
 
 	* source/eclspectra.cpp (eclSpectra): modified
-	* source/eclddx.cpp: byg fixed
+	* source/eclddx.cpp: bug fixed
 	* source/eclipse.cpp: bug fixed
 	exclusive spectra for charged particles when DDX calc. invoked
 	discrete transisions to the levels were not included

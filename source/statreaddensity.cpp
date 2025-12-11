@@ -36,7 +36,6 @@ static inline double interpol(const double x, const double x0, const double x1, 
 }
 
 
-
 /**********************************************************/
 /*      Read Level Density File and Replace Density       */
 /**********************************************************/
@@ -67,9 +66,13 @@ void statReadLevelDensity(Nucleus *n)
     cohTerminateCode("statReadLevelDensity");
   }
 
-  std::cout << "# Reading " << str << " for Z = " << n->za.getZ() << "  A = " << n->za.getA() << std::endl;
+  message << "reading " << str << " for Z " << n->za.getZ() << " - A " << n->za.getA();
+  cohNotice("statReadLevelDensity");
 
-  if(statReadDensityFile(&fp,n->za.getA(),x,y0,y1) != 0) std::cout << "# A = " << n->za.getA() << " not found" << std::endl;
+  if(statReadDensityFile(&fp,n->za.getA(),x,y0,y1) != 0){
+    message << "level density A = " << n->za.getA() << " in " << str << " not found";
+    cohTerminateCode("statReadLevelDensity");
+  }
   else statInterpolateDensity(n->ntotal,x,y0,y1,n->excitation,n->density);
 
   fp.close();
@@ -115,12 +118,12 @@ void statReadFissionLevelDensity(Nucleus *n)
     cohTerminateCode("statReadFissionLevelDensity");
   }
 
-  message << "# Reading " << str1 << " for Z = " << n->za.getZ() << "  A = " << n->za.getA();
+  message << "reading " << str1 << " for Z " << n->za.getZ() << " - A " << n->za.getA();
   cohNotice("statReadFissionLevelDensity");
 
   if(statReadDensityFile(&fp,n->za.getA(),x,y0,y1) != 0){
-    message << "# A = " << n->za.getA() << " not found";
-    cohNotice("statReadFissionLevelDensity");
+    message << "level density A = " << n->za.getA() << " in " << str1 << " not found";
+    cohTerminateCode("statReadFissionLevelDensity");
   }
   else statInterpolateDensity(n->ntotal,x,y0,y1,n->excitation,n->fission->barrier[0].density);
 
@@ -134,12 +137,12 @@ void statReadFissionLevelDensity(Nucleus *n)
     cohTerminateCode("statReadFissionLevelDensity");
   }
 
-  message << "# Reading " << str2 << " for Z = " << n->za.getZ() << "  A = " << n->za.getA();
+  message << "reading " << str2 << " for Z " << n->za.getZ() << " - A " << n->za.getA();
   cohNotice("statReadFissionLevelDensity");
 
   if(statReadDensityFile(&fp,n->za.getA(),x,y0,y1) != 0){
-    message << "# A = " << n->za.getA() << " not found";
-    cohNotice("statReadFissionLevelDensity");
+    message << "level density A = " << n->za.getA() << " in " << str2 << " not found";
+    cohTerminateCode("statReadFissionLevelDensity");
   }
   else statInterpolateDensity(n->ntotal,x,y0,y1,n->excitation,n->fission->barrier[1].density);
 

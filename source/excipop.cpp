@@ -7,22 +7,23 @@
 #include <cmath>
 
 #include "exciton.h"
+#include "terminate.h"
 
 
 /**********************************************************/
 /*      Occupation Probability of Each p-h Configuration  */
 /**********************************************************/
-void  preqPOccupation(double **p, double **t1, double **t2, double **tzp,double **tnp, double **tz0, double **tn0)
+void preqPOccupation(double **p, double **t1, double **t2, double **tzp,double **tnp, double **tz0, double **tn0)
                              
 {
   double x1,x2,x3,x4,x5,x6,y1,y2;
-  bool   conv    = true;
+  bool   conv = true;
 
   const double eps     = 1e-6;
   const int    maxloop = 100;
   
   for(int loop=1 ; loop<maxloop ; loop++){
-    conv=true;
+    conv = true;
 
     for(int i=0 ; i<MAX_PREEQ ; i++){
       for(int j=0 ; j<MAX_PREEQ ; j++){
@@ -47,7 +48,7 @@ void  preqPOccupation(double **p, double **t1, double **t2, double **tzp,double 
         if(j > 1 && i < MAX_PREEQ-1) x4 = p[i+1][j-2] * tnp[i+1][j-2]* t2[i+1][j-2];
 
         double t = x1 + x2 + y1*(x3+x5) + y2*(x4+x6);
-        if(t > 0.0 && fabs(p[i][j]/t-1.0) > eps) conv=false;
+        if(t > 0.0 && fabs(p[i][j]/t-1.0) > eps) conv = false;
         p[i][j] = t;
       }
     }
@@ -62,5 +63,9 @@ void  preqPOccupation(double **p, double **t1, double **t2, double **tzp,double 
 */
     if(conv) break;
   }
-  if(!conv) std::cout << "P calc. not converged" << std::endl;
+
+  if(!conv){
+    message << "P calc. for occupation probabilities did not converge";
+    cohWarningMessage("preqPOccupation");
+  }
 }

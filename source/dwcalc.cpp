@@ -267,7 +267,7 @@ int dwRadialIntegralZerorange(const int lt, int st, int jt, const int nint, cons
       /***  Exit channel wave function */
       for(int l1=l1min ; l1<=l1max ; l1+=2){
         int ll1 = 2*l1;
-        if((x1=clebsh_gordan(ll1,llt,0,0,ll0)) == 0.0) continue;
+        if((x1=clebsch_gordan(ll1,llt,0,0,ll0)) == 0.0) continue;
         double z1 =(ll1+1) * ( ((l0-l1-lt)/2)%2==0 ? 1: -1);
         for(int s1=0 ; s1<s1max ; s1++){
           if( (j1=ll1+(i1-2*s1)) < 0 ) continue;
@@ -297,15 +297,15 @@ void dwMagneticSum(const int s0max, const int s1max, const int lt, const int jt,
 
   for(int m0=0 ; m0<s0max ; m0++){
     int mm0 = i0-2*m0;
-    if((x1=clebsh_gordan(ll0,i0,0,mm0,j0)) == 0.0) continue;
+    if((x1=clebsch_gordan(ll0,i0,0,mm0,j0)) == 0.0) continue;
     for(int m1=0 ; m1<s1max ; m1++){
       int mm1 = i1-2*m1;
       for(int mp=0 ; mp<=lt ; mp++){
         int mm = 2*(m=mp+(mm1-mm0)/2);
         int m2 = std::abs(m);
         if(m2 > l1) continue;
-        if((x2 = clebsh_gordan(ll1,i1,   -mm,       mm1,j1)) == 0.0) continue;
-        if((x3 = clebsh_gordan( j1,jt,mm1-mm,mm-mm1+mm0,j0)) == 0.0) continue;
+        if((x2 = clebsch_gordan(ll1,i1,   -mm,       mm1,j1)) == 0.0) continue;
+        if((x3 = clebsch_gordan( j1,jt,mm1-mm,mm-mm1+mm0,j0)) == 0.0) continue;
         double c = z*x1*x2*x3*sqrt((exp(fact[l1-m2]-fact[l1+m2])));
         unsigned long index = (unsigned int)MAX_L*(MAX_LTRANS*(3*m0+m1)+mp)+l1;
         beta[index] += overlap * c;

@@ -48,7 +48,6 @@ void outPrepCumulativeResidual(const int n, const double fraction)
                   ncl[i].lev[meta].halflife,
                   ncl[i].lpop[meta] * fraction);
 
-
       /*** scan discrete states */
       meta = 1;
       for(int k=1 ; k<ncl[i].ndisc ; k++){

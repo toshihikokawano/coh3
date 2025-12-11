@@ -8,6 +8,7 @@
 
 #include "omplib/omplib.h"
 #include "etc.h"
+#include "terminate.h"
 
 #define GAUSS_LEGENDRE20
 #include "gauss.h"
@@ -41,7 +42,11 @@ unsigned int find_omp(std::string str)
    if(k == 0){
         if( (k = findname(add_name,&str[0],ADD_CUSTOM_OMP)) != 0 ) k += N_OMPLIB;
    }
-   if(k == 0) std::cerr << "ERROR     : OMP name [ " << str << " ] not found" << std::endl;
+   if(k == 0){
+     message << "OMP name [ " << str << " ] not found";
+     cohTerminateCode("find_omp");
+   }
+
    return(k);
 }
 
@@ -109,7 +114,7 @@ unsigned int omp_library(const int id, const int zt, const int at, const int zi,
   default: potfm = 0                                       ; break;
   }
 
-  if(id>N_OMPLIB) potfm = add_library(id-N_OMPLIB,e,zt,at,zi,ai,omp);
+  if(id > N_OMPLIB) potfm = add_library(id-N_OMPLIB,e,zt,at,zi,ai,omp);
 
   return(potfm);
 }

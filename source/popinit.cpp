@@ -135,19 +135,22 @@ double statStoreInitPopulationPhoton(const int targlev, const int targid, const 
 /**********************************************************/
 /*      Adjust Initial Population to Match Reaction CS    */
 /**********************************************************/
-void statAdjustInitPopulation(const double sigr)
+double statAdjustInitPopulation(const double sigr)
 {
-  if(sigr == 0.0) return;
-
   double f = 0.0;
+
+  if(sigr == 0.0) return(f);
+
   for(int j=0 ; j<=ncl[0].jmax ; j++) f += ncl[0].pop[0][j].even + ncl[0].pop[0][j].odd;
-  if(f == 0.0) return;
+  if(f == 0.0) return(f);
 
   f = sigr/f;
   for(int j=0 ; j<=ncl[0].jmax ; j++){
     ncl[0].pop[0][j].even *= f;
     ncl[0].pop[0][j].odd  *= f;
   }
-  f=0.0;
-  for(int j=0;j<=ncl[0].jmax;j++)  f += ncl[0].pop[0][j].even + ncl[0].pop[0][j].odd;
+
+  return(f);
+//  f = 0.0;
+//  for(int j=0 ; j<=ncl[0].jmax ; j++)  f += ncl[0].pop[0][j].even + ncl[0].pop[0][j].odd;
 } 

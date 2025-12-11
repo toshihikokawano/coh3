@@ -582,56 +582,56 @@ int ccTransmissionIndex(Particle p, const int l, const int j2)
 #ifdef DEBUG_CC_MATRIX
 void ccCheckMatrix(const int m, std::complex<double> *pmat)
 {
-  cout.setf(ios::scientific, ios::floatfield);
-  cout << setprecision(6);
-  cout << "M = " << m << endl;
+  std::cout.setf(std::ios::scientific, std::ios::floatfield);
+  std::cout << std::setprecision(6);
+  std::cout << "M = " << m << std::endl;
 
-  cout <<" Smat " << endl;
+  std::cout <<" Smat " << std::endl;
   double x = 0.0;
   for(int i=0 ; i<m ; i++){
-    cout << setw(3) << gCdt[i].level;
-    cout << setw(3) << gCdt[i].chn.l;
-    cout << setw(3) << gCdt[i].chn.j2;
+    std::cout << std::setw(3) << gCdt[i].level;
+    std::cout << std::setw(3) << gCdt[i].chn.l;
+    std::cout << std::setw(3) << gCdt[i].chn.j2;
     for(int j=0 ; j<m ; j++){
       int ij = i*m+j;
-      cout << setw(14) << Smat[ij].real() << setw(14) << Smat[ij].imag();
+      std::cout << std::setw(14) << Smat[ij].real() << std::setw(14) << Smat[ij].imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
   x = 0.0;
   for(int i=0 ; i<m ; i++){
-    cout << setw(14) << 1.0-norm(Smat[i*m+i]) << endl;
+    std::cout << std::setw(14) << 1.0-norm(Smat[i*m+i]) << std::endl;
     x += 1.0-norm(Smat[i*m+i]);
   }
-  cout << setw(14) << x <<" sum" << endl;;
+  std::cout << std::setw(14) << x <<" sum" << std::endl;;
 
-  cout <<" Pmat " << endl;
+  std::cout <<" Pmat " << std::endl;
   for(int i=0 ; i<m ; i++){
     for(int j=0 ; j<m ; j++){
       int ij = i*m+j;
-      cout << setw(14) << pmat[ij].real() << setw(14) << pmat[ij].imag();
+      std::cout << std::setw(14) << pmat[ij].real() << std::setw(14) << pmat[ij].imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
-  cout <<" Eigenvalues " << endl;
+  std::cout <<" Eigenvalues " << std::endl;
   x = 0.0;
   for(int i=0 ; i<m ; i++){
-    cout << setw(14) << gHermiteEigenvalue[i] << endl;
+    std::cout << std::setw(14) << gHermiteEigenvalue[i] << std::endl;
     x += gHermiteEigenvalue[i];
   }
-  cout << setw(14) << x <<" sum" << endl;;
+  std::cout << std::setw(14) << x <<" sum" << std::endl;;
 
-  cout <<" Umat " << endl;
+  std::cout <<" Umat " << std::endl;
   for(int i=0 ; i<m ; i++){
     for(int j=0 ; j<m ; j++){
       int ij = i*m+j;
-      cout << setw(14) << gHermiteEigenvector[ij].real() << setw(14) << gHermiteEigenvector[ij].imag();
+      std::cout << std::setw(14) << gHermiteEigenvector[ij].real() << std::setw(14) << gHermiteEigenvector[ij].imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
-  cout <<" Unitary " << endl;
+  std::cout <<" Unitary " << std::endl;
   for(int i=0 ; i<m ; i++){
     for(int j=0 ; j<m ; j++){
       std::complex<double> w = std::complex<double>(0.0,0.0);
@@ -642,9 +642,9 @@ void ccCheckMatrix(const int m, std::complex<double> *pmat)
       }
       if(fabs(w.real()) < 1e-15) w.real(0.0);
       if(fabs(w.imag()) < 1e-15) w.imag(0.0);
-      cout << setw(14) << w.real() << setw(14) << w.imag();
+      std::cout << std::setw(14) << w.real() << std::setw(14) << w.imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
   std::complex<double> *wmat = work[2];
@@ -659,15 +659,15 @@ void ccCheckMatrix(const int m, std::complex<double> *pmat)
     }
   }
 
-  cout <<" UPU^{-1} " << endl;
+  std::cout <<" UPU^{-1} " << std::endl;
   for(int i=0 ; i<m ; i++){
     for(int j=0 ; j<m ; j++){
       std::complex<double> w = wmat[i*m+j];
       if(fabs(w.real()) < 1e-15) w.real(0.0);
       if(fabs(w.imag()) < 1e-15) w.imag(0.0);
-      cout << setw(14) << w.real() << setw(14) << w.imag();
+      std::cout << std::setw(14) << w.real() << std::setw(14) << w.imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
 
@@ -684,21 +684,21 @@ void ccCheckMatrix(const int m, std::complex<double> *pmat)
     }
   }
 
-  cout <<" USU " << endl;
+  std::cout <<" USU " << std::endl;
   for(int i=0 ; i<m ; i++){
     for(int j=0 ; j<m ; j++){
       std::complex<double> w = wmat[i*m+j];
       if(fabs(w.real()) < 1e-15) w.real(0.0);
       if(fabs(w.imag()) < 1e-15) w.imag(0.0);
-      cout << setw(14) << w.real() << setw(14) << w.imag();
+      std::cout << std::setw(14) << w.real() << std::setw(14) << w.imag();
     }
-    cout << endl;
+    std::cout << std::endl;
   }
   x = 0.0;
   for(int i=0 ; i<m ; i++){
-    cout << setw(14) << 1.0-norm(wmat[i*m+i]) << endl;
+    std::cout << std::setw(14) << 1.0-norm(wmat[i*m+i]) << std::endl;
     x += 1.0-norm(wmat[i*m+i]);
   }
-  cout << setw(14) << x << " sum" << endl;
+  std::cout << std::setw(14) << x << " sum" << std::endl;
 }
 #endif

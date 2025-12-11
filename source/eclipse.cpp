@@ -17,7 +17,7 @@ static void   eclClearArray (const int, const int, const int);
 static void   eclCountParticle (const int, const int);
 static void   eclGammaMultiplicity (const int, const int, double, EXSpectra *);
 static void   eclPEFraction (const int, double **, Nucleus *);
-static void   eclAddBinaryReaction (const int, const int, EXSpectra *);
+//static void   eclAddBinaryReaction (const int, const int, EXSpectra *);
 
 static double   ****ptbl;  // decay probability table
 static int        **cidx;  // decay chain indices
@@ -52,13 +52,13 @@ void eclCalc(System *sys, double **pe, const unsigned long nsim)
     dat[c0].set(ncl[c0].ncont,nl,ncl[c0].max_energy,ncl[c0].lev[ ncl[c0].ndisc-1 ].energy);
 
     if(ctl.ddx){
-      /*** check if binary reaction */
-      dat[c0].setGcon(false); // means discrete population is by a particle only
+      /*** check if binary reactions are separated */
+      dat[c0].setBinary(false); // means gamma spec includes both discrete and continuum transitions
       for(int c1=1 ; c1<cm ; c1++){
         /*** look for the case where the residual from the initial CN is C0 */
         if(c0 == ncl[0].cdt[c1].next){
-          dat[c0].setGcon(true); // means discrete transition not in spectrum
-          if(!opt.chargediscrete && (c1 != neutron)) dat[c0].setGcon(false);
+          dat[c0].setBinary(true); // means gamma spec is only continuum transitions
+          if(!opt.chargediscrete && (c1 != neutron)) dat[c0].setBinary(false);
           break;
         }
       }
@@ -100,15 +100,27 @@ void eclCalc(System *sys, double **pe, const unsigned long nsim)
     eclGammaMultiplicity(nm,cm,de,dat);
     if(ctl.ddx){
       /*** calculate DDX and gamma-ray multiplicities */
-      eclAddBinaryReaction(nm,cm,dat);
-//      eclOutSpectra(nm,max_energybin,cm,de,mtpl,dat);
+//    eclOutSpectra(nm,max_energybin,cm,de,mtpl,dat);
       eclOutHead(nm,cm,sys->lab_energy);
-      eclDDX(nm,max_energybin,cm,sys,mtpl,pe,dat);
+      eclDDX(max_energybin,sys,mtpl,pe,dat);
     }
     else{
       eclOutSpectra(nm,max_energybin,cm,de,mtpl,dat);
     }
   }
+}
+
+
+/**********************************************************/
+/*      Inclusive Double Differential Cross SEction       */
+/**********************************************************/
+void eclDDXInclusiveSpectra(System *sys, double **pe, Nucleus *n)
+{
+  /*** fractions of preequilibrium emission */
+  eclPEFraction(sys->max_channel,pe,n);
+
+  /*** calculate inclusive DDX */
+  eclDDXInclusive(ncl[0].ntotal,sys,pe);
 }
 
 
@@ -395,7 +407,10 @@ void eclGammaMultiplicity(const int nm, const int cm, double de, EXSpectra *dat)
 
 #ifdef DEBUG
     std::cout << std::setprecision(6) << std::setiosflags(std::ios::scientific);
-    std::cout << "# " << std::setw(3) << n << std::setw(13) << mtpl[n][0] << std::setw(13) << dat[n].getEm() << std::setw(13)<< ep << std::endl;
+    std::cout << "# " << std::setw(3) << n;
+    std::cout << "  Mult" << std::setw(13) << mtpl[n][0];
+    std::cout << "  Emax" << std::setw(13) << dat[n].getEm();
+    std::cout << "  Epar" << std::setw(13) << ep << std::endl;
     std::cout << "# Sum        ";
     for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << sum[c];
     std::cout << std::endl;
@@ -464,16 +479,16 @@ void eclRetrieveFissionProbability(const int c0, double *pfex)
 /**********************************************************/
 /*      Add Binary Reaction Component if not Separated    */
 /**********************************************************/
-void eclAddBinaryReaction(const int nm, const int cm, EXSpectra *dat)
-{
-  for(int n=0 ; n<nm ; n++){
-    if(!dat[n].getGcon()){
-      for(int k=0 ; k<=ktot[n]+1 ; k++){
-        for(int c=1 ; c<cm ; c++){
-          if(n == c) dat[n].spec[c][k] += dat[n].sbin[k];
-        }
-      }
-    }
-  }
-}
+// void eclAddBinaryReaction(const int nm, const int cm, EXSpectra *dat)
+// {
+//   for(int n=0 ; n<nm ; n++){
+//     if(dat[n].isBinary()){
+//       for(int k=0 ; k<=ktot[n]+1 ; k++){
+//         for(int c=1 ; c<cm ; c++){
+//           if(n == c) dat[n].spec[c][k] += dat[n].sbin[k];
+//         }
+//       }
+//     }
+//   }
+// }
 

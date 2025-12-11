@@ -5,11 +5,14 @@
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
+#include "physicalconstant.h"
 #include "structur.h"
 #include "nucleus.h"
 #include "eclipse.h"
 #include "output.h"
+#include "outformat.h"
 
 
 /**********************************************************/
@@ -41,20 +44,26 @@ void eclOutSpectra(const int nm, const int km, const int cm, const double de, do
 
     std::cout << "# ";
     outZA(&ncl[n].za);
+    for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << particle_name[c];
+    std::cout << " Disc.Gamma   Bin.React    Bin.Gamma" <<  std::endl;
 
+    std::cout << "#   Multipl. ";
     for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << np[n][c];
-    std::cout << std::endl;
+    nl();
 
     for(int k=0 ; k<km2 ; k++){
       std::cout << std::setw(13) << k*de;
       for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << dat[n].spec[c][k];
       std::cout << std::setw(13) << dat[n].glin[k];
-      if(n < cm)  std::cout << std::setw(13) << dat[n].sbin[k];
-      std::cout << std::endl;
+      if(n < cm){
+        std::cout << std::setw(13) << dat[n].sbin[k];
+        std::cout << std::setw(13) << dat[n].gbin[k];
+      }
+      nl();
     }
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
+    nl();
+    nl();
+    nl();
   }
 }
 
@@ -88,13 +97,13 @@ void eclTotalSpectra(const int nm, const int km, const int cm, const double de, 
     for(int k=0 ; k<km2 ; k++){
       std::cout << std::setw(13) << k*de;
       for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << dat[0].spec[c][k];
-      std::cout << std::endl;
+      nl();
     }
     std::cout << "# Sum        ";
     for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << sum[c];
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
+    nl();
+    nl();
+    nl();
   }
 
   delete [] sum;
@@ -104,16 +113,20 @@ void eclTotalSpectra(const int nm, const int km, const int cm, const double de, 
 /**********************************************************/
 /*      Write Legendre Coefficient, Header Part           */
 /**********************************************************/
-void eclOutNucleusHead(const int n, const int cm, double **np)
+void eclOutNucleusHead(const int n, const int cm, double *np)
 {
   static char p[] = {'g','n','p','a','d','t','h'};
   int j = 0;
 
   std::cout << "# Nucleus    ";
   std::cout <<" ";
-  for(int i=1 ; i<7 ; i++){
-    j = (i >= cm) ? 0 : (int)np[n][i];
-    std::cout << std::setw(1) << p[i] << std::setw(1)<< j;
+
+  if(np[0] < 0)  std::cout << "            "; // for inclusive case
+  else{
+    for(int i=1 ; i<7 ; i++){
+      j = (i >= cm) ? 0 : (int)np[i];
+      std::cout << std::setw(1) << p[i] << std::setw(1)<< j;
+    }
   }
   std::cout << std::setw(13) << n << std::endl;
 }
@@ -171,20 +184,20 @@ void eclOutLegCoeff(const int km, const int nleg, double *ep, double **cleg)
 
     std::cout << std::setw(13) << ep[0];
     for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][0];
-    std::cout << std::endl;
+    nl();
 
     for(int k=k0 ; k<=k1 ; k++){
       std::cout << std::setw(13) << ep[k];
       for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][k];
-      std::cout << std::endl;
+      nl();
     }
 
     std::cout << std::setw(13) << ep[km-1];
     for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][km-1];
-    std::cout << std::endl;
+    nl();
   }
-  std::cout << std::endl;
-  std::cout << std::endl;
+  nl();
+  nl();
 }
 
 
@@ -197,8 +210,8 @@ void eclOutGammaLine(const int ng, const int nleg, double *e, double *x)
   for(int j=0 ; j<ng ; j++){
     std::cout << std::setw(13) << e[j] << std::setw(13) << x[j]<< std::endl;
   }
-  std::cout << std::endl;
-  std::cout << std::endl;
+  nl();
+  nl();
 }
 
 
@@ -214,17 +227,68 @@ void eclOutPtable(const int n, const int m, int *ktot, int **cidx, double ****pt
 
       std::cout << std::setw(5) << c0 << std::setw(4) << k0 << std::setw(4) << ktot[c0];
       for(int j=0 ; j<m ; j++) std::cout << std::setw(13) <<  cidx[c0][j];
-      std::cout << std::endl;
+      nl();
 
       for(int k1=k0 ; k1<=ktot[c0] ; k1++){
         std::cout << std::setw(13) << k1;
         for(int c1=0 ; c1<m ; c1++){
           std::cout << std::setw(13) << ptbl[c0][k0][c1][k1];
         }
-        std::cout << std::endl;
+        nl();
       }
     }
   }
+}
+
+
+/**********************************************************/
+/*      Print Inclusive DDX                               */
+/**********************************************************/
+void eclOutInclusiveSpectrum(const int c, const int kmax, const int nang, double *xang, int *nleg, const double de, double **cleg, double **fleg, double *espc)
+{
+  std::ostringstream title;
+  title << particle_name[c] << " DOUBLE DIFFERENTIAL CROSS SECTION";
+  outSectionHead( (title.str()).c_str() );
+  std::cout << cline << std::endl;
+
+  /*** gamma-ray spectrum, isotropic */
+  if(c == 0){
+    std::cout << "# Emin[MeV]  Emax[MeV]";
+    std::cout << "  EDX [mb/MeV]" << std::endl;
+  }
+  /*** particle spectra */
+  else{
+    std::cout << "#          Angle [deg]";
+    for(int n=0 ; n<nang ; n++) outVal(14,1,xang[n]);
+    nl();
+    std::cout << "# Emin[MeV]  Emax[MeV]";
+    std::cout << " [mb/MeV/sr]" << std::endl;
+  }
+
+  for(int k=0 ; k<kmax ; k++){
+    if(k == 0){
+      outVal(11,4,0.0);
+      outVal(11,4,0.5*de);
+    }
+    else{
+      outVal(11,4,((double)k-0.5)*de);
+      outVal(11,4,((double)k+0.5)*de);
+    }
+
+    if(c == 0){
+      outVal(14,lowfilter( espc[k] * cleg[0][k] ));
+    }
+    else{
+      for(int n=0 ; n<nang ; n++){
+        double y = 0.0;
+        for(int j=0 ; j<nleg[k] ; j++) y += cleg[j][k] * fleg[j][n];
+        outVal(14,lowfilter( espc[k] * y ));
+      }
+    }
+    nl();
+  }
+  nl();
+  nl();
 }
 
 
@@ -250,3 +314,5 @@ int eclFindKmax(const int km, const int cm, double **dat)
   }
   return( (kend) ? km2 : -1 );
 }
+
+

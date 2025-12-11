@@ -22,7 +22,7 @@
  *
  *
  *  wigner_3j(j1,j2,j3,j4,j5,j6)
- *    Wigner's 3J symbol (similar to Clebsh-Gordan)
+ *    Wigner's 3J symbol (similar to Clebsch-Gordan)
  *               = / j1 j2 j3 \
  *                 \ j4 j5 j6 /
  *
@@ -41,8 +41,8 @@
  *    Racah coefficient
  *               = W(j1 j2 j3 j4 ; j5 j6)
  *
- *  clebsh_gordan(j1,j2,m1,m2,j3)
- *    Clebsh-Gordan coefficient 
+ *  clebsch_gordan(j1,j2,m1,m2,j3)
+ *    Clebsch-Gordan coefficient 
  *               = <j1,j2,m1,m2|j3,m1+m3>
  *
  *  z_coefficient(l1,j1,l2,j2,S,L)
@@ -118,9 +118,9 @@ double wigner_3j(const int j1, const int j2, const int j3, const int j4, const i
   double cg = 0.0;
 
   if( (j4+j5+j6) != 0 ) return(0.0);
-  if((cg=clebsh_gordan(j1, j2, j4, j5, j3)) == 0.0) return(0.0);
+  if((cg = clebsch_gordan(j1, j2, j4, j5, j3)) == 0.0) return(0.0);
   /*** Brink, page 136 */
-  return( (((j1-j2-j6)%4==0) ?  1.0 : -1.0)*cg/sqrt(j3+1.0) );
+  return( (((j1-j2-j6)%4 == 0) ?  1.0 : -1.0)*cg/sqrt(j3+1.0) );
 }
 
 
@@ -269,7 +269,7 @@ double racah(const int a, const int b, const int c, const int d, const int e, co
   int i6 = (a+d+e+f)/2;
   int i7 = (b+c+e+f)/2;
   double tri = triangle(a,b,e) * triangle(c,d,e) * triangle(a,c,f) * triangle(b,d,f);
-  if(tri ==0.0 ) return(0.0);
+  if(tri == 0.0) return(0.0);
 
   int k0 = i1; if(i2 > k0) k0 = i2; if(i3 > k0) k0 = i3; if(i4 > k0) k0 = i4;
   int k1 = i5; if(i6 < k1) k1 = i6; if(i7 < k1) k1 = i7;
@@ -305,13 +305,13 @@ double triangle(const int a, const int b, const int c)
 /*      Clebsch-Gordan Coefficients                        */
 /*     ( J1  J2  M1  M2 | J3  M1+M2 )                      */
 /***********************************************************/
-double clebsh_gordan(const int j1, const int j2, const int m1, const int m2, const int j3, const int m3)
+double clebsch_gordan(const int j1, const int j2, const int m1, const int m2, const int j3, const int m3)
 {
   if(m1+m2 != m3) return 0.0;
-  else return clebsh_gordan(j1,j2,m1,m2,j3);
+  else return clebsch_gordan(j1,j2,m1,m2,j3);
 }
 
-double clebsh_gordan(const int j1, const int j2, const int m1, const int m2, const int j3)
+double clebsch_gordan(const int j1, const int j2, const int m1, const int m2, const int j3)
 {
   int x1,x2,x3,y1,y2,y3;
   double cg=0.0;
@@ -469,7 +469,7 @@ double z_coefficient(const int l1, const int j1, const int l2, const int j2, con
 
   double z = ((p%4 == 0) ? 1.0 : -1.0)
            * sqrt(l1+1.0) * sqrt(l2+1.0) * sqrt(j1+1.0) * sqrt(j2+1.0)
-           * clebsh_gordan(l1,l2,0,0,ll) * racah(l1,j1,l2,j2,s,ll);
+           * clebsch_gordan(l1,l2,0,0,ll) * racah(l1,j1,l2,j2,s,ll);
 
   return(z);
 }
@@ -484,7 +484,7 @@ double zbar_coefficient(const int l1, const int j1, const int l2, const int j2, 
   if(p%2 != 0) return(0.0);
 
   double z = sqrt(l1+1.0) * sqrt(l2+1.0) * sqrt(j1+1.0) * sqrt(j2+1.0)
-           * clebsh_gordan(l1,l2,0,0,ll) * racah(l1,j1,l2,j2,s,ll);
+           * clebsch_gordan(l1,l2,0,0,ll) * racah(l1,j1,l2,j2,s,ll);
 
   return(z);
 }
@@ -514,7 +514,7 @@ double reduced_matrix_element(const int lt, const int st, const int jt,
   int sst = 2*st;
 
   reduced_mat = 1.0/sqrt(FOUR_PI)
-               *clebsh_gordan(j1,j0,1,-1,jjt)/sqrt(jjt+1.0)
+               *clebsch_gordan(j1,j0,1,-1,jjt)/sqrt(jjt+1.0)
                *sqrt( (j0+1.0) * (j1+1.0) * (llt+1.0) )
                *parity((j1-j0)/2)*parity((-l0+l1+lt)/2)*parity((j0-1)/2);
 

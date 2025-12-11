@@ -192,7 +192,7 @@ void statSetupGdrParameter(Nucleus *n, GDR *gdr, const double beta)
 /**********************************************************/
 void statSetupGdrSystematics(Nucleus *n, const double beta)
 {
-  int m = 0, km1 = 0, ke2 = 0;
+  int m = 0;
 
   /*** get E1 parameters from systematics */
   if(beta == 0.0){
@@ -203,15 +203,21 @@ void statSetupGdrSystematics(Nucleus *n, const double beta)
     gdrE1DoubleHump1((double)n->za.getA(),beta,&n->gdr[m]);  if(n->gdr[m].getXL() == "E1") m++;
   }
   /*** M1 and E2 */
-  gdrM1((double)n->za.getA(),&n->gdr[m]);                      km1 = m; m++;
-  gdrE2((double)n->za.getZ(),(double)n->za.getA(),&n->gdr[m]); ke2 = m; m++;
+  gdrM1((double)n->za.getA(),&n->gdr[m]);                      int km1 = m; m++;
+  gdrE2((double)n->za.getZ(),(double)n->za.getA(),&n->gdr[m]); int ke2 = m; m++;
 
   /*** renormalize M1 photo cross section */
   gdrM1norm((double)n->za.getA(),n->ldp.a,n->gdr);
 
   /*** M2 and E3, if needed */
-  gdrM2(&n->gdr[km1],&n->gdr[m++]);
-  gdrE3(&n->gdr[ke2],&n->gdr[m++]);
+  gdrM2(&n->gdr[km1],&n->gdr[m]); int km2 = m; m++;
+  gdrE3(&n->gdr[ke2],&n->gdr[m]); int ke3 = m; m++;
+
+  /*** M3 and E4, if really needed */
+  if(MAX_MULTIPOL >= 7){
+    gdrM3(&n->gdr[km2],&n->gdr[m++]);
+    gdrE4(&n->gdr[ke3],&n->gdr[m++]);
+  }
   
   /*** M1 scissors */
   if(beta != 0.0){
@@ -229,7 +235,7 @@ void statSetupGdrSystematics(Nucleus *n, const double beta)
 /**********************************************************/
 void statSetupResetGdrParameter(const int m, Nucleus *n)
 {
-  static std::string XL[MAX_MULTIPOL] = {"E1","M1","E2","M2","E3"};
+  static std::string XL[] = {"E1","M1","E2","M2","E3","M3","E4"};
 
   for(int c = 0 ; c < MAX_MULTIPOL ; c++){
 

@@ -40,6 +40,7 @@ void    specCompoundDecay(const int c0, const int k0, Transmission **tc, Transmi
   }
 
   double sigreac = 0.0;
+  double sigbyps = 0.0;
 
   /** For photo-induced reaction, spc.dp still contains PE at the top bin, add it to sigreac */
   if((c0 == 0) && (k0 == 0)){
@@ -68,6 +69,7 @@ void    specCompoundDecay(const int c0, const int k0, Transmission **tc, Transmi
       /*** If no transition, add population to discrete levels */
       if((tsum == 0.0) && (pop > 0.0)){
         specPopulationBypass(k0,pop,&ncl[c0],spc->cn[gammaray],spc->dp[gammaray]);
+        sigbyps += pop;
         continue;
       }
 
@@ -80,7 +82,7 @@ void    specCompoundDecay(const int c0, const int k0, Transmission **tc, Transmi
 
   /*** Fission probability at each bin is stored at the top of delta-pop */
   if(ctl.exclusive && ctl.fission){
-    specLostPopFraction(c0,k0,sigreac,tstat,spc->dp);
+    specLostPopFraction(c0,k0,sigreac-sigbyps,tstat,spc->dp);
 
     /*** avoid unrealistic fission population in the no-particle emission case */
     if(k0 == ncl[c0].ncont - 1) ncl[c0].popfis[k0] = 0.0;
@@ -117,9 +119,6 @@ double  specTransmissionSum(const Statcalcmode mode, bool *tstat, const int k0, 
     if((tsumn == 0.0) && (tsumg == 0.0) && (tsumf > 0.0)) tsum = 0.0;
     else tsum = tsumn + tsumg + tsumf;
   }
-  
-  // Call the analysis routine for potential print out of neutron-gamma competition
-//ngCompetitionAnalysis(n0,jcn,pcn,k0,tsumg,tsumn,tsumf,tsum);
 
   return(tsum);
 }
@@ -212,6 +211,9 @@ void    specLostPopFraction(const int c0, const int k0, double sigreac, bool *ts
   std::cout << std::setw( 5) << ncl[c0].za.getA();
   std::cout << std::setw(12) << ncl[c0].excitation[k0];
   std::cout << std::setw(12) << ncl[c0].popfis[k0];
+  std::cout << std::setw(12) << sigreac;
+  std::cout << std::setw(12) << sigresi;
+  std::cout << std::setw(12) << sigfiss;
   std::cout << std::setw(12) << dp[0][0] << std::endl;
 */
 }

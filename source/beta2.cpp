@@ -43,6 +43,8 @@ double beta2Read(ZAnumber *za)
     cohTerminateCode("beta2Read");
   }
 
+  std::string file = str;
+
   bool found=false;
   while(getline(fp,str)){
     if(str[0] == '#') continue;
@@ -65,6 +67,9 @@ double beta2Read(ZAnumber *za)
     message << "FRDM shape parameter for Z " << za->getZ() << " - A " << za->getA() << " not found";
     cohTerminateCode("beta2Read");
   }
+
+  message << "deformation parameter for Z " << za->getZ() << " - A " << za->getA() << " read from " << file;
+  cohNotice("beta2Read");
 
   return(beta2);
 }

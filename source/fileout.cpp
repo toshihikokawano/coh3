@@ -53,6 +53,7 @@ static void    fioWriteCrossSectionFission     (const bool, const std::string, c
 static void    fioWriteLevelExcite             (const bool, const std::string, double *, const double, const int, Nucleus *);
 static void    fioWriteAngularDistribution     (const std::string, double *, const double);
 static void    fioWriteLegendreCoefficient     (const std::string, double *, const double, const int);
+static void    fioWriteFissionSpectrum         (const std::string, const int, const double, double *, double *);
 
 static inline void   fioSetLevelEnergy         (double *, Nucleus *);
 static inline bool   fioCheckExist             (std::string);
@@ -66,7 +67,7 @@ static const double eps = 1.0e-99;
 /**********************************************************/
 /*     Output Cross Sections and Angular Distributions    */
 /**********************************************************/
-void cohFileOut(int nc, int tid, double elab)
+void cohFileOut(const int nc, const int tid, const double elab)
 // nc    : number of compound nucleus
 // tid   : index for the target
 // elab  : incident LAB energy 
@@ -92,21 +93,23 @@ void cohFileOut(int nc, int tid, double elab)
     fn << filename_cross_section << "." << file_extension;
     fioWriteCrossSectionMain(fioCheckExist(fn.str()), fn.str(), nc, elab);
 
-    /*** all reaction cross sections */
-    fn.str("");
-    fn << filename_particle_production << "." << file_extension;
-    fioWriteCrossSectionParticle(fioCheckExist(fn.str()), fn.str(), nc, elab);
-
-    /*** radioactive isotopes */
-    fn.str("");
-    fn << filename_radioactive_production << "." << file_extension;
-    fioWriteCrossSectionRadioactive(fioCheckExist(fn.str()), fn.str(), nc, elab);
-
-    /*** multi-chance fission cross sections */
-    if(ctl.fission){
+    if(nc > 0){
+      /*** all reaction cross sections */
       fn.str("");
-      fn << filename_fission << "." << file_extension;
-      fioWriteCrossSectionFission(fioCheckExist(fn.str()), fn.str(), nc, elab);
+      fn << filename_particle_production << "." << file_extension;
+      fioWriteCrossSectionParticle(fioCheckExist(fn.str()), fn.str(), nc, elab);
+
+      /*** radioactive isotopes */
+      fn.str("");
+      fn << filename_radioactive_production << "." << file_extension;
+      fioWriteCrossSectionRadioactive(fioCheckExist(fn.str()), fn.str(), nc, elab);
+
+      /*** multi-chance fission cross sections */
+      if(ctl.fission){
+        fn.str("");
+        fn << filename_fission << "." << file_extension;
+        fioWriteCrossSectionFission(fioCheckExist(fn.str()), fn.str(), nc, elab);
+      }
     }
   }
 
@@ -128,6 +131,25 @@ void cohFileOut(int nc, int tid, double elab)
       fn << filename_level_excite << std::setw(1) << id << "." << file_extension;
       fioWriteLevelExcite(fioCheckExist(fn.str()), fn.str(), elev, elab, id, &ncl[p]);
     }
+  }
+}
+
+
+/**********************************************************/
+/*     Output Fission Neutron Spectrum                    */
+/**********************************************************/
+void cohFileOutFissionSpectrum(const int ne, const double elab, double *eout, double *chi)
+// elab  : incident LAB energy 
+// eout  : out-going energies
+// chi   : fission neutron spectrum
+{
+  std::string fname;
+  std::ostringstream fn;
+
+  fn.str("");
+  if(prn.spectra){
+    fn << filename_fission_spectrum << "." << file_extension;
+    fioWriteFissionSpectrum(fn.str(), ne, elab, eout, chi);
   }
 }
 
@@ -617,6 +639,33 @@ void fioWriteLegendreCoefficient(std::string fname, double *y, const double e, c
     for(int j=0 ; j<N_OUTPUT_LEVELS-1 ; j++) fp << std::setw(COLUMN_WIDTH) <<  crx.legcoef[id][j][i];
     fp << std::endl;
   }
+
+  fp.close();
+}
+
+
+/**********************************************************/
+/*     Output Fission Neutron Spectrum on File            */
+/**********************************************************/
+void fioWriteFissionSpectrum(const std::string fname, const int ne, const double e, double *eout, double *chi)
+{
+  std::ofstream fp;
+  fp.open(fname.c_str(),std::ios::out | std::ios::app);
+  if(!fp){
+    message << "data file " << fname << " output error";
+    cohTerminateCode("fioWriteFissionSpectrum");
+  }
+
+  fp << std::setiosflags(std::ios::scientific);
+  fp << std::setprecision(DECIMAL_WIDTH-1);
+  fp << "#" << std::setw(COLUMN_WIDTH-1) << e << std::endl;
+
+  fp << std::setprecision(DECIMAL_WIDTH);
+  for(int k=0 ; k<ne; k++){
+    fp << std::setw(COLUMN_WIDTH) << eout[k];
+    fp << std::setw(COLUMN_WIDTH) << chi[k] << std::endl;
+  }
+  fp << std::endl;
 
   fp.close();
 }

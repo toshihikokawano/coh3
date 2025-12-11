@@ -76,6 +76,7 @@ double           *fact;              // factorials for coupling constants
 /**********************************************************/
 static int        allocated_ncl = 0; // total number of nucleus
 static int        allocated_nst = 0; // total number of nuclear structure data
+static bool       verbflag      = false; // verbose output flag
 
 
 /**********************************************************/
@@ -105,7 +106,7 @@ int main(int argc, char *argv[])
   std::string   elem     = "";  // element name
 
   int           x;
-  while((x = getopt(argc,argv,"p:e:d:a:z:j:J:f:k:b:s:mh")) != -1){
+  while((x = getopt(argc,argv,"p:e:d:a:z:j:J:f:k:b:s:mvh")) != -1){
     switch(x){
     case 'p': propt      = atoi(optarg);                  break;
     case 'e': energy     = atof(optarg);                  break;
@@ -125,6 +126,7 @@ int main(int argc, char *argv[])
     case 'k': targE      = atof(optarg);                  break;
     case 'b': beta2      = atof(optarg);                  break;
     case 's': nsim       = atoi(optarg);                  break;
+    case 'v': verbflag   = true;                          break;
     case 'h': cohHelp();                                  break;
     case ':': std::cerr << "ERROR     :need a value for option " << x << std::endl;
               cohHelp();                                  break;
@@ -324,6 +326,29 @@ void cohDeleteAllocated()
 
 
 /**********************************************************/
+/*     Warning Message                                    */
+/**********************************************************/
+void cohWarningMessage(std::string module)
+{
+  std::cerr << "WARNING   : ";
+  if(module != "") std::cerr << "[" << module <<"] ";
+  std::cerr << message.str() << std::endl;
+  message.str("");
+}
+
+void cohNotice(std::string module)
+{
+  if(module == "NOTE"){
+    std::cerr << " (._.) " << message.str() << std::endl;
+  }
+  else{
+    if(verbflag) std::cerr  << " (@_@) [" << module << "] " << message.str() << std::endl;
+  }
+  message.str("");
+}
+
+
+/**********************************************************/
 /*     Emergency Stop                                     */
 /**********************************************************/
 int cohTerminateCode(std::string module)
@@ -332,19 +357,9 @@ int cohTerminateCode(std::string module)
   cohDeleteAllocated();
 
   /*** Exit code */
-  if(module == "") std::cerr << "ERROR     :" << message.str() << std::endl;
-  else             std::cerr << "ERROR     : [" << module << "] " << message.str() << std::endl;
+  std::cerr << "ERROR     : ";
+  if(module != "") std::cerr << "[" << module << "] ";
+  std::cerr << message.str() << std::endl;
   exit(-1);
 }
 
-
-void cohNotice(std::string module)
-{
-  if(module == "NOTE"){
-    std::cerr << "NOTICE    : " << message.str() << std::endl;
-  }
-  else{
-    std::cerr << "WARNING   : [" << module << "] " << message.str() << std::endl;
-  }
-  message.str("");
-}

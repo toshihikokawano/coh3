@@ -22,7 +22,7 @@ static const unsigned char DEBUG_ATKE = 0x20;
 static const unsigned char DEBUG_LUNG = 0x40;
 
 //static unsigned char DEBUG_ID = DEBUG_MASS | DEBUG_LIST;
-static unsigned char DEBUG_ID = 0x00;
+static unsigned char DEBUG_ID = 0x0;
 
 static void FFPDebug (unsigned char, FissionFragmentPair *);
 
@@ -726,10 +726,11 @@ void FFPDebug(unsigned char id, FissionFragmentPair *ffp)
 
   /* check TKE and TXE */
   if(id & DEBUG_ENRG){
-    double s = 0.0;
+    double s = 0.0, q = 0.0;
     for(int k=0 ; k<ffp->getN() ; k++){
       if(ffp->fragment[k].yield == 0.0) continue;
       s += ffp->fragment[k].yield;
+      q += ffp->fragment[k].yield * ffp->fragment[k].qval;
       std::cout << std::setw(5)  << k;
       std::cout << std::setw(5)  << ffp->fragment[k].getZl();
       std::cout << std::setw(5)  << ffp->fragment[k].getAl();
@@ -740,7 +741,8 @@ void FFPDebug(unsigned char id, FissionFragmentPair *ffp)
       std::cout << std::setw(14) << ffp->fragment[k].ex;
       std::cout << std::setw(14) << ffp->fragment[k].sigma;
       std::cout << std::setw(14) << ffp->fragment[k].yield;
-      std::cout << std::setw(14) << s << std::endl;
+      std::cout << std::setw(14) << s;
+      std::cout << std::setw(14) << q << std::endl;
     }
   }
 

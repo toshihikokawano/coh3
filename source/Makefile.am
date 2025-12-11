@@ -38,9 +38,12 @@ coh_SOURCES = \
 	coulomb.cpp \
 	dataread.cpp \
 	datatable.cpp \
+	ddxkalbach.cpp \
 	dsd.cpp \
 	dsdoverlap.cpp \
+	eclcheckenergy.cpp \
 	eclddx.cpp \
+	eclddxinclusive.cpp \
 	eclipse.cpp \
 	eclmc.cpp \
 	ecloutput.cpp \
@@ -131,6 +134,7 @@ coh_SOURCES = \
 	coulomb.h \
 	coupling.h \
 	datatable.h \
+	ddxkalbach.h \
 	dir.h \
 	dsd.h \
 	eclipse.h \

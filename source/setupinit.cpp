@@ -249,6 +249,9 @@ int setupChain(const int pmax, const double ex, ZAnumber *cZA, Pdata *pdt)
  
   delete [] gen;
 
+  message << "max excitation energy " << ex << " total number of CN " << n;
+  cohNotice("setupChain");
+
   return(n);
 }
 
@@ -276,6 +279,9 @@ int setupCountCompound(const int n)
     cohTerminateCode("setupCountCompound");
   }
 
+  message << "number of unique nuclide " << c;
+  cohNotice("setupCountCompound");
+
   return(c);
 }
 
@@ -288,7 +294,7 @@ void setupInitMT(void)
   unsigned long seed = 87545L;
 
 #ifdef RANDOM_SEED_BY_SYSTEM
-  random_device seedgen;
+  std::random_device seedgen;
   seed = (unsigned long)seedgen();
 #endif
 

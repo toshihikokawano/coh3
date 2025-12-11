@@ -20,6 +20,7 @@
 /**************************************/
 /*      output.cpp                    */
 /**************************************/
+
 void    outSetSigmaReaction (const int);
 void    outZA (ZAnumber *);
 void    outTitle (char *);
@@ -38,7 +39,7 @@ void    outFission (const int);
 void    outParticleProduction (const int, Channel *, double **);
 void    outAngularDistribution (const int, int, int, int, ZAnumber *);
 void    outLegendreCoefficient (const int, int, int, int, ZAnumber *, double ***);
-void    outSpectrum (const int, double **, Nucleus *);
+void    outSpectrum (const int, double **, Nucleus *, const int);
 void    outSpectrumFineGamma (double *, GammaProduction *, Nucleus *);
 void    outSpectrumSum (const int, double **, Nucleus *);
 void    outPrimaryGammaSpectrum (const int, double **, Nucleus *);

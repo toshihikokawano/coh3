@@ -21,6 +21,16 @@ static double specRenormReaction (void);
 static void specPopCheck (Nucleus *);
 #endif
 
+#undef DEBUG_EXCHECK
+#ifdef DEBUG_EXCHECK
+static void specExCheck (Nucleus *);
+#endif
+
+#undef DEBUG_SPINCHECK
+#ifdef DEBUG_SPINCHECK
+static void specSpinCheck (Nucleus *);
+#endif
+
 
 /**********************************************************/
 /*      Decay of each compound nucleus                    */
@@ -74,18 +84,26 @@ void    spectra
 
       /*** Initial binary reaction, including compound elastic */
       if((c0 == 0) && (k0 == 0) && (sys->incident.pid != gammaray)){
+//    if((c0 == 0) && (k0 == 0)){
+        /*** for particle induced case */
+        if(sys->incident.pid != gammaray){
 
-        /*** Compound elastic calculation */
-        specCompoundElastic(sys,renorm,tin,tc,td,tg,dir,spc);
+          /*** Compound elastic calculation */
+          specCompoundElastic(sys,renorm,tin,tc,td,tg,dir,spc);
 
-        /*** Extract primary gamma-ray from level population */
-        spc->npg = specStorePrimaryGamma(&ncl[c0],spc->pg,&gml);
+          /*** Extract primary gamma-ray from level population */
+          spc->npg = specStorePrimaryGamma(&ncl[c0],spc->pg,&gml);
 
-        /*** Output discrete level population before gamma cascading */
-        if(prn.levelexcite) outDiscreteLevelPopulation(sys->ex_total,&ncl[0]);
+          /*** Output discrete level population before gamma cascading */
+          if(prn.levelexcite) outDiscreteLevelPopulation(sys->ex_total,&ncl[0]);
 
-        /*** Outupt primary gamma-ray lines */
-        if(prn.spectra) outPrimaryGammaSpectrum(spc->npg,spc->pg,&ncl[0]);
+          /*** Outupt primary gamma-ray lines */
+          if(prn.spectra) outPrimaryGammaSpectrum(spc->npg,spc->pg,&ncl[0]);
+        }
+        /*** photonuclear reaction case */
+        else{
+          specCompoundPhoton(sys,renorm,tin,tc,td,tg,spc);
+        }
 
 #ifdef DEBUG_POPCHECK
         specPopCheck(&ncl[c0]);
@@ -112,10 +130,10 @@ void    spectra
     crx.prod[c0].xsec += ncl[c0].lpop[0];
 
     /*** Add to total particle emission spectra */
-    specCumulativeSpectra(spc->getCsize(),spc->getNsize(),spc->cn,&ncl[c0]);
+    specCumulativeSpectra(spc->getCsize(),spc->getNCmax(),spc->cn,&ncl[c0]);
 
     /*** Output calculated spectra and populations */
-    if(prn.spectra)     outSpectrum(0,spc->cn,&ncl[c0]);
+    if(prn.spectra)     outSpectrum(0,spc->cn,&ncl[c0],0);
     if(prn.xsection)    outSpectrumSum(0,spc->cn,&ncl[c0]);
     if(prn.gcascade)    outGammaCascade(c0,&ncl[c0]);
     if(prn.xsection)    outIsomerProduction(&ncl[c0]);
@@ -138,8 +156,12 @@ void    spectra
 /**********************************************************/
 void    spectraExclusive(System *sys, Pdata *pdt, Transmission *tin, Transmission **tc, Transmission **td, double **tg, Direct *dir, Spectra *spc)
 {
-  /*** discrete population increment other than particle transition */
-  double *lp0[sys->max_compound],*lp1[sys->max_compound];
+  /*** discrete population increment other than particle transition
+       lp0: level population by particle emission only, e.g. inelastic scattering
+       lp1: population increment by gamma decay of CN, e.g. (n,gn) */
+
+  double **lp0 = new double * [sys->max_compound];
+  double **lp1 = new double * [sys->max_compound];
   try{
     for(int c=0 ; c<sys->max_compound ; c++){
       lp0[c] = new double [MAX_LEVELS];
@@ -204,7 +226,7 @@ void    spectraExclusive(System *sys, Pdata *pdt, Transmission *tin, Transmissio
       eclGenerateDecayTable(c0,k0,sys->max_channel,spc->dp);
       spc->memclear("dp");
     }
-    specCumulativeSpectra(spc->getCsize(),spc->getNsize(),spc->cn,&ncl[c0]);
+    specCumulativeSpectra(spc->getCsize(),spc->getNCmax(),spc->cn,&ncl[c0]);
     crx.prod[c0].xsec += ncl[c0].lpop[0];
   }
 
@@ -267,7 +289,9 @@ double  specRenormReaction()
 #ifdef DEBUG_POPCHECK
 void specPopCheck(Nucleus *n)
 {
-  double s1 = 0.0, s2 = 0.0;
+  const bool bothparity = true;
+  const int ncolumn = 10; // number of J printed
+  double s1 = 0.0, s2 = 0.0, j1 = 0.0, j2 = 0.0;
 
   std::cout << "#  ";
   std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
@@ -280,32 +304,107 @@ void specPopCheck(Nucleus *n)
     std::cout.setf(std::ios::scientific, std::ios::floatfield);
 
     double s3 = 0.0;
-    for(int j=0 ; j<10 ; j++) {
-      s1 += n->pop[k][j].even+n->pop[k][j].odd;
-      s3 += n->pop[k][j].even+n->pop[k][j].odd;
-      std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].even;
-    }
-    std::cout << std::endl;
-
-    std::cout << "       ";
-    for(int j=0 ; j<10 ; j++) {
-      std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].odd;
+    for(int j=0 ; j<n->jmax ; j++) {
+      s1 += n->pop[k][j].even + n->pop[k][j].odd;
+      s3 += n->pop[k][j].even + n->pop[k][j].odd;
+      j1 += (n->pop[k][j].even + n->pop[k][j].odd) * j;
+      if(j < ncolumn){
+        if(bothparity){
+          std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].even + n->pop[k][j].odd;
+        }
+        else{
+          std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].even;
+        }
+      }
     }
     std::cout << std::setprecision(4) << std::setw(11) << s3 << std::endl;
+
+    if(!bothparity){
+      std::cout << "       ";
+      for(int j=0 ; j<n->jmax ; j++) {
+        if(j < ncolumn){
+          std::cout << std::setprecision(2) << std::setw(9) << n->pop[k][j].odd;
+        }
+      }
+      std::cout << std::endl;
+    }
   }
 
   s2 = 0.0;
-  for(int k=0;k<n->ndisc;k++){
+  for(int k=0 ; k<n->ndisc ; k++){
     s2 += n->lpop[k];
+    j2 += n->lpop[k] * n->lev[k].spin;
     std::cout << std::setw(5) << k
          << std::setprecision(4) << std::setw(13) << n->lev[k].energy
          << std::setw(13) << n->lpop[k] << std::endl;
   }
 
-  std::cout << "# SUMcont " << s1 << std::endl;
-  std::cout << "# SUMdisc " << s2 << std::endl;
-  std::cout << "# SUMall  " << s1+s2 << std::endl;
+  double st = s1 + s2;
+  double jt = j1 + j2;
+  j1 = (s1 > 0.0) ? j1 / s1 : 0.0;
+  j2 = (s2 > 0.0) ? j2 / s2 : 0.0;
+  jt = (st > 0.0) ? jt / st : 0.0;
+
+
+  std::cout << "# SUMcont, <J>  " << s1 << " " << j1 <<std::endl;
+  std::cout << "# SUMdisc, <J>  " << s2 << " " << j2 << std::endl;
+  std::cout << "# SUMall,  <J>  " << st << " " << jt << std::endl;
   std::cout << std::endl;
+}
+#endif
+
+
+#ifdef DEBUG_EXCHECK
+void specExCheck(Nucleus *n)
+{
+  double ex = 0.0, sx = 0.0;
+
+  for(int k=0 ; k<n->ncont ; k++){
+    double s3 = 0.0;
+    for(int j=0 ; j<n->jmax ; j++) s3 += n->pop[k][j].even + n->pop[k][j].odd;
+    sx += s3;
+    ex += s3 * n->excitation[k];
+  }
+
+  for(int k=0 ; k<n->ndisc ; k++){
+    sx += n->lpop[k];
+    ex += n->lpop[k] * n->lev[k].energy;
+  }
+
+  if(sx > 0.0) ex = ex / sx;
+  else ex = 0.0;
+
+  std::cout << "#  ";
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getA();
+  std::cout << " Ex(average) " << ex << std::endl;
+  std::cout << std::endl;
+}
+#endif
+
+
+#ifdef DEBUG_SPINCHECK
+void specSpinCheck(Nucleus *n)
+{
+  const int ncolumn = 10; // number of J printed
+
+  std::cout << "#  ";
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getA() << std::endl;
+  std::cout << std::setfill(' ');
+
+  for(int k=0 ; k<n->ncont ; k++){
+    for(int j=0 ; j<n->jmax ; j++) {
+      if(j < ncolumn){
+        std::cout.setf(std::ios::fixed, std::ios::floatfield);
+        std::cout << std::setw(7) << std::setprecision(3) <<  n->excitation[k];
+        std::cout << std::setw(5) << j;
+        std::cout.setf(std::ios::scientific, std::ios::floatfield);
+        std::cout << std::setprecision(6) << std::setw(14) << n->pop[k][j].even + n->pop[k][j].odd << std::endl;
+      }
+    }
+    std::cout << std::endl;
+  }
   std::cout << std::endl;
 }
 #endif

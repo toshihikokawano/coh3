@@ -167,9 +167,17 @@ void HOSphericalExpansion(Basis *dbase, SPEnergy *spe, Operator *H, HFInterface 
   hfsp->n = 0;
   for(int k=0 ; k<dbase->nv ; k++){
 
-    if(spe->energy[k] > sp_emax) break;
     if(k >= HF_MAX_SPSTATE) break;
-    if(spe->v2[k] < epsv2) break;
+
+    /*** default cut-off */
+    if(hfsp->emax == 0.0){
+      if(spe->energy[k] > sp_emax) break;
+      if(spe->v2[k] < epsv2) break;
+    }
+    /*** if highest sp energy is given */
+    else{
+      if(spe->energy[k] > hfsp->emax) break;
+    }
 
     int k1 = spe->subindex[k];    // index inside block
     int kb = spe->block[k];       // block index

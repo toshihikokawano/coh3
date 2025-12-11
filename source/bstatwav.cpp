@@ -63,12 +63,13 @@ int bstateWavefunc(Pdata *proj, ZAnumber *targ, const double eb, const double mu
   for(int i=0 ; i<maxorbit ; i++) bstateWsWave(mu,omp->volume.real(),nonloc,&bst[i],pot);
 
 #ifdef DEBUG
+  std::cout.setf(std::ios::scientific, std::ios::floatfield);
   for(int i=0 ; i<MAX_SPLEVEL ; i++){
     if(bst[i].j2 == 0) break;
     std::cout << std::setw(3) << bst[i].n;
     std::cout << std::setw(3) << bst[i].l;
     std::cout << std::setw(3) << bst[i].j2;
-    std::cout << std::setprecision(7) << std::setw( 7) << bst[i].bind;
+    std::cout << std::setprecision(5) << std::setw(14) << bst[i].bind;
     std::cout << std::setprecision(3) << std::setw(10) << bst[i].w*bst[i].w;
     if(i == nfermi) std::cout << "  <= Nf";
     std::cout << std::endl;

@@ -14,6 +14,7 @@
 #include "parameter.h"
 #include "mt19937.h"
 #include "metastable.h"
+#include "terminate.h"
 
 
 /**********************************************************/
@@ -32,12 +33,25 @@ bool statAddDiscreteLevels(NuclearStructure *d)
   int lcut = parmGetValue(parmLCUT,d->za);
 
   bool t = false;
-  if( (d->nlevel < lcut) && (lcut <= nhigh)){
-    d->nlevel = lcut;
-    t = true;
-  }
+  int  norg = d->nlevel;
 
-  statFixDiscreteLevels(d);
+  if(lcut <= nhigh){
+    if(d->nlevel < lcut){
+      norg = d->nlevel;
+      d->nlevel = lcut;
+      t = true;
+    }
+    statFixDiscreteLevels(d);
+  }
+  else{
+    message << "level cut number " << lcut << " larger than stored data " << nhigh;
+    cohWarningMessage("statAddDiscreteLevels");
+  }
+  
+  if(t){
+    message << "number of discrete levels for Z " << d->za.getZ() << " - A " << d->za.getA() << " extended from " << norg << " to " << lcut;
+    cohNotice("statAddDiscreteLevels");
+  }
 
   return(t);
 }
@@ -98,6 +112,10 @@ bool statForceIncludeMeta(NuclearStructure *d, Nucleus *n)
       d->lev[idx].fstate[0] = 0;
       d->lev[idx].branch[0] = 1.0;
       d->lev[idx].gratio[0] = 1.0;
+
+      message << "artificial level for Z " << d->za.getZ() << " - A " << d->za.getA() << " inserted at " << idx << " energy " << d->lev[idx].energy << " spin " << d->lev[idx].spin << " parity " << d->lev[idx].parity;
+      cohNotice("statForceIncludeMeta");
+
       m++;
     }
     d->nlevel += ntop + m;
@@ -118,6 +136,8 @@ bool statForceIncludeMeta(NuclearStructure *d, Nucleus *n)
 /**********************************************************/
 int statFixDiscreteLevels(NuclearStructure *d)
 {
+  const bool fixspinparity = false;
+
   /*** quick scan if data are incomplete */
   bool needfix = false;
   for(int i=0 ; i<d->nlevel ; i++){
@@ -125,34 +145,67 @@ int statFixDiscreteLevels(NuclearStructure *d)
   }
   if(!needfix) return(0);
 
-  /*** reset random number seed by Z-A,
-       so that the sequence of spin-parity will be the same all the time */
-  unsigned long seed = d->za.getZ() * 1000 + d->za.getA();
-  genrand_init(seed);
 
-  double s0 = sqrt(kckSpinCutoff(d->za.getA()));
-  double c  = sqrt(PI2)*s0*s0*s0;
-
-  for(int i=0 ; i<d->nlevel ; i++){
-
-    /*** re-assign spin, sampling from spin and parity distributions */
-    if(d->lev[i].spin < 0.0){
-      double r = genrand_real1();
-      double s = 0.0;
-      for(int j=0 ; j<MAX_J ; j++){
-        double x = j+halfint(d->lev[0].spin);
-        s += (x+0.5)/c * exp(-(x+0.5)*(x+0.5)/(2*s0*s0)) * (2*x+1.0);
-        if(s > r){
-          d->lev[i].spin = x;
-          break;
-        }
-      }
+  /*** apply constant spin and parity (debug only) */
+  if(fixspinparity){
+    double jmax = halfint(d->lev[0].spin);
+    double jmin = halfint(d->lev[0].spin);
+    for(int i=0 ; i<d->nlevel ; i++){
+      if(d->lev[i].spin >= 0.0) if(jmax < d->lev[i].spin) jmax = d->lev[i].spin;
     }
+    /*** take average of lowest and highest spins */
+    double j0 = jmin + (int)((jmax - jmin)/2.0);
 
-    /*** assume even distribution for parity */
-    if(d->lev[i].parity == 0){
-      double r = genrand_real1();
-      d->lev[i].parity = (r > 0.5) ? 1 : -1;
+    /*** take the same parity as the ground state */
+    double p0 = d->lev[0].parity;
+    if(p0 == 0.0) p0 = 1.0;
+
+    for(int i=0 ; i<d->nlevel ; i++){
+      if(d->lev[i].spin   < 0.0) d->lev[i].spin   = j0;
+      if(d->lev[i].parity < 0.0) d->lev[i].parity = p0;
+    }
+  }
+
+  /*** generate spin and parity by random number */
+  else{
+    /*** reset random number seed by Z-A,
+         so that the sequence of spin-parity will be the same all the time */
+    unsigned long seed = d->za.getZ() * 1000 + d->za.getA();
+    genrand_init(seed);
+
+    double s0 = sqrt(kckSpinCutoff(d->za.getA()));
+    double c  = sqrt(PI2)*s0*s0*s0;
+
+    for(int i=0 ; i<d->nlevel ; i++){
+
+      bool fixed = false;
+
+      /*** re-assign spin, sampling from spin and parity distributions */
+      if(d->lev[i].spin < 0.0){
+        double r = genrand_real1();
+        double s = 0.0;
+        for(int j=0 ; j<MAX_J ; j++){
+          double x = j+halfint(d->lev[0].spin);
+          s += (x+0.5)/c * exp(-(x+0.5)*(x+0.5)/(2*s0*s0)) * (2*x+1.0);
+          if(s > r){
+            d->lev[i].spin = x;
+            break;
+          }
+        }
+        fixed = true;
+      }
+
+      /*** assume even distribution for parity */
+      if(d->lev[i].parity == 0){
+        double r = genrand_real1();
+        d->lev[i].parity = (r > 0.5) ? 1 : -1;
+        fixed = true;
+      }
+
+      if(fixed){
+        message << "spin/parity of Z " << d->za.getZ() << " - A " << d->za.getA() << " at " << i << " energy " << d->lev[i].energy << " fixed, spin " << d->lev[i].spin << " parity " << d->lev[i].parity;
+        cohNotice("statFixDiscreteLevels");
+      }
     }
   }
 
@@ -170,7 +223,12 @@ void statPopTrapMeta(NuclearStructure *d)
 {
   for(int i=1 ; i<MAX_LEVELS ; i++){
     if(d->lev[i].energy == 0.0) break;
-    if(d->lev[i].halflife > thalfmin) d->lev[i].ngamma = 0;
+    if(d->lev[i].halflife > thalfmin){
+      d->lev[i].ngamma = 0;
+
+      message << "discrete level of " << d->lev[i].energy << " marked as meta";
+      cohNotice("statPopTrapMeta");
+    }
   }
 }
 
@@ -184,6 +242,10 @@ void statCutDiscreteLevels(const double emax, Nucleus *n)
   for(int i=1 ; i<n->ndisc ; i++){
     if(n->lev[i].energy >= emax){
       nhigh = i-1;
+
+      message << "discrete level for Z " << n->za.getZ() << " - A " << n->za.getA() << " truncated at " << nhigh << " because Emax = " << emax;
+      cohNotice("statCutDiscreteLevels");
+
       break;
     }
   }
