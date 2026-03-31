@@ -371,16 +371,28 @@ void extGammaLine(const double elab, double *spc, Nucleus *n, const double gw)
 /**********************************************************/
 /*      Channel Decay Widths                              */
 /**********************************************************/
-void extDecayWidth(const int j, double *w)
+void extDecayWidth(const bool ctl, const int lp, const int j, const int p, const double r, double *w)
 {
-  extHead("decaywidth");
+  if(ctl){
+    extHead("decaywidth");
+    std::cout << "#  lp    J P";
+    std::cout << "  D [MeV]      <Gamma_g>    <Gamma_n>    <Gamma_p>    <Gamma_a>    <Gamma_d>    <Gamma_t>    <Gamma_h>    <Gamma_f>    <Gamma_inl>" << std::endl;
+  }
+
+  double d = (r > 0.0) ? 1.0/r : 0.0;
 
   std::cout.setf(std::ios::fixed, std::ios::floatfield);
+
+  char   c = (p > 0)   ? '+' : '-';
+
+  std::cout << std::setw(5) << lp/2;
   std::cout << std::setw(5) << std::setprecision(1) << j/2.0;
+  std::cout << std::setw(2) << c;
 
   std::cout.setf(std::ios::scientific, std::ios::floatfield);
   std::cout << std::setprecision(5);
-  for(int i=0 ; i<MAX_CHANNEL+1 ; i++) std::cout << std::setw(13) << w[i];
+  std::cout << std::setw(13) << d;
+  for(int i=0 ; i<MAX_CHANNEL+2 ; i++) std::cout << std::setw(13) << w[i];
   std::cout << std::endl;
 }
 

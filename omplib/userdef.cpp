@@ -23,6 +23,36 @@ unsigned int OMPuserdef(double e,int at,int zt,int ai,int zi,Optical *omp)
     omp->wso1 = 0.0;
     potform = 0x0013;
   }
+  // dineutron Z = 0, A = 2
+  else if(zi == 0 && ai == 2){
+    Optical ompn;
+    OMPKoningDelaroche(e/2.0,at,zt,1,0,&ompn);
+
+    *omp = ompn;
+
+    omp->v1   = 2 * ompn.v1;
+    omp->ws1  = 2 * ompn.ws1;
+    omp->wv1  = 2 * ompn.wv1;
+
+    omp->vso1 = 0.0;
+    omp->wso1 = 0.0;
+    potform = 0x0013;
+  }
+  // dineutron Z = 0, A = 3
+  else if(zi == 0 && ai == 3){
+    Optical ompn;
+    OMPKoningDelaroche(e/3.0,at,zt,1,0,&ompn);
+
+    *omp = ompn;
+
+    omp->v1   = 3 * ompn.v1;
+    omp->ws1  = 3 * ompn.ws1;
+    omp->wv1  = 3 * ompn.wv1;
+
+    omp->vso1 = 0.0;
+    omp->wso1 = 0.0;
+    potform = 0x0013;
+  }
   // hexaneutron Z = 0, A = 6
   else if(zi == 0 && ai == 6){
     Optical ompn;

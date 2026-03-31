@@ -1,5 +1,6 @@
 .DS_Store
 *.o
+*~
 .deps/
 .dirstamp
 /autom4te.cache

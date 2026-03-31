@@ -207,7 +207,7 @@ void    statDirectSpectra (const double, const double, Level *, double *, double
 /**************************************/
 double  statCalculateD0 (const double, Nucleus *, Nucleus *);
 void    statAdjustD0 (const double, Nucleus *, Nucleus *);
-void    statDecayWidth (System *, Pdata *, Transmission **, Transmission **, double **, Spectra *);
+void    statDecayWidth (System *, Transmission *, Transmission **, Transmission **, double **, Spectra *);
 
 
 /**************************************/

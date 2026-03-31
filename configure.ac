@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([coh], [3.6.1-Cordelia], [kawano@mailaps.org])
+AC_INIT([coh], [3.6.1-Cordelia], [toshihiko.kawano@mgmail.com])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
 AC_CONFIG_SRCDIR([])
 AC_CONFIG_HEADERS([config.h])

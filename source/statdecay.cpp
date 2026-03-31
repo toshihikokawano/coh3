@@ -33,7 +33,7 @@ static int  spinproj = 0, spings = 0, spintarg = 0, paritarg = 0;
 static double ***cleg; // Legendre coefficients in continuum, optional calc
 
 #undef SelectJPi
-//#define SelectJPi 4
+//#define SelectJPi 0
 
 
 /**********************************************************/

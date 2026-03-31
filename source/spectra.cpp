@@ -144,7 +144,7 @@ void    spectra
   }
 
   /*** Output decay widths of initial compound nucleus */
-  if(pex.decaywidth) statDecayWidth(sys,pdt,tc,td,tg,spc);
+//if(pex.decaywidth) statDecayWidth(sys,pdt,tc,td,tg,spc);
 }
 
 
