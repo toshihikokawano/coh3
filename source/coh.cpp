@@ -253,6 +253,7 @@ void cohHelp(void)
   std::cerr << "                  16 : DDX data (with -x for ENDF formatting)" << std::endl;
   std::cerr << "                  32 : compound nucleus decay probability matrix" << std::endl;
   std::cerr << "                  64 : all gamma lines including primary gamma" << std::endl;
+  std::cerr << "                 128 : compound decay width" << std::endl;
   std::cerr << "    -f          : generate tabulated cross section output" << std::endl;
   std::cerr << "  ... or" << std::endl;
   std::cerr << "coh -e Ein -a targA -z targZ" << std::endl;

@@ -21,18 +21,30 @@ static void setupInitMT (void);
 static bool firstcall = true;
 
 // user-defined uncommon incident particle
+
 static const int    userdefZ    = 0;
 static const int    userdefA    = 4;
 static const int    userdefJ2   = 0;
 static const double userdefMass = 4.0;
 static const double userdefMassExcess = 4*ENEUTRON - 0.42;
-//static const double userdefMassExcess = 4*ENEUTRON - 1.0;
 
 // static const int    userdefZ    = 0;
 // static const int    userdefA    = 6;
 // static const int    userdefJ2   = 0;
 // static const double userdefMass = 6.0;
 // static const double userdefMassExcess = 6*ENEUTRON - 1.0;
+
+// static const int    userdefZ    = 0;
+// static const int    userdefA    = 2;
+// static const int    userdefJ2   = 0;
+// static const double userdefMass = 2.0;
+// static const double userdefMassExcess = 2*ENEUTRON;
+
+// static const int    userdefZ    = 0;
+// static const int    userdefA    = 3;
+// static const int    userdefJ2   = 0;
+// static const double userdefMass = 3.0;
+// static const double userdefMassExcess = 3*ENEUTRON;
 
 
 /**********************************************************/

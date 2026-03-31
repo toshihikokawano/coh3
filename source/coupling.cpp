@@ -166,7 +166,7 @@ inline double w6j0(const int i, int *x)
 
   if( x[5] > (x[0]+x[3]) || x[5] < std::abs(x[0]-x[3]) ) return(0.0);
   if( x[0] > MAX_FACTORIAL || x[3] > MAX_FACTORIAL){
-    std::cerr << "factorial n! too large" << std::endl;
+    std::cerr << "factorial n! too large in Wigner6j-1" << std::endl;
     return(ARRAY_OVER);
   }
 
@@ -190,7 +190,7 @@ inline double w6j1(int *x)
 
     int n = (x1+x2+x3)/2;
     if(n > MAX_FACTORIAL){
-      std::cerr << "factorial n! too large" << std::endl;
+      std::cerr << "factorial n! too large in Wigner6j-2" << std::endl;
       return(ARRAY_OVER);
     }
     else if(n < 0) return(0.0);
@@ -257,7 +257,7 @@ double wigner_9j(const int j1,const int j2,const int j3,
 double racah(const int a, const int b, const int c, const int d, const int e, const int f)
 {
   if( (a+b+c+d+e+f) >= 2*MAX_FACTORIAL){
-    std::cerr << "factorial n! too large" << std::endl;
+    std::cerr << "factorial n! too large in Racah" << std::endl;
     return(ARRAY_OVER);
   }
 
@@ -318,7 +318,7 @@ double clebsch_gordan(const int j1, const int j2, const int m1, const int m2, co
 
   if(j1 < 0 || j2 < 0 || j3 < 0) return(0.0);
   if(j1+j2+j3 > 2*MAX_FACTORIAL){
-    std::cerr << "factorial n! too large" << std::endl;
+    std::cerr << "factorial n! too large in Clebsch-Gordan" << std::endl;
     return(ARRAY_OVER);
   }
 
@@ -369,7 +369,7 @@ inline double cg1(const int x1, const int x2, const int x3)
   int p4 = x1-x2+x3;
   if(p2 <= 0 || p3 <= 0 || p4 <= 0) return(0.0);
   if(p1 >= MAX_FACTORIAL){
-    std::cerr << "factorial n! too large" << std::endl;
+    std::cerr << "factorial n! too large in CG1" << std::endl;
     return(ARRAY_OVER);
   }
 
@@ -394,7 +394,7 @@ inline double cg2(const int k, const int q0, const int z1, const int z2, const i
   int p4 =-z2 + q0 +1;
   if(p2 <= 0 || p3 <= 0 || p4 <= 0) return(0.0);
   if(p1 >= MAX_FACTORIAL){
-    std::cerr << "factorial n! too large" << std::endl;
+    std::cerr << "factorial n! too large in CG2" << std::endl;
     return(ARRAY_OVER);
   }
 

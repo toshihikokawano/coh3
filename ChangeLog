@@ -1,3 +1,11 @@
+2026-03-30  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/outext.cpp (extDecayWidth): updated
+	* source/stataveragespace.cpp (statDecayWidth): updated
+	(statPenetrationFactor): new function
+	calculate ENDF-type unresolved resonance parameters
+	URR parameters from decay widths printed by -q128 option
+
 2025-12-10  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* source/statmodeltools.cpp (specGaussianBroadening): updated
@@ -11,7 +19,6 @@
 	* source/ecloutput.cpp (eclOutInclusiveSpectrum): new function
 	option "-q16" without "-x" now produces inclusive particle energy spectra,
 	the double differential cross section
-	
 
 2025-12-07  KAWANO Toshihiko  <kawano@lanl.gov>
 

@@ -181,16 +181,23 @@ void statHauserFeshbach(System *sys, Pdata *pdt, Direct *dir)
 
   specCumulativeSpectra(spc.getCsize(),spc.getNCmax(),spc.cn,&ncl[0]);
 
-  /*** compound decay chain start */
-  if(ctl.exclusive){
-    /*** copy PE, DSD, Inel spectra to the population increment */
-    for(int j=0 ; j<MAX_CHANNEL ; j++){
-      for(int k=0 ; k<MAX_ENERGY_BIN ; k++) spc.dp[j][k] = crx.spectra[j][k];
-    }
-    spectraExclusive(sys,pdt,&tin,tc,td,tg,dir,&spc);
+  /*** if unresolved resonance parameters are needed only */
+  if(pex.decaywidth){
+    statDecayWidth(sys,&tin,tc,td,tg,&spc);
+    return;
   }
-  else
-    spectra(sys,pdt,&tin,tc,td,tg,dir,&spc);
+  /*** compound decay chain start */
+  else {
+    if(ctl.exclusive){
+      /*** copy PE, DSD, Inel spectra to the population increment */
+      for(int j=0 ; j<MAX_CHANNEL ; j++){
+        for(int k=0 ; k<MAX_ENERGY_BIN ; k++) spc.dp[j][k] = crx.spectra[j][k];
+      }
+      spectraExclusive(sys,pdt,&tin,tc,td,tg,dir,&spc);
+    }
+    else
+      spectra(sys,pdt,&tin,tc,td,tg,dir,&spc);
+  }
 
   /*** before output, store re-calculated sigmaR in output area */
   outSetSigmaReaction(sys->max_compound);

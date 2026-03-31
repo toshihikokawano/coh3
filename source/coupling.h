@@ -1,6 +1,6 @@
 // functions for angular momentum coupling
 
-const int    MAX_FACTORIAL = 200;        // maximal factorial n!  (2 x Lmax)
+const int    MAX_FACTORIAL = 300;        // maximal factorial n!  (2 x Lmax)
 const double ARRAY_OVER    = 1.0e+300;   // force overflow
 
 /**************************************/
