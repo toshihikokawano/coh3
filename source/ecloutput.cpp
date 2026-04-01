@@ -29,7 +29,7 @@ void eclOutHead(const int n, const int c, const double elab)
 
 
 /**********************************************************/
-/*      Ouput Individual Spectrum                         */
+/*      Output Individual Spectrum                        */
 /**********************************************************/
 void eclOutSpectra(const int nm, const int km, const int cm, const double de, double **np, EXSpectra *dat)
 {
@@ -45,7 +45,13 @@ void eclOutSpectra(const int nm, const int km, const int cm, const double de, do
     std::cout << "# ";
     outZA(&ncl[n].za);
     for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << particle_name[c];
-    std::cout << " Disc.Gamma   Bin.React    Bin.Gamma" <<  std::endl;
+
+
+    std::cout << " Disc.Gamma  ";
+    if(n < cm){
+      std::cout << " Bin.React    Bin.Gamma";
+    }
+    nl();
 
     std::cout << "#   Multipl. ";
     for(int c=0 ; c<cm ; c++) std::cout << std::setw(13) << np[n][c];
