@@ -424,6 +424,7 @@ void outReaction(const int n, const int targid, double ex)
   std::cout << cline << blank << blank << blank << "  ";
   for(int j=1 ; j<(int)p_name.length() ; j++){
     std::cout << std::setw(2)<< p_name.substr(j,1);
+    if( p_name.substr(j,1) == "h" ) break;
   }
   nl();
 
@@ -1039,7 +1040,7 @@ void outDiscreteLevelPopulation(double extot, Nucleus *n)
       double e = extot - ncl[p].lev[i0].energy - n->cdt[j].binding_energy;
       if(e < 0.0) continue;
 
-      outVal(11,4,ncl[p].lev[i0].energy);
+      outVal(11,6,ncl[p].lev[i0].energy);
       outVal(7, 1,ncl[p].lev[i0].spin);
       char p0 = (ncl[p].lev[i0].parity < 0) ? '-' : '+';
       std::cout << p0 << "   ";

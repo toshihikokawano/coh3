@@ -1,3 +1,10 @@
+2026-04-20  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* source/statdirect.cpp (statSetupDirectInelastic): updated
+	In case the last coupled state is higher than 
+	the MAX_ANGDISTLEVELS-th level, this state is ignored,
+	though this should not happen
+
 2026-03-30  KAWANO Toshihiko  <kawano@lanl.gov>
 
 	* source/outext.cpp (extDecayWidth): updated

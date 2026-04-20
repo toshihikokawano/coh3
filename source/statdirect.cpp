@@ -68,6 +68,13 @@ void statSetupDirectInelastic(Level *dir, Nucleus *n, const int tlev, CrossSecti
 
   int k = ndir; // lowest angdist pointer to be used for non-direct levels
 
+  /*** check if ndir is larger that MAX+ANGDISTLEVELS, should not happen */
+  if(dlev[k-1] >= MAX_ANGDISTLEVELS && prn.angdist){
+    for(int j=0 ; j<MAX_ANGDIST ; j++) crx->angdist[k-1][j] = 0.0;
+    dlev[k-1] = -1;
+    k --;
+  }
+
   /*** for all discrete levels */
   for(int j=0 ; j<n->ndisc ; j++){
 
@@ -89,8 +96,9 @@ void statSetupDirectInelastic(Level *dir, Nucleus *n, const int tlev, CrossSecti
       }
     }
     else{
-      /*** shift ang-dist pointer */
-      if(k<MAX_ANGDISTLEVELS && prn.angdist) crx->angdist[j] = crx->angdist[k];
+
+     /*** shift ang-dist pointer */
+      if(k < MAX_ANGDISTLEVELS && prn.angdist) crx->angdist[j] = crx->angdist[k];
       k++;
     }
   }
