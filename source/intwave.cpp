@@ -10,7 +10,7 @@
 #include "optical.h"
 #include "etc.h"
 
-static inline void            ccUcalc1 (const int, const int, const double, const double, std::complex<double> *, std::complex<double> *);
+static inline void ccUcalc1 (const int, const int, const double, const double, std::complex<double> *, std::complex<double> *);
 static inline std::complex<double> ccUcalc2 (const int, const int, std::complex<double> *, std::complex<double> *);
 
 

@@ -100,9 +100,8 @@ void eclCalc(System *sys, double **pe, const unsigned long nsim)
     eclGammaMultiplicity(nm,cm,de,dat);
     if(ctl.ddx){
       /*** calculate DDX and gamma-ray multiplicities */
-//    eclOutSpectra(nm,max_energybin,cm,de,mtpl,dat);
-      eclOutHead(nm,cm,sys->lab_energy);
-      eclDDX(max_energybin,sys,mtpl,pe,dat);
+        eclOutHead(nm,cm,sys->lab_energy);
+        eclDDX(max_energybin,sys,mtpl,pe,dat);
     }
     else{
       eclOutSpectra(nm,max_energybin,cm,de,mtpl,dat);
@@ -120,7 +119,7 @@ void eclDDXInclusiveSpectra(System *sys, double **pe, Nucleus *n)
   eclPEFraction(sys->max_channel,pe,n);
 
   /*** calculate inclusive DDX */
-  eclDDXInclusive(ncl[0].ntotal,sys,pe);
+  eclDDXInclusive(sys,pe);
 }
 
 
@@ -436,7 +435,7 @@ void eclGammaMultiplicity(const int nm, const int cm, double de, EXSpectra *dat)
 /**********************************************************/
 void eclPEFraction(const int cm, double **pe, Nucleus *n)
 {
-  int kmax = (int)(n->max_energy/n->de) +1;
+  int kmax = (int)(n->max_energy/n->de) + 1;
 
   for(int j=0 ; j<cm ; j++){
     if (!n->cdt[j].status) continue;

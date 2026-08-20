@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GETOPT
   int x;
-  while( (x = getopt(argc,argv,"p:q:e:a:z:m:fxvbh")) != -1 ){
+  while( (x = getopt(argc,argv,"p:q:e:a:z:m:fxsvbh")) != -1 ){
     switch(x){
     case 'p': propt      = atoi(optarg);                  break;
     case 'q': prext      = atoi(optarg);                  break;
@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
               nsim       = atoi(optarg);                  break;
     case 'f': ctl.fileout    = true;                      break;
     case 'x': ctl.exclusive  = true;                      break;
+    case 's': ctl.endfspec   = true;                      break;
     case 'v': verbflag       = true;                      break;
     case 'h': cohHelp();                                  break;
     case 'b': outBanner(); exit(0);                       break;

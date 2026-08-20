@@ -1,3 +1,21 @@
+2026-08-19  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coh.cpp (main): updated
+	* source/eclddxinclusive.cpp (ddxMainInclusiveSpectrum): updated
+	new option of -s added to produce inclusive energy spectra for ENDF
+	for photonuclear reaction cases
+
+2026-05-04  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/setup.cpp (setupGeneralParameter): modified
+	read all of the levels in order to find meta-state when the target is excited
+
+2026-05-02  KAWANO Toshihiko  <kawano@lanl.gov>
+
+	* source/coulomb.cpp (coulombWRatio): modified
+	when ratio calculation didn't converge, continue calculation,
+	since it might be extremely tiny charged particle cross section
+
 2026-04-20  Toshihiko Kawano  <kawano@lanl.gov>
 
 	* source/statdirect.cpp (statSetupDirectInelastic): updated

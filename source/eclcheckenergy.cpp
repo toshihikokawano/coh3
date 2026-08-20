@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #include "physicalconstant.h"
 #include "structur.h"

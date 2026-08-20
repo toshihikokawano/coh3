@@ -139,12 +139,15 @@ void eclOutNucleusHead(const int n, const int cm, double *np)
 /**********************************************************/
 /*      Write Legendre Coefficient, Sub-Header Part       */
 /**********************************************************/
-void eclOutChannelHead(const int c, const double mp)
+void eclOutChannelHead(const int c, const double mp, const bool withdiscrete)
 {
   int nsec = 0;
 
-  if(c == 0) nsec = (mp > 0.0) ? 2 : 0;
-  else       nsec = (mp > 0.0) ? 1 : 0;
+  if(c == 0){
+    if(withdiscrete) nsec = (mp > 0.0) ? 2 : 0;
+    else             nsec = (mp > 0.0) ? 1 : 0;
+  }
+  else               nsec = (mp > 0.0) ? 1 : 0;
 
   std::cout << "# Particle   ";
   std::cout << std::setw(13) << c
@@ -186,18 +189,18 @@ void eclOutLegCoeff(const int km, const int nleg, double *ep, double **cleg)
 
     std::cout << "# Continuum  " << std::setw(13) << k2 << std::setw(13) << nleg << std::endl;
 
-    std::cout << std::setw(13) << ep[0];
-    for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][0];
+    outVal(13,ep[0]);
+    for(int l=0 ; l<nleg ; l++) outVal(13,cleg[l][0]);
     nl();
 
     for(int k=k0 ; k<=k1 ; k++){
       std::cout << std::setw(13) << ep[k];
-      for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][k];
+      for(int l=0 ; l<nleg ; l++) outVal(13,cleg[l][k]);
       nl();
     }
 
     std::cout << std::setw(13) << ep[km-1];
-    for(int l=0 ; l<nleg ; l++) std::cout << std::setw(13) << cleg[l][km-1];
+    for(int l=0 ; l<nleg ; l++)  outVal(13,cleg[l][km-1]);
     nl();
   }
   nl();
