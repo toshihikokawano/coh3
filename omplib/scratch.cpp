@@ -8,7 +8,7 @@ unsigned int OMPscratch(double e,int at,int zt,int ai,int zi,Optical *omp)
 {
   unsigned int pf = OMPKoningDelaroche(e,at,zt,ai,zi,omp);
 
-  omp->rc = 1.25;
+  omp->wv1 = 0.0;
 
   return(pf);
 }
