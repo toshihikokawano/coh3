@@ -198,11 +198,11 @@ AM_DEFAULT_VERBOSITY = 1
 AUTOCONF = ${SHELL} '/Users/kawano/Program/code/coh3.git/missing' autoconf
 AUTOHEADER = ${SHELL} '/Users/kawano/Program/code/coh3.git/missing' autoheader
 AUTOMAKE = ${SHELL} '/Users/kawano/Program/code/coh3.git/missing' automake-1.18
-AWK = awk
-CC = gcc
+AWK = gawk
+CC = gcc -std=gnu23
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
-CPP = gcc -E
+CPP = gcc -std=gnu23 -E
 CPPFLAGS = 
 CSCOPE = cscope
 CTAGS = ctags
