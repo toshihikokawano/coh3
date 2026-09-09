@@ -281,7 +281,7 @@ std::complex<double> coulombWRatio(const int lambda, const double eta, const dou
 
   if(!conv){
     message << "continued fraction calculation for G'+iF'/G+iF didn't converge";
-    cohTerminateCode("coulombWRatio");
+    cohWarningMessage("coulombWRatio");
   }
 
   /*** multiply by i/rho and add the first term of (1 - eta/rho)i */

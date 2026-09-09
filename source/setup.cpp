@@ -85,7 +85,7 @@ void setupGeneralParameter(System *sys, Pdata *pdt, Direct *dir)
   }
 
   /*** target level data stored into ncl[0], to be changed later */
-  nst[0].nlevel = riplReadDiscreteLevels(&sys->target, nst[0].lev, reassign);
+  nst[0].nlevel = riplReadDiscreteLevels(&sys->target, nst[0].lev, all);
   nst[0].za.setZA(sys->compound.getZ(),sys->compound.getA());
   ncl[0].ndisc = nst[0].nlevel;
   ncl[0].lev = nst[0].lev;

@@ -13,7 +13,7 @@
 #include "outext.h"
 #include "nucleus.h"
 
-static const bool gammaray_with_conversion = false;
+static const bool gammaray_with_conversion = true;
 
 static inline void extHead (const char *section){
   std::cout << "#" << section << std::endl;

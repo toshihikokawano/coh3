@@ -155,7 +155,7 @@ void ddxMainExclusive(const int nm, const int km, const int cm, const double de,
       }
 
       for(int c=0 ; c<cm ; c++){
-        eclOutChannelHead(c,np[n][c]);
+        eclOutChannelHead(c,np[n][c],true);
         if(np[n][c] == 0.0) continue;
         if(kmax[c] > 0){
           if(c == 0) eclOutGammaLine(ngam,nleg[c],gx,gy);

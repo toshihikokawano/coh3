@@ -123,7 +123,7 @@ void    eclOutHead (const int, const int, const double);
 void    eclOutSpectra (const int, const int, const int, const double, double **, EXSpectra *);
 void    eclTotalSpectra (const int, const int, const int, const double, EXSpectra *);
 void    eclOutNucleusHead (const int, const int, double *);
-void    eclOutChannelHead (const int, const double);
+void    eclOutChannelHead (const int, const double, const bool);
 void    eclOutLegCoeff (const int, const int, double *, double **);
 void    eclOutGammaLine (const int, const int, double *, double *);
 void    eclOutPtable (const int, const int, int *, int **, double ****);
@@ -141,7 +141,7 @@ void    eclDDX (const int, System *, double **, double **, EXSpectra *);
 /**************************************/
 /*      eclddxinclusive.cpp           */
 /**************************************/
-void    eclDDXInclusive (const int, System *, double **);
+void    eclDDXInclusive (System *, double **);
 
 
 /**************************************/

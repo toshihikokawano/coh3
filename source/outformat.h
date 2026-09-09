@@ -1,4 +1,5 @@
 // formatting output values
+#include <cmath>
 
 /*** lower limit of output values, enforce zero */
 static const double output_eps = 1.0e-99;
@@ -28,8 +29,9 @@ static inline void outVal(double x)
 // variable width (w)
 static inline void outVal(int w, double x)
 { std::cout.setf(std::ios::scientific, std::ios::floatfield);
-  int p = w - 8;
-  if(p >= 1){ std::cout << std::setprecision(w-8) << std::setw(w) << x; }
+  int p = w - 7;
+  if(x < 0.0) p--;
+  if(p >= 1){ std::cout << std::setprecision(p) << std::setw(w) << x; }
   else      { std::cout << std::setw(w) << x; }}
 
 static inline void outVal(int w, int x)

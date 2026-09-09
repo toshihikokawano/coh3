@@ -27,7 +27,7 @@
 #define PEX_PTABLE       0x0020    //   32
 #define PEX_GAMMALINE    0x0040    //   64
 #define PEX_DECAYWIDTH   0x0080    //  128
-#define PEX_GAMMASTF     0x0100    //  256
+#define PEX_GAMMASTF     0x0100    //  258
 
 
 class GlobalPrint{
@@ -68,7 +68,7 @@ class GlobalPrintExt{
   bool cumulevel;                  // print cumulative levels
   bool density;                    // print level density
   bool fisdensity;                 // print fission level density
-  bool ddx;                        // print DDX data for ENDF6 formatting
+  bool ddx;                        // print DDX data
   bool ptable;                     // print decay probability matrix
   bool gammaline;                  // print all line gammas
   bool decaywidth;                 // print compound nucleus channel decay width
@@ -161,7 +161,8 @@ class GlobalControl{
   bool fileout;                    // write cross sections on a file
   bool superlazy;                  // super-lazy mode for quick calculation
   bool exclusive;                  // exclusive particle spectra calculation
-  bool ddx;                        // double differential spectra
+  bool ddx;                        // double differential (DDX) spectra
+  bool endfspec;                   // DDX for ENDF formatting
   bool fns;                        // fission neutron spectra
   bool macs;                       // maxwellian average cross section
   bool meanfield;                  // mean-field theory
@@ -184,6 +185,7 @@ class GlobalControl{
     superlazy      = false;
     exclusive      = false;
     ddx            = false;
+    endfspec       = false;
     fns            = false;
     macs           = false;
     meanfield      = false;
