@@ -89,7 +89,7 @@ void FRDMPotential(MFTSystem *sys, Basis *basis, OneBodyPotential *pot, Laguerre
       pot[1].spinorb[i][j] = -pot[1].central[i][j] * vsp;
 
       /*** add Coulomb */
-      pot[1].central[i][j] += c * erho;
+//      pot[1].central[i][j] += c * erho;
 
       /*** effective mass required for solving Hamiltonian */
       pot[0].effmass[i][j] = hbn;

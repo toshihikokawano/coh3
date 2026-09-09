@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <cmath>
 
 #include "omplib/omplib.h"
 #include "etc.h"

@@ -1,6 +1,8 @@
 // formatting output values
 #include <cmath>
 
+#include <cmath>
+
 /*** lower limit of output values, enforce zero */
 static const double output_eps = 1.0e-99;
 
