@@ -91,15 +91,13 @@ int beohENSDFRead(ZAnumber *za, Beta *beta)
 
   /*** re-normalize the branching ratio */
   double sum = 0.0;
-  if(norm != 0.0 || norm != 1.0){
-    for(int i=0 ; i<beta->nstate ; i++){
-      beta->br[i].setR(beta->br[i].getR() * norm);
-      sum += beta->br[i].getR();
-    }
+  for(int i=0 ; i<beta->nstate ; i++){
+    beta->br[i].setR(beta->br[i].getR() * norm);
+    sum += beta->br[i].getR();
   }
 
   /*** if branching ratios are not given, set zero all */
-  if(sum==0.0 && beta->nstate>0){
+  if(sum == 0.0 && beta->nstate > 0){
     beta->nstate = 0;
 //  for(int i=0 ; i<beta->nstate ; i++) beta->br[i].setR(1.0/beta->nstate);
   }
