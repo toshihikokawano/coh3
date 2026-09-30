@@ -350,9 +350,9 @@ void beohPopCheck(Nucleus *n)
   const int jm = 10;
 
   std::cout << "#  ";
-  std::cout << std::setw(3) << setfill('0') << n->za.getZ() << '-';
-  std::cout << std::setw(3) << setfill('0') << n->za.getA() << std::endl;
-  std::cout << setfill(' ');
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getZ() << '-';
+  std::cout << std::setw(3) << std::setfill('0') << n->za.getA() << std::endl;
+  std::cout << std::setfill(' ');
 
   for(int k=0 ; k<n->ncont ; k++){
     std::cout.setf(std::ios::fixed, std::ios::floatfield);

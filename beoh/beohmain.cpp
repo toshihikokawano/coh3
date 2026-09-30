@@ -306,7 +306,10 @@ void beohStatCalculation(System *sys, Pdata *pdt, const unsigned long nsim)
   if(nsim == 0L){
     /*** regular Hauser-Feshbach calculation */
     if(ncl[0].ncont > 0) beohspectra(sys,pdt,tc,td,tg,&spc,&gml);
-    else                 specGammaCascade(spc.cn[0],&ncl[0]);
+    else{
+      specGammaCascade(spc.cn[0],&ncl[0]);
+      specCumulativeSpectra(spc.getCsize(),spc.getNsize(),spc.cn,&ncl[0]);
+    }
   }
   else{
     /*** Monte Carlo Hauser-Feshbach calculation */
@@ -458,7 +461,7 @@ void beohBetaSetting(System *sys, Beta *gts, Beta *ens, BetaProfile *bpf)
   /*** renormalize the probability */
   double sum = 0.0;
   for(int j=0 ; j<gts->nstate ; j++) sum += gts->br[j].getR();
-  if(sum==0.0) gts->nstate = 0;
+  if(sum == 0.0) gts->nstate = 0;
 
   for(int j=0 ; j<gts->nstate ; j++) gts->br[j].scaleR(1.0/sum);
 

@@ -44,7 +44,6 @@ int beohENSDFRead(ZAnumber *za, Beta *beta)
     return(beta->nstate);
   }
 
-
   for(int p=0 ; p<N_RECORD ; p++) line += ' ';
   line[N_RECORD] = '\0';
 
@@ -108,14 +107,15 @@ int beohENSDFRead(ZAnumber *za, Beta *beta)
   if(sum>1.0){
     for(int i=0 ; i<beta->nstate ; i++) beta->br[i].scaleR(1.0/sum);
   }
-/*
-  cout << "# ENSDF Sum " << sum << "  " << beta->nstate << endl;
-  for(int i=0 ; i<beta->nstate ; i++){
-    cout << "#EN "
-         << setprecision(4) << setiosflags(ios::scientific) << setw(11)
-         << beta->br[i].getE() << setw(11) << beta->br[i].getR() << endl;
-  }
-*/
+
+  // std::cout << "# ENSDF Sum " << sum << "  " << beta->nstate << std::endl;
+  // std::cout << std::setprecision(4);
+  // for(int i=0 ; i<beta->nstate ; i++){
+  //   std::cout << "#EN ";
+  //   std::cout << std::setw(11) << beta->br[i].getE();
+  //   std::cout << std::setw(11) << beta->br[i].getR() << std::endl;
+  // }
+
   return(beta->nstate);
 }
 

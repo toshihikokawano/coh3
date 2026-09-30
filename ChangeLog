@@ -1,3 +1,8 @@
+2026-09-30  Toshihiko Kawano  <kawano@lanl.gov>
+
+	* beoh/beohmain.cpp (beohStatCalculation): bug fixed
+	beta decay when discrete transition only, the gamma spectrum was not added to total
+
 2026-08-31  Toshihiko Kawano  <kawano@lanl.gov>
 
 	* source/outformat.h: updated
